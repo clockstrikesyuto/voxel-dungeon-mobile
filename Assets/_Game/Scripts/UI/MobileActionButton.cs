@@ -9,7 +9,9 @@ namespace VoxelDungeon.UI
         public enum ActionKind
         {
             Attack,
-            Dodge
+            Dodge,
+            Ranged,
+            Potion
         }
 
         [SerializeField] private ActionKind action;
@@ -32,6 +34,12 @@ namespace VoxelDungeon.UI
                     break;
                 case ActionKind.Dodge:
                     motor?.TryDodge();
+                    break;
+                case ActionKind.Ranged:
+                    combat?.TryRanged();
+                    break;
+                case ActionKind.Potion:
+                    combat?.TryPotion();
                     break;
             }
         }
