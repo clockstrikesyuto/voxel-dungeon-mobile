@@ -18,6 +18,14 @@ namespace VoxelDungeon.AI
         private float nextTime;
         private LineRenderer ring;
 
+        public void Configure(float attackRadius, float attackInterval, float attackWindup, int attackDamage)
+        {
+            radius = Mathf.Max(1f, attackRadius);
+            interval = Mathf.Max(0.5f, attackInterval);
+            windup = Mathf.Max(0.1f, attackWindup);
+            damage = Mathf.Max(1, attackDamage);
+        }
+
         private void Awake()
         {
             health = GetComponent<Health>();
