@@ -41,6 +41,12 @@ namespace VoxelDungeon.Player
                 if (Keyboard.current.spaceKey.wasPressedThisFrame)
                     combat.TryMelee();
 
+                if (Keyboard.current.fKey.wasPressedThisFrame)
+                    combat.TryRanged();
+
+                if (Keyboard.current.rKey.wasPressedThisFrame)
+                    combat.TryPotion();
+
                 if (Keyboard.current.leftShiftKey.wasPressedThisFrame ||
                     Keyboard.current.rightShiftKey.wasPressedThisFrame)
                     motor.TryDodge();
@@ -54,6 +60,12 @@ namespace VoxelDungeon.Player
 
                 if (Gamepad.current.buttonSouth.wasPressedThisFrame)
                     combat.TryMelee();
+
+                if (Gamepad.current.rightShoulder.wasPressedThisFrame)
+                    combat.TryRanged();
+
+                if (Gamepad.current.dpad.up.wasPressedThisFrame)
+                    combat.TryPotion();
 
                 if (Gamepad.current.buttonEast.wasPressedThisFrame)
                     motor.TryDodge();
