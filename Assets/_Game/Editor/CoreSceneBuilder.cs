@@ -104,12 +104,12 @@ namespace VoxelDungeon.EditorTools
             controller.radius = 0.5f;
             controller.center = new Vector3(0f, 1f, 0f);
 
+            Health playerHealth = player.AddComponent<Health>();
+            player.AddComponent<HealthDamageReceiver>();
             TopDownPlayerMotor motor = player.AddComponent<TopDownPlayerMotor>();
             player.AddComponent<KnockbackMotor>();
             PlayerCombat combat = player.AddComponent<PlayerCombat>();
             DebugPlayerInput input = player.AddComponent<DebugPlayerInput>();
-            Health playerHealth = player.AddComponent<Health>();
-            player.AddComponent<HealthDamageReceiver>();
 
             Camera camera = CreateCamera("Main Camera", new Vector3(0f, 9f, -7f), Vector3.zero);
             TopDownCameraFollow follow = camera.gameObject.AddComponent<TopDownCameraFollow>();
