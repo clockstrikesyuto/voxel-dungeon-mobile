@@ -65,8 +65,15 @@ namespace VoxelDungeon.EditorTools
             root.transform.position = center;
 
             CreateFloorTiles(root.transform, width, depth, floor, variant);
-            CreateBlockChild(root.transform, "Wall_L", new Vector3(-width * 0.5f, 1.5f, 0f), new Vector3(0.7f, 3.0f, depth), wall);
-            CreateBlockChild(root.transform, "Wall_R", new Vector3(width * 0.5f, 1.5f, 0f), new Vector3(0.7f, 3.0f, depth), wall);
+            if (variant == 2)
+                CreateSideWallWithGap(root.transform, -width * 0.5f, depth, wall, "Wall_L");
+            else
+                CreateBlockChild(root.transform, "Wall_L", new Vector3(-width * 0.5f, 1.5f, 0f), new Vector3(0.7f, 3.0f, depth), wall);
+
+            if (variant == 3)
+                CreateSideWallWithGap(root.transform, width * 0.5f, depth, wall, "Wall_R");
+            else
+                CreateBlockChild(root.transform, "Wall_R", new Vector3(width * 0.5f, 1.5f, 0f), new Vector3(0.7f, 3.0f, depth), wall);
 
             CreatePillar(root.transform, new Vector3(-width * 0.5f + 0.8f, 1.9f, -depth * 0.5f + 1.0f), wall, trim);
             CreatePillar(root.transform, new Vector3(width * 0.5f - 0.8f, 1.9f, -depth * 0.5f + 1.0f), wall, trim);
@@ -77,6 +84,31 @@ namespace VoxelDungeon.EditorTools
             CreateCrystalCluster(root.transform, new Vector3(-width * 0.38f, 0.65f, 0f), glow, 1.0f + variant * 0.06f);
             CreateCrystalCluster(root.transform, new Vector3(width * 0.38f, 0.65f, depth * 0.18f), glow, 0.85f + variant * 0.05f);
             CreateRoomLight(root.transform, new Vector3(0f, 3.2f, 0f), glow.color, 2.2f + variant * 0.2f, Mathf.Max(width, depth) * 0.65f);
+        }
+
+        private static void CreateSideWallWithGap(
+            Transform parent,
+            float x,
+            float depth,
+            Material wall,
+            string prefix)
+        {
+            float gap = 4.2f;
+            float segment = Mathf.Max(1f, (depth - gap) * 0.5f);
+
+            CreateBlockChild(
+                parent,
+                prefix + "_A",
+                new Vector3(x, 1.5f, -(gap * 0.5f + segment * 0.5f)),
+                new Vector3(0.7f, 3.0f, segment),
+                wall);
+
+            CreateBlockChild(
+                parent,
+                prefix + "_B",
+                new Vector3(x, 1.5f, gap * 0.5f + segment * 0.5f),
+                new Vector3(0.7f, 3.0f, segment),
+                wall);
         }
 
         private static void CreateCorridor(
