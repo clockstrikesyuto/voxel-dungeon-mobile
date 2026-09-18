@@ -35,6 +35,22 @@ namespace VoxelDungeon.AI
             ResolveTargetReceiver();
         }
 
+        public void Configure(
+            float speed,
+            float aggro,
+            float range,
+            float cooldown,
+            float windup,
+            int damage)
+        {
+            moveSpeed = Mathf.Max(0.1f, speed);
+            aggroRange = Mathf.Max(0.1f, aggro);
+            attackRange = Mathf.Max(0.1f, range);
+            attackCooldown = Mathf.Max(0.05f, cooldown);
+            attackWindup = Mathf.Max(0.05f, windup);
+            attackDamage = Mathf.Max(1, damage);
+        }
+
         private void Awake()
         {
             controller = GetComponent<CharacterController>();
