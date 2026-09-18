@@ -106,7 +106,10 @@ namespace VoxelDungeon.Core
 
             bossActivated = true;
             if (bossRoot != null)
+            {
                 bossRoot.SetActive(true);
+                BossIntroUI.Show(bossRoot.name);
+            }
         }
 
         private void OnBossDied()
