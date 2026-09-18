@@ -48,7 +48,7 @@ namespace VoxelDungeon.Core
                     player = go.transform;
             }
 
-            if (player == null || overlayRoot.activeSelf)
+            if (player == null || overlayRoot.activeSelf || HubServiceUI.IsOpen)
                 return;
 
             nearest = FindNearestPoint();
@@ -108,6 +108,8 @@ namespace VoxelDungeon.Core
                 HubPointKind.Forge => "USE FORGE",
                 HubPointKind.Merchant => "TALK",
                 HubPointKind.Training => "TRAIN",
+                HubPointKind.Armory => "OPEN ARSENAL",
+                HubPointKind.Quest => "TALK",
                 _ => "OPEN"
             };
         }
@@ -149,15 +151,21 @@ namespace VoxelDungeon.Core
                     break;
 
                 case HubPointKind.Merchant:
-                    ShowInfoPanel(
-                        "FRONTIER MERCHANT",
-                        $"Gold: {ProfileProgress.Gold}\n\nThe merchant has arrived. Consumables and rotating loot are planned for the next economy pass.");
+                    HubServiceUI.ShowMerchant();
                     break;
 
                 case HubPointKind.Training:
                     ShowInfoPanel(
                         "TRAINING YARD",
-                        "Movement and combat practice area.\nThe next pass will add target dummies, DPS feedback and weapon trials.");
+                        "Movement and combat practice area.\nTarget dummies and weapon trials are being expanded.");
+                    break;
+
+                case HubPointKind.Armory:
+                    HubServiceUI.ShowEquipment();
+                    break;
+
+                case HubPointKind.Quest:
+                    HubServiceUI.ShowArchivist();
                     break;
             }
         }
