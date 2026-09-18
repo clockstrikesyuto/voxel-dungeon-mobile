@@ -79,7 +79,7 @@ namespace VoxelDungeon.Core
             contentRoot.offsetMin = Vector2.zero;
             contentRoot.offsetMax = Vector2.zero;
 
-            if (FindFirstObjectByType<UnityEngine.EventSystems.EventSystem>() == null)
+            if (UnityEngine.Object.FindFirstObjectByType<UnityEngine.EventSystems.EventSystem>() == null)
             {
                 GameObject es = new GameObject("EventSystem");
                 es.AddComponent<UnityEngine.EventSystems.EventSystem>();
