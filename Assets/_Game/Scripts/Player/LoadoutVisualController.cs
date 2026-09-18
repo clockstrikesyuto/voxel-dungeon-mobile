@@ -12,8 +12,26 @@ namespace VoxelDungeon.Player
 
         private void Start()
         {
+            HideBakedWeaponParts();
             ResolveVisualRoot();
             Refresh(true);
+        }
+
+        private void HideBakedWeaponParts()
+        {
+            string[] names =
+            {
+                "PlayerVisual/SwordBlade",
+                "PlayerVisual/SwordGuard",
+                "PlayerVisual/SwordGrip"
+            };
+
+            foreach (string path in names)
+            {
+                Transform part = transform.Find(path);
+                if (part != null)
+                    part.gameObject.SetActive(false);
+            }
         }
 
         private void Update()
