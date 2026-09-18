@@ -33,6 +33,7 @@ namespace VoxelDungeon.Core
 
         private void Start()
         {
+            ProfileProgress.EnsureStarterEquipment();
             font = Resources.GetBuiltinResource<Font>("LegacyRuntime.ttf");
             points = FindObjectsByType<HubPoint>(FindObjectsSortMode.None);
             BuildUi();
