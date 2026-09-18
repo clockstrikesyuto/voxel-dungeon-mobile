@@ -111,6 +111,7 @@ namespace VoxelDungeon.EditorTools
             player.AddComponent<HealthDamageReceiver>();
             PlayerCombat combat = player.AddComponent<PlayerCombat>();
             DebugPlayerInput input = player.AddComponent<DebugPlayerInput>();
+            VisualStyleBuilder.ApplyPlayerVisual(player);
 
             Camera camera = CreateCamera("Main Camera", new Vector3(0f, 9f, -7f), Vector3.zero);
             TopDownCameraFollow follow = camera.gameObject.AddComponent<TopDownCameraFollow>();
@@ -118,6 +119,7 @@ namespace VoxelDungeon.EditorTools
             camera.transform.LookAt(player.transform.position + Vector3.up);
 
             CreateDirectionalLight();
+            VisualStyleBuilder.DecorateMission();
             CreateMobileHud(motor, combat, input, playerHealth);
 
             VerticalSliceBuilder.PopulateMission(player);
@@ -291,7 +293,9 @@ namespace VoxelDungeon.EditorTools
             go.transform.eulerAngles = euler;
 
             Camera camera = go.AddComponent<Camera>();
-            camera.fieldOfView = 48f;
+            camera.fieldOfView = 46f;
+            camera.backgroundColor = new Color(0.018f, 0.03f, 0.045f);
+            camera.clearFlags = CameraClearFlags.SolidColor;
             camera.nearClipPlane = 0.1f;
             camera.farClipPlane = 250f;
             go.AddComponent<AudioListener>();
