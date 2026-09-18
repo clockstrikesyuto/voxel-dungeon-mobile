@@ -46,6 +46,18 @@ namespace VoxelDungeon.EditorTools
             else if (mat.HasProperty("_Color"))
                 mat.SetColor("_Color", color);
 
+            Texture2D pixelTexture = PixelTextureFactory.GetOrCreate(name, color, emissive);
+            if (mat.HasProperty("_BaseMap"))
+            {
+                mat.SetTexture("_BaseMap", pixelTexture);
+                mat.SetTextureScale("_BaseMap", GetTextureTiling(name));
+            }
+            else if (mat.HasProperty("_MainTex"))
+            {
+                mat.SetTexture("_MainTex", pixelTexture);
+                mat.SetTextureScale("_MainTex", GetTextureTiling(name));
+            }
+
             if (mat.HasProperty("_Metallic"))
                 mat.SetFloat("_Metallic", metallic);
             if (mat.HasProperty("_Smoothness"))
@@ -59,6 +71,17 @@ namespace VoxelDungeon.EditorTools
 
             EditorUtility.SetDirty(mat);
             return mat;
+        }
+
+        private static Vector2 GetTextureTiling(string name)
+        {
+            if (name.Contains("Floor") || name.Contains("Grass") || name.Contains("Path"))
+                return new Vector2(5f, 5f);
+
+            if (name.Contains("Stone") || name.Contains("Wood"))
+                return new Vector2(2.5f, 2.5f);
+
+            return Vector2.one;
         }
 
         public static Sprite GetRoundSprite()
