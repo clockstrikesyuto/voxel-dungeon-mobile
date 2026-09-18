@@ -7,12 +7,13 @@ namespace VoxelDungeon.UI
     [RequireComponent(typeof(Health))]
     public sealed class WorldHealthBar : MonoBehaviour
     {
-        [SerializeField] private Vector3 worldOffset = new Vector3(0f, 2.35f, 0f);
-        [SerializeField] private Vector2 size = new Vector2(1.4f, 0.16f);
+        [SerializeField] private Vector3 worldOffset = new Vector3(0f, 2.45f, 0f);
+        [SerializeField] private Vector2 pixelSize = new Vector2(140f, 16f);
+        [SerializeField] private float worldScale = 0.01f;
 
         private Health health;
         private RectTransform fill;
-        private Transform barRoot;
+        private RectTransform barRoot;
         private Camera mainCamera;
 
         private void Awake()
@@ -51,22 +52,21 @@ namespace VoxelDungeon.UI
                 mainCamera = Camera.main;
 
             if (mainCamera != null)
-                barRoot.rotation = Quaternion.LookRotation(barRoot.position - mainCamera.transform.position);
+                barRoot.rotation = mainCamera.transform.rotation;
         }
 
         private void BuildBar()
         {
             GameObject root = new GameObject("WorldHealthBar");
-            barRoot = root.transform;
-            barRoot.SetParent(transform, false);
+            root.transform.SetParent(transform, false);
 
             Canvas canvas = root.AddComponent<Canvas>();
             canvas.renderMode = RenderMode.WorldSpace;
             canvas.sortingOrder = 20;
 
-            RectTransform rootRect = root.GetComponent<RectTransform>();
-            rootRect.sizeDelta = size;
-            rootRect.localScale = Vector3.one * 0.01f;
+            barRoot = root.GetComponent<RectTransform>();
+            barRoot.sizeDelta = pixelSize;
+            barRoot.localScale = Vector3.one * worldScale;
 
             GameObject bg = new GameObject("Background");
             bg.transform.SetParent(root.transform, false);
