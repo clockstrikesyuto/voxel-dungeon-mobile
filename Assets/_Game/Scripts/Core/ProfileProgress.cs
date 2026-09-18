@@ -8,14 +8,16 @@ namespace VoxelDungeon.Core
         private const string MeleeKey = "profile.melee";
         private const string RangedKey = "profile.ranged";
         private const string CryptClearKey = "profile.crypt.clear";
+        private const string AshenClearKey = "profile.ashen.clear";
 
         public static int Gold => PlayerPrefs.GetInt(GoldKey, 0);
         public static int MeleePower => PlayerPrefs.GetInt(MeleeKey, 0);
         public static int RangedPower => PlayerPrefs.GetInt(RangedKey, 0);
         public static bool CrystalCryptCleared => PlayerPrefs.GetInt(CryptClearKey, 0) == 1;
+        public static bool AshenForgeCleared => PlayerPrefs.GetInt(AshenClearKey, 0) == 1;
 
         public static bool AshenForgeUnlocked => CrystalCryptCleared;
-        public static bool VoidGardenUnlocked => false;
+        public static bool VoidGardenUnlocked => AshenForgeCleared;
 
         public static void AddGold(int amount)
         {
@@ -57,10 +59,11 @@ namespace VoxelDungeon.Core
         public static void CompleteStage(string stageId)
         {
             if (stageId == "stage.crypt")
-            {
                 PlayerPrefs.SetInt(CryptClearKey, 1);
-                PlayerPrefs.Save();
-            }
+            else if (stageId == "stage.ashen")
+                PlayerPrefs.SetInt(AshenClearKey, 1);
+
+            PlayerPrefs.Save();
         }
 
         public static void ResetProfile()
@@ -69,6 +72,7 @@ namespace VoxelDungeon.Core
             PlayerPrefs.DeleteKey(MeleeKey);
             PlayerPrefs.DeleteKey(RangedKey);
             PlayerPrefs.DeleteKey(CryptClearKey);
+            PlayerPrefs.DeleteKey(AshenClearKey);
             PlayerPrefs.Save();
         }
     }
