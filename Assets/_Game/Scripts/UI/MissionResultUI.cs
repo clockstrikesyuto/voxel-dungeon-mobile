@@ -10,6 +10,8 @@ namespace VoxelDungeon.UI
     {
         public static void Show(PlayerProgress progress)
         {
+            HideGameplayHud();
+
             GameObject canvasGo = new GameObject("MissionResultCanvas");
             Canvas canvas = canvasGo.AddComponent<Canvas>();
             canvas.renderMode = RenderMode.ScreenSpaceOverlay;
@@ -108,6 +110,24 @@ namespace VoxelDungeon.UI
                     GameFlowState.ResetToTitle();
                     SceneManager.LoadScene("Boot");
                 });
+        }
+
+        private static void HideGameplayHud()
+        {
+            string[] names =
+            {
+                "MobileHUD",
+                "MissionHeader",
+                "ProgressText",
+                "JourneyBanner"
+            };
+
+            foreach (string name in names)
+            {
+                GameObject go = GameObject.Find(name);
+                if (go != null)
+                    go.SetActive(false);
+            }
         }
 
         private static Text CreateText(
