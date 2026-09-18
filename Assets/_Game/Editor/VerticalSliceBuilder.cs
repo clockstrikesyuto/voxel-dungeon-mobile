@@ -119,6 +119,10 @@ namespace VoxelDungeon.EditorTools
             character.radius = 0.5f;
             character.center = new Vector3(0f, 1f, 0f);
 
+            Renderer renderer = enemy.GetComponent<Renderer>();
+            if (renderer != null)
+                renderer.material.color = color;
+
             Health health = enemy.AddComponent<Health>();
             health.ConfigureMaxHealth(hp);
 
@@ -132,10 +136,6 @@ namespace VoxelDungeon.EditorTools
 
             EnemyDropper dropper = enemy.AddComponent<EnemyDropper>();
             dropper.Configure(2, 7, 0.22f, 3, false);
-
-            Renderer renderer = enemy.GetComponent<Renderer>();
-            if (renderer != null)
-                renderer.material.color = color;
 
             return health;
         }
@@ -154,6 +154,10 @@ namespace VoxelDungeon.EditorTools
             character.radius = 0.55f;
             character.center = new Vector3(0f, 1f, 0f);
 
+            Renderer renderer = boss.GetComponent<Renderer>();
+            if (renderer != null)
+                renderer.material.color = new Color(0.18f, 0.08f, 0.08f);
+
             Health health = boss.AddComponent<Health>();
             health.ConfigureMaxHealth(460);
 
@@ -170,10 +174,7 @@ namespace VoxelDungeon.EditorTools
             EnemyDropper dropper = boss.AddComponent<EnemyDropper>();
             dropper.Configure(35, 50, 1f, 9, true);
 
-            Renderer renderer = boss.GetComponent<Renderer>();
-            if (renderer != null)
-                renderer.material.color = new Color(0.18f, 0.08f, 0.08f);
-
+            boss.SetActive(false);
             return boss;
         }
 
