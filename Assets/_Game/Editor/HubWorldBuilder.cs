@@ -51,7 +51,7 @@ namespace VoxelDungeon.EditorTools
             CreateWorldMapTable(new Vector3(0f, 0f, 6.0f), paleStone, cyan, gold);
             CreateForge(new Vector3(-10f, 0f, -6f), paleStone, darkStone, orange, wood, woodLight);
             CreateMerchant(new Vector3(10f, 0f, -6f), paleStone, wood, woodLight, gold);
-            CreateArmory(new Vector3(-17f, 0f, 4f), paleStone, darkStone, steel: stone, cyan, wood);
+            CreateArmory(new Vector3(-17f, 0f, 4f), paleStone, darkStone, stone, cyan, wood);
             CreateArchivist(new Vector3(17f, 0f, 4f), paleStone, violet, gold, wood);
             CreateTraining(new Vector3(0f, 0f, -15f), paleStone, wood, orange);
 
