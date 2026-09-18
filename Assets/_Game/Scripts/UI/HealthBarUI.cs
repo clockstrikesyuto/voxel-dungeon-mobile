@@ -8,25 +8,72 @@ namespace VoxelDungeon.UI
         [SerializeField] private Health source;
         [SerializeField] private RectTransform fill;
 
+        private bool subscribed;
+
         public void Configure(Health health, RectTransform fillRect)
         {
-            if (source != null)
-                source.Changed -= OnHealthChanged;
-
+            Unsubscribe();
             source = health;
             fill = fillRect;
+            SubscribeAndRefresh();
+        }
 
-            if (source != null)
-            {
-                source.Changed += OnHealthChanged;
-                OnHealthChanged(source.CurrentHealth, source.MaxHealth);
-            }
+        private void Awake()
+        {
+            SubscribeAndRefresh();
+        }
+
+        private void OnEnable()
+        {
+            SubscribeAndRefresh();
+        }
+
+        private void Start()
+        {
+            RefreshFromSource();
+        }
+
+        private void OnDisable()
+        {
+            Unsubscribe();
         }
 
         private void OnDestroy()
         {
-            if (source != null)
+            Unsubscribe();
+        }
+
+        private void SubscribeAndRefresh()
+        {
+            if (source == null)
+                return;
+
+            if (!subscribed)
+            {
+                source.Changed += OnHealthChanged;
+                subscribed = true;
+            }
+
+            RefreshFromSource();
+        }
+
+        private void Unsubscribe()
+        {
+            if (source != null && subscribed)
+            {
                 source.Changed -= OnHealthChanged;
+                subscribed = false;
+            }
+        }
+
+        private void RefreshFromSource()
+        {
+            if (source == null)
+                return;
+
+            int max = Mathf.Max(1, source.MaxHealth);
+            int current = source.CurrentHealth > 0 ? source.CurrentHealth : max;
+            OnHealthChanged(current, max);
         }
 
         private void OnHealthChanged(int current, int max)
