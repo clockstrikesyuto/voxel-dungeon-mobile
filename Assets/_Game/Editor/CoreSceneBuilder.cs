@@ -25,6 +25,7 @@ namespace VoxelDungeon.EditorTools
         private const string HubPath = SceneFolder + "/Hub.unity";
         private const string MissionPath = SceneFolder + "/Mission_Test.unity";
         private const string AshenMissionPath = SceneFolder + "/Mission_Ashen.unity";
+        private const string VoidMissionPath = SceneFolder + "/Mission_Void.unity";
 
         [MenuItem("Tools/Voxel Dungeon/Create Core Scenes")]
         public static void CreateCoreScenes()
@@ -35,11 +36,12 @@ namespace VoxelDungeon.EditorTools
             CreateHub();
             CreateMission();
             CreateAshenMission();
+            CreateVoidMission();
             ConfigureBuildScenes();
             AssetDatabase.SaveAssets();
             AssetDatabase.Refresh();
             EditorSceneManager.OpenScene(BootPath);
-            Debug.Log("[VoxelDungeon] Created Boot, Hub, Camp, Crystal Crypt and Ashen Forge scenes and added them to build settings.");
+            Debug.Log("[VoxelDungeon] Created Boot, Hub, Camp, Crystal Crypt, Ashen Forge and Void Garden scenes and added them to build settings.");
         }
 
         private static void EnsureFolder()
@@ -213,6 +215,52 @@ namespace VoxelDungeon.EditorTools
             AshenForgeSliceBuilder.PopulateMission(player);
 
             EditorSceneManager.SaveScene(scene, AshenMissionPath);
+        }
+
+
+        private static void CreateVoidMission()
+        {
+            Scene scene = EditorSceneManager.NewScene(NewSceneSetup.EmptyScene, NewSceneMode.Single);
+
+            GameObject stageIdentity = new GameObject("StageIdentity");
+            stageIdentity.AddComponent<StageSceneIdentity>().Configure("stage.void", "VOID GARDEN");
+
+            CreateGround("Mission Ground", new Vector3(0f, -0.5f, 10f), new Vector3(34f, 1f, 88f));
+
+            GameObject player = GameObject.CreatePrimitive(PrimitiveType.Capsule);
+            player.name = "Player_Debug";
+            player.transform.position = new Vector3(0f, 1f, -31f);
+
+            Object.DestroyImmediate(player.GetComponent<CapsuleCollider>());
+            CharacterController controller = player.AddComponent<CharacterController>();
+            controller.height = 2f;
+            controller.radius = 0.5f;
+            controller.center = new Vector3(0f, 1f, 0f);
+
+            Health playerHealth = player.AddComponent<Health>();
+            player.AddComponent<PlayerProgress>();
+            TopDownPlayerMotor motor = player.AddComponent<TopDownPlayerMotor>();
+            player.AddComponent<KnockbackMotor>();
+            player.AddComponent<HealthDamageReceiver>();
+            PlayerCombat combat = player.AddComponent<PlayerCombat>();
+            DebugPlayerInput input = player.AddComponent<DebugPlayerInput>();
+            VisualStyleBuilder.ApplyPlayerVisual(player);
+
+            Camera camera = CreateCamera("Main Camera", new Vector3(0f, 10f, -8f), Vector3.zero);
+            camera.backgroundColor = new Color(0.58f, 0.66f, 0.74f);
+            TopDownCameraFollow follow = camera.gameObject.AddComponent<TopDownCameraFollow>();
+            follow.SetTarget(player.transform);
+            camera.transform.LookAt(player.transform.position + Vector3.up);
+
+            CreateDirectionalLight();
+            VoidGardenWorldBuilder.Build();
+            CreateMobileHud(motor, combat, input, playerHealth);
+            player.AddComponent<MissionHeaderUI>();
+            player.AddComponent<StageJourneyUI>();
+
+            VoidGardenSliceBuilder.PopulateMission(player);
+
+            EditorSceneManager.SaveScene(scene, VoidMissionPath);
         }
 
 
@@ -508,7 +556,8 @@ namespace VoxelDungeon.EditorTools
                 new EditorBuildSettingsScene(HubPath, true),
                 new EditorBuildSettingsScene(CampPath, true),
                 new EditorBuildSettingsScene(MissionPath, true),
-                new EditorBuildSettingsScene(AshenMissionPath, true)
+                new EditorBuildSettingsScene(AshenMissionPath, true),
+                new EditorBuildSettingsScene(VoidMissionPath, true)
             };
         }
     }
