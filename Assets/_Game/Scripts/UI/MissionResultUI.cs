@@ -59,9 +59,14 @@ namespace VoxelDungeon.UI
             ProfileProgress.AddGold(gold);
             ProfileProgress.CompleteStage(GameFlowState.SelectedStageId);
 
-            string unlockLine = GameFlowState.SelectedStageId == "stage.crypt"
-                ? "\nNEW ROUTE  ASHEN FORGE UNLOCKED"
-                : string.Empty;
+            string unlockLine = GameFlowState.SelectedStageId switch
+            {
+                "stage.crypt" => "\nNEW ROUTE  ASHEN FORGE UNLOCKED",
+                "stage.ashen" => "\nNEW ROUTE  VOID GARDEN DISCOVERED",
+                _ => string.Empty
+            };
+
+            string retryScene = SceneManager.GetActiveScene().name;
 
             string body =
                 $"GOLD   {gold}\n" +
@@ -96,7 +101,7 @@ namespace VoxelDungeon.UI
                 new Vector2(260f, 78f),
                 new Color(0.2f, 0.55f, 0.72f),
                 font,
-                () => SceneManager.LoadScene("Mission_Test"));
+                () => SceneManager.LoadScene(retryScene));
 
             CreateButton(
                 panel.transform,
