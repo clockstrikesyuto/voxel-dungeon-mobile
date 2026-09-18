@@ -24,6 +24,7 @@ namespace VoxelDungeon.EditorTools
         private const string CampPath = SceneFolder + "/Camp.unity";
         private const string HubPath = SceneFolder + "/Hub.unity";
         private const string MissionPath = SceneFolder + "/Mission_Test.unity";
+        private const string AshenMissionPath = SceneFolder + "/Mission_Ashen.unity";
 
         [MenuItem("Tools/Voxel Dungeon/Create Core Scenes")]
         public static void CreateCoreScenes()
@@ -33,11 +34,12 @@ namespace VoxelDungeon.EditorTools
             CreateCamp();
             CreateHub();
             CreateMission();
+            CreateAshenMission();
             ConfigureBuildScenes();
             AssetDatabase.SaveAssets();
             AssetDatabase.Refresh();
             EditorSceneManager.OpenScene(BootPath);
-            Debug.Log("[VoxelDungeon] Created Boot, Hub, Camp and Mission_Test scenes and added them to build settings.");
+            Debug.Log("[VoxelDungeon] Created Boot, Hub, Camp, Crystal Crypt and Ashen Forge scenes and added them to build settings.");
         }
 
         private static void EnsureFolder()
@@ -125,6 +127,9 @@ namespace VoxelDungeon.EditorTools
         {
             Scene scene = EditorSceneManager.NewScene(NewSceneSetup.EmptyScene, NewSceneMode.Single);
 
+            GameObject stageIdentity = new GameObject("StageIdentity");
+            stageIdentity.AddComponent<StageSceneIdentity>().Configure("stage.crypt", "CRYSTAL CRYPT");
+
             CreateGround("Mission Ground", new Vector3(0f, -0.5f, 10f), new Vector3(34f, 1f, 88f));
 
             GameObject player = GameObject.CreatePrimitive(PrimitiveType.Capsule);
@@ -161,6 +166,53 @@ namespace VoxelDungeon.EditorTools
             VerticalSliceBuilder.PopulateMission(player);
 
             EditorSceneManager.SaveScene(scene, MissionPath);
+        }
+
+
+
+        private static void CreateAshenMission()
+        {
+            Scene scene = EditorSceneManager.NewScene(NewSceneSetup.EmptyScene, NewSceneMode.Single);
+
+            GameObject stageIdentity = new GameObject("StageIdentity");
+            stageIdentity.AddComponent<StageSceneIdentity>().Configure("stage.ashen", "ASHEN FORGE");
+
+            CreateGround("Mission Ground", new Vector3(0f, -0.5f, 10f), new Vector3(34f, 1f, 88f));
+
+            GameObject player = GameObject.CreatePrimitive(PrimitiveType.Capsule);
+            player.name = "Player_Debug";
+            player.transform.position = new Vector3(0f, 1f, -31f);
+
+            Object.DestroyImmediate(player.GetComponent<CapsuleCollider>());
+            CharacterController controller = player.AddComponent<CharacterController>();
+            controller.height = 2f;
+            controller.radius = 0.5f;
+            controller.center = new Vector3(0f, 1f, 0f);
+
+            Health playerHealth = player.AddComponent<Health>();
+            player.AddComponent<PlayerProgress>();
+            TopDownPlayerMotor motor = player.AddComponent<TopDownPlayerMotor>();
+            player.AddComponent<KnockbackMotor>();
+            player.AddComponent<HealthDamageReceiver>();
+            PlayerCombat combat = player.AddComponent<PlayerCombat>();
+            DebugPlayerInput input = player.AddComponent<DebugPlayerInput>();
+            VisualStyleBuilder.ApplyPlayerVisual(player);
+
+            Camera camera = CreateCamera("Main Camera", new Vector3(0f, 10f, -8f), Vector3.zero);
+            camera.backgroundColor = new Color(0.30f, 0.20f, 0.15f);
+            TopDownCameraFollow follow = camera.gameObject.AddComponent<TopDownCameraFollow>();
+            follow.SetTarget(player.transform);
+            camera.transform.LookAt(player.transform.position + Vector3.up);
+
+            CreateDirectionalLight();
+            AshenForgeWorldBuilder.Build();
+            CreateMobileHud(motor, combat, input, playerHealth);
+            player.AddComponent<MissionHeaderUI>();
+            player.AddComponent<StageJourneyUI>();
+
+            AshenForgeSliceBuilder.PopulateMission(player);
+
+            EditorSceneManager.SaveScene(scene, AshenMissionPath);
         }
 
 
@@ -455,7 +507,8 @@ namespace VoxelDungeon.EditorTools
                 new EditorBuildSettingsScene(BootPath, true),
                 new EditorBuildSettingsScene(HubPath, true),
                 new EditorBuildSettingsScene(CampPath, true),
-                new EditorBuildSettingsScene(MissionPath, true)
+                new EditorBuildSettingsScene(MissionPath, true),
+                new EditorBuildSettingsScene(AshenMissionPath, true)
             };
         }
     }
