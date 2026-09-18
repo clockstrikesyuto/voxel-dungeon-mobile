@@ -4,6 +4,8 @@ namespace VoxelDungeon.Combat
 {
     public sealed class SimpleProjectile : MonoBehaviour
     {
+        private readonly Collider[] overlapBuffer = new Collider[16];
+
         private GameObject source;
         private Vector3 direction;
         private float speed;
@@ -29,6 +31,9 @@ namespace VoxelDungeon.Combat
 
         private void Update()
         {
+            if (TryHitOverlappingTarget())
+                return;
+
             float distance = speed * Time.deltaTime;
             Vector3 origin = transform.position;
 
@@ -41,20 +46,10 @@ namespace VoxelDungeon.Combat
                     Physics.AllLayers,
                     QueryTriggerInteraction.Ignore))
             {
-                HealthDamageReceiver receiver = hit.collider.GetComponentInParent<HealthDamageReceiver>();
-                if (receiver != null && receiver.CanReceiveDamage && receiver.gameObject != source)
-                {
-                    receiver.ReceiveDamage(new DamagePayload(
-                        source,
-                        damage,
-                        hit.point,
-                        direction,
-                        false));
-                    Destroy(gameObject);
+                if (TryApplyHit(hit.collider, hit.point))
                     return;
-                }
 
-                if (hit.collider.gameObject != source)
+                if (!BelongsToSource(hit.collider))
                 {
                     Destroy(gameObject);
                     return;
@@ -66,6 +61,53 @@ namespace VoxelDungeon.Combat
 
             if (remainingLifetime <= 0f)
                 Destroy(gameObject);
+        }
+
+        private bool TryHitOverlappingTarget()
+        {
+            int count = Physics.OverlapSphereNonAlloc(
+                transform.position,
+                radius,
+                overlapBuffer,
+                Physics.AllLayers,
+                QueryTriggerInteraction.Ignore);
+
+            for (int i = 0; i < count; i++)
+            {
+                Collider hit = overlapBuffer[i];
+                if (hit == null || BelongsToSource(hit))
+                    continue;
+
+                if (TryApplyHit(hit, transform.position))
+                    return true;
+            }
+
+            return false;
+        }
+
+        private bool TryApplyHit(Collider hit, Vector3 hitPoint)
+        {
+            HealthDamageReceiver receiver = hit.GetComponentInParent<HealthDamageReceiver>();
+            if (receiver == null || !receiver.CanReceiveDamage || receiver.gameObject == source)
+                return false;
+
+            receiver.ReceiveDamage(new DamagePayload(
+                source,
+                damage,
+                hitPoint,
+                direction,
+                false));
+
+            Destroy(gameObject);
+            return true;
+        }
+
+        private bool BelongsToSource(Collider hit)
+        {
+            if (source == null || hit == null)
+                return false;
+
+            return hit.gameObject == source || hit.transform.IsChildOf(source.transform);
         }
     }
 }
