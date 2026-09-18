@@ -2,6 +2,7 @@ using System.Collections;
 using UnityEngine;
 using VoxelDungeon.Combat;
 using VoxelDungeon.Core;
+using VoxelDungeon.Items;
 using VoxelDungeon.Presentation;
 
 namespace VoxelDungeon.Player
@@ -53,7 +54,8 @@ namespace VoxelDungeon.Player
             if (Time.time < nextMeleeTime)
                 return false;
 
-            nextMeleeTime = Time.time + meleeCooldown;
+            EquipmentRecord meleeItem = ProfileProgress.EquippedMelee;
+            nextMeleeTime = Time.time + meleeCooldown * Mathf.Max(0.35f, meleeItem.CooldownMultiplier);
             PlayAttackPulse();
             MeleeArcVisual.Spawn(transform);
 
@@ -82,7 +84,8 @@ namespace VoxelDungeon.Player
                     gameObject,
                     meleeDamage
                         + (progress != null ? progress.MeleePowerBonus : 0)
-                        + ProfileProgress.MeleePower,
+                        + ProfileProgress.MeleePower
+                        + meleeItem.Power,
                     hit.ClosestPoint(center),
                     direction.normalized,
                     false));
@@ -96,7 +99,8 @@ namespace VoxelDungeon.Player
             if (Time.time < nextRangedTime)
                 return false;
 
-            nextRangedTime = Time.time + rangedCooldown;
+            EquipmentRecord rangedItem = ProfileProgress.EquippedRanged;
+            nextRangedTime = Time.time + rangedCooldown * Mathf.Max(0.35f, rangedItem.CooldownMultiplier);
             PlayAttackPulse();
 
             Vector3 direction = FindAimDirection();
@@ -121,7 +125,8 @@ namespace VoxelDungeon.Player
                 rangedSpeed,
                 rangedDamage
                     + (progress != null ? progress.RangedPowerBonus : 0)
-                    + ProfileProgress.RangedPower);
+                    + ProfileProgress.RangedPower
+                    + rangedItem.Power);
 
             transform.forward = direction;
             return true;
