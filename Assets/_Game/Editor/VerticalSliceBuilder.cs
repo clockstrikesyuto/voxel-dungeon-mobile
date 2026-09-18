@@ -234,6 +234,9 @@ namespace VoxelDungeon.EditorTools
             brain.Configure(speed, 14f, 1.55f, cooldown, windup, damage);
             brain.SetTarget(player);
 
+            EquipmentDropper equipmentDropper = enemy.AddComponent<EquipmentDropper>();
+            equipmentDropper.Configure(new[] { "crystal_saber", "crystal_bow" }, 0.10f, false);
+
             EnemyDropper dropper = enemy.AddComponent<EnemyDropper>();
             dropper.Configure(3, 8, 0.24f, 3, false);
 
@@ -274,6 +277,9 @@ namespace VoxelDungeon.EditorTools
             boss.AddComponent<BossPulseAttack>();
             BossPhaseController phaseController = boss.AddComponent<BossPhaseController>();
             phaseController.Configure(false);
+
+            EquipmentDropper equipmentDropper = boss.AddComponent<EquipmentDropper>();
+            equipmentDropper.Configure(new[] { "warden_cleaver" }, 1f, true);
 
             EnemyDropper dropper = boss.AddComponent<EnemyDropper>();
             dropper.Configure(45, 60, 1f, 10, true);
