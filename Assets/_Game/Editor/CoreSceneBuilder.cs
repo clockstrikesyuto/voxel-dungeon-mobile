@@ -53,7 +53,11 @@ namespace VoxelDungeon.EditorTools
             GameObject bootstrap = new GameObject("GameBootstrap");
             bootstrap.AddComponent<GameBootstrap>();
 
-            CreateCamera("Main Camera", new Vector3(0f, 4f, -8f), new Vector3(18f, 0f, 0f));
+            GameObject menu = new GameObject("MainMenu");
+            menu.AddComponent<MainMenuController>();
+
+            Camera camera = CreateCamera("Main Camera", new Vector3(0f, 4f, -8f), new Vector3(18f, 0f, 0f));
+            camera.backgroundColor = new Color(0.012f, 0.02f, 0.035f);
             CreateDirectionalLight();
 
             EditorSceneManager.SaveScene(scene, BootPath);
