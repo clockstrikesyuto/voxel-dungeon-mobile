@@ -4,11 +4,15 @@ using UnityEditor;
 using UnityEditor.SceneManagement;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
+using UnityEngine.EventSystems;
+using UnityEngine.InputSystem.UI;
 using VoxelDungeon.Combat;
 using VoxelDungeon.AI;
 using VoxelDungeon.Core;
 using VoxelDungeon.Player;
 using VoxelDungeon.Presentation;
+using VoxelDungeon.UI;
 
 namespace VoxelDungeon.EditorTools
 {
@@ -100,10 +104,10 @@ namespace VoxelDungeon.EditorTools
             controller.radius = 0.5f;
             controller.center = new Vector3(0f, 1f, 0f);
 
-            player.AddComponent<TopDownPlayerMotor>();
-            player.AddComponent<PlayerCombat>();
-            player.AddComponent<DebugPlayerInput>();
-            player.AddComponent<Health>();
+            TopDownPlayerMotor motor = player.AddComponent<TopDownPlayerMotor>();
+            PlayerCombat combat = player.AddComponent<PlayerCombat>();
+            DebugPlayerInput input = player.AddComponent<DebugPlayerInput>();
+            Health playerHealth = player.AddComponent<Health>();
             player.AddComponent<HealthDamageReceiver>();
 
             Camera camera = CreateCamera("Main Camera", new Vector3(0f, 9f, -7f), Vector3.zero);
@@ -112,6 +116,7 @@ namespace VoxelDungeon.EditorTools
             camera.transform.LookAt(player.transform.position + Vector3.up);
 
             CreateDirectionalLight();
+            CreateMobileHud(motor, combat, input, playerHealth);
 
             Vector3[] enemyPositions =
             {
@@ -139,6 +144,138 @@ namespace VoxelDungeon.EditorTools
             }
 
             EditorSceneManager.SaveScene(scene, MissionPath);
+        }
+
+        private static void CreateMobileHud(
+            TopDownPlayerMotor motor,
+            PlayerCombat combat,
+            DebugPlayerInput input,
+            Health playerHealth)
+        {
+            GameObject canvasGo = new GameObject("MobileHUD");
+            Canvas canvas = canvasGo.AddComponent<Canvas>();
+            canvas.renderMode = RenderMode.ScreenSpaceOverlay;
+
+            CanvasScaler scaler = canvasGo.AddComponent<CanvasScaler>();
+            scaler.uiScaleMode = CanvasScaler.ScaleMode.ScaleWithScreenSize;
+            scaler.referenceResolution = new Vector2(1920f, 1080f);
+            scaler.matchWidthOrHeight = 0.5f;
+            canvasGo.AddComponent<GraphicRaycaster>();
+
+            GameObject safeRoot = new GameObject("SafeArea");
+            safeRoot.transform.SetParent(canvasGo.transform, false);
+            RectTransform safeRect = safeRoot.AddComponent<RectTransform>();
+            safeRect.anchorMin = Vector2.zero;
+            safeRect.anchorMax = Vector2.one;
+            safeRect.offsetMin = Vector2.zero;
+            safeRect.offsetMax = Vector2.zero;
+            safeRoot.AddComponent<SafeAreaFitter>();
+
+            GameObject joystickBg = CreateUiBlock(
+                "MoveJoystick",
+                safeRect,
+                new Vector2(0f, 0f),
+                new Vector2(0f, 0f),
+                new Vector2(190f, 190f),
+                new Vector2(230f, 230f),
+                new Color(0.08f, 0.1f, 0.14f, 0.55f));
+
+            GameObject joystickHandle = CreateUiBlock(
+                "Handle",
+                joystickBg.GetComponent<RectTransform>(),
+                new Vector2(0.5f, 0.5f),
+                new Vector2(0.5f, 0.5f),
+                Vector2.zero,
+                new Vector2(95f, 95f),
+                new Color(0.85f, 0.9f, 1f, 0.85f));
+
+            MobileJoystick joystick = joystickBg.AddComponent<MobileJoystick>();
+            joystick.Configure(
+                joystickBg.GetComponent<RectTransform>(),
+                joystickHandle.GetComponent<RectTransform>());
+            input.SetMobileJoystick(joystick);
+
+            GameObject attack = CreateUiBlock(
+                "AttackButton",
+                safeRect,
+                new Vector2(1f, 0f),
+                new Vector2(1f, 0f),
+                new Vector2(-155f, 185f),
+                new Vector2(165f, 165f),
+                new Color(1f, 0.42f, 0.15f, 0.8f));
+            attack.AddComponent<MobileActionButton>().Configure(
+                MobileActionButton.ActionKind.Attack,
+                motor,
+                combat);
+
+            GameObject dodge = CreateUiBlock(
+                "DodgeButton",
+                safeRect,
+                new Vector2(1f, 0f),
+                new Vector2(1f, 0f),
+                new Vector2(-345f, 115f),
+                new Vector2(125f, 125f),
+                new Color(0.2f, 0.65f, 1f, 0.8f));
+            dodge.AddComponent<MobileActionButton>().Configure(
+                MobileActionButton.ActionKind.Dodge,
+                motor,
+                combat);
+
+            GameObject hpBg = CreateUiBlock(
+                "HealthBar",
+                safeRect,
+                new Vector2(0f, 1f),
+                new Vector2(0f, 1f),
+                new Vector2(200f, -75f),
+                new Vector2(330f, 38f),
+                new Color(0.08f, 0.08f, 0.08f, 0.85f));
+
+            GameObject hpFill = CreateUiBlock(
+                "Fill",
+                hpBg.GetComponent<RectTransform>(),
+                new Vector2(0f, 0f),
+                new Vector2(1f, 1f),
+                Vector2.zero,
+                Vector2.zero,
+                new Color(0.15f, 0.9f, 0.28f, 0.95f));
+            RectTransform fillRect = hpFill.GetComponent<RectTransform>();
+            fillRect.offsetMin = new Vector2(4f, 4f);
+            fillRect.offsetMax = new Vector2(-4f, -4f);
+            hpBg.AddComponent<HealthBarUI>().Configure(playerHealth, fillRect);
+
+            GameObject eventSystemGo = new GameObject("EventSystem");
+            eventSystemGo.AddComponent<EventSystem>();
+            eventSystemGo.AddComponent<InputSystemUIInputModule>();
+        }
+
+        private static GameObject CreateUiBlock(
+            string name,
+            RectTransform parent,
+            Vector2 anchorMin,
+            Vector2 anchorMax,
+            Vector2 anchoredPosition,
+            Vector2 size,
+            Color color)
+        {
+            GameObject go = new GameObject(name);
+            go.transform.SetParent(parent, false);
+
+            RectTransform rect = go.AddComponent<RectTransform>();
+            rect.anchorMin = anchorMin;
+            rect.anchorMax = anchorMax;
+            rect.pivot = new Vector2(0.5f, 0.5f);
+            rect.anchoredPosition = anchoredPosition;
+            if (anchorMin == anchorMax)
+                rect.sizeDelta = size;
+            else
+            {
+                rect.offsetMin = Vector2.zero;
+                rect.offsetMax = Vector2.zero;
+            }
+
+            Image image = go.AddComponent<Image>();
+            image.color = color;
+            return go;
         }
 
         private static Camera CreateCamera(string name, Vector3 position, Vector3 euler)
