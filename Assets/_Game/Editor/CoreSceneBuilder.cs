@@ -110,6 +110,7 @@ namespace VoxelDungeon.EditorTools
             TopDownPlayerMotor motor = player.AddComponent<TopDownPlayerMotor>();
             HubPlayerInput input = player.AddComponent<HubPlayerInput>();
             VisualStyleBuilder.ApplyPlayerVisual(player);
+            player.AddComponent<LoadoutVisualController>();
 
             Camera camera = CreateCamera("Main Camera", new Vector3(0f, 12f, -10f), Vector3.zero);
             camera.backgroundColor = new Color(0.58f, 0.78f, 0.90f);
@@ -152,6 +153,7 @@ namespace VoxelDungeon.EditorTools
             PlayerCombat combat = player.AddComponent<PlayerCombat>();
             DebugPlayerInput input = player.AddComponent<DebugPlayerInput>();
             VisualStyleBuilder.ApplyPlayerVisual(player);
+            player.AddComponent<LoadoutVisualController>();
 
             Camera camera = CreateCamera("Main Camera", new Vector3(0f, 10f, -8f), Vector3.zero);
             camera.backgroundColor = new Color(0.18f, 0.28f, 0.34f);
@@ -199,6 +201,7 @@ namespace VoxelDungeon.EditorTools
             PlayerCombat combat = player.AddComponent<PlayerCombat>();
             DebugPlayerInput input = player.AddComponent<DebugPlayerInput>();
             VisualStyleBuilder.ApplyPlayerVisual(player);
+            player.AddComponent<LoadoutVisualController>();
 
             Camera camera = CreateCamera("Main Camera", new Vector3(0f, 10f, -8f), Vector3.zero);
             camera.backgroundColor = new Color(0.30f, 0.20f, 0.15f);
@@ -245,6 +248,7 @@ namespace VoxelDungeon.EditorTools
             PlayerCombat combat = player.AddComponent<PlayerCombat>();
             DebugPlayerInput input = player.AddComponent<DebugPlayerInput>();
             VisualStyleBuilder.ApplyPlayerVisual(player);
+            player.AddComponent<LoadoutVisualController>();
 
             Camera camera = CreateCamera("Main Camera", new Vector3(0f, 10f, -8f), Vector3.zero);
             camera.backgroundColor = new Color(0.58f, 0.66f, 0.74f);
