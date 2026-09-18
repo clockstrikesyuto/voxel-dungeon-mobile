@@ -1,5 +1,7 @@
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using VoxelDungeon.Core;
 using VoxelDungeon.Player;
 
 namespace VoxelDungeon.UI
@@ -23,33 +25,144 @@ namespace VoxelDungeon.UI
             panelRect.offsetMax = Vector2.zero;
 
             Image image = panel.AddComponent<Image>();
-            image.color = new Color(0.02f, 0.03f, 0.05f, 0.82f);
+            image.color = new Color(0.015f, 0.025f, 0.04f, 0.9f);
 
-            GameObject textGo = new GameObject("ResultText");
-            textGo.transform.SetParent(panel.transform, false);
-            RectTransform textRect = textGo.AddComponent<RectTransform>();
-            textRect.anchorMin = new Vector2(0.2f, 0.25f);
-            textRect.anchorMax = new Vector2(0.8f, 0.75f);
-            textRect.offsetMin = Vector2.zero;
-            textRect.offsetMax = Vector2.zero;
+            Font font = Resources.GetBuiltinResource<Font>("LegacyRuntime.ttf");
 
-            Text text = textGo.AddComponent<Text>();
-            text.font = Resources.GetBuiltinResource<Font>("LegacyRuntime.ttf");
-            text.fontSize = 54;
-            text.alignment = TextAnchor.MiddleCenter;
-            text.color = Color.white;
+            Text title = CreateText(
+                panel.transform,
+                "MISSION CLEAR",
+                new Vector2(0.5f, 0.74f),
+                new Vector2(1000f, 120f),
+                64,
+                FontStyle.Bold,
+                Color.white,
+                font);
+
+            CreateText(
+                panel.transform,
+                GameFlowState.SelectedStageName,
+                new Vector2(0.5f, 0.655f),
+                new Vector2(800f, 55f),
+                24,
+                FontStyle.Bold,
+                new Color(0.12f, 0.82f, 0.95f),
+                font);
 
             int gold = progress != null ? progress.Gold : 0;
             int loot = progress != null ? progress.LootCount : 0;
             int melee = progress != null ? progress.MeleePowerBonus : 0;
             int ranged = progress != null ? progress.RangedPowerBonus : 0;
 
-            text.text =
-                "MISSION CLEAR\n\n" +
-                $"GOLD  {gold}\n" +
-                $"LOOT  {loot}\n" +
-                $"MELEE POWER  +{melee}\n" +
-                $"RANGED POWER +{ranged}";
+            string body =
+                $"GOLD   {gold}\n" +
+                $"LOOT   {loot}\n" +
+                $"MELEE POWER   +{melee}\n" +
+                $"RANGED POWER  +{ranged}";
+
+            CreateText(
+                panel.transform,
+                body,
+                new Vector2(0.5f, 0.47f),
+                new Vector2(760f, 260f),
+                38,
+                FontStyle.Normal,
+                Color.white,
+                font);
+
+            CreateButton(
+                panel.transform,
+                "RETRY",
+                new Vector2(0.42f, 0.18f),
+                new Vector2(300f, 78f),
+                new Color(0.1f, 0.7f, 0.85f),
+                font,
+                () => SceneManager.LoadScene("Mission_Test"));
+
+            CreateButton(
+                panel.transform,
+                "TITLE",
+                new Vector2(0.58f, 0.18f),
+                new Vector2(300f, 78f),
+                new Color(0.5f, 0.28f, 0.9f),
+                font,
+                () =>
+                {
+                    GameFlowState.ResetToTitle();
+                    SceneManager.LoadScene("Boot");
+                });
+        }
+
+        private static Text CreateText(
+            Transform parent,
+            string value,
+            Vector2 anchor,
+            Vector2 size,
+            int fontSize,
+            FontStyle style,
+            Color color,
+            Font font)
+        {
+            GameObject go = new GameObject("Text");
+            go.transform.SetParent(parent, false);
+
+            RectTransform rect = go.AddComponent<RectTransform>();
+            rect.anchorMin = anchor;
+            rect.anchorMax = anchor;
+            rect.pivot = new Vector2(0.5f, 0.5f);
+            rect.anchoredPosition = Vector2.zero;
+            rect.sizeDelta = size;
+
+            Text text = go.AddComponent<Text>();
+            text.font = font;
+            text.text = value;
+            text.fontSize = fontSize;
+            text.fontStyle = style;
+            text.alignment = TextAnchor.MiddleCenter;
+            text.color = color;
+            text.raycastTarget = false;
+            return text;
+        }
+
+        private static void CreateButton(
+            Transform parent,
+            string label,
+            Vector2 anchor,
+            Vector2 size,
+            Color accent,
+            Font font,
+            UnityEngine.Events.UnityAction action)
+        {
+            GameObject go = new GameObject(label + "Button");
+            go.transform.SetParent(parent, false);
+
+            RectTransform rect = go.AddComponent<RectTransform>();
+            rect.anchorMin = anchor;
+            rect.anchorMax = anchor;
+            rect.pivot = new Vector2(0.5f, 0.5f);
+            rect.anchoredPosition = Vector2.zero;
+            rect.sizeDelta = size;
+
+            Image bg = go.AddComponent<Image>();
+            bg.color = new Color(accent.r * 0.3f, accent.g * 0.3f, accent.b * 0.3f, 0.96f);
+
+            Outline outline = go.AddComponent<Outline>();
+            outline.effectColor = accent;
+            outline.effectDistance = new Vector2(2f, -2f);
+
+            Button button = go.AddComponent<Button>();
+            button.targetGraphic = bg;
+            button.onClick.AddListener(action);
+
+            CreateText(
+                go.transform,
+                label,
+                new Vector2(0.5f, 0.5f),
+                size,
+                25,
+                FontStyle.Bold,
+                Color.white,
+                font);
         }
     }
 }
