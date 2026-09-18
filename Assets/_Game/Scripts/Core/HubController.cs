@@ -132,14 +132,6 @@ namespace VoxelDungeon.Core
             switch (point.Kind)
             {
                 case HubPointKind.StageGate:
-                    if (point.StageId == "stage.void")
-                    {
-                        ShowInfoPanel(
-                            "VOID GARDEN",
-                            "The route has been revealed. The full Void Garden expedition is the next frontier update.");
-                        return;
-                    }
-
                     StartStage(point.StageId, point.DisplayName, point.SceneName);
                     break;
 
@@ -311,13 +303,13 @@ namespace VoxelDungeon.Core
             bool voidOpen = ProfileProgress.VoidGardenUnlocked;
             CreateMapCard(
                 "03  VOID GARDEN",
-                voidOpen ? "ROUTE FOUND" : "SEALED",
+                voidOpen ? "UNLOCKED" : "SEALED",
                 voidOpen
-                    ? "The path is open. Full expedition arrives in the next frontier update."
+                    ? "White ruins, reflecting pools and the Astral Warden."
                     : "Clear Ashen Forge first.",
                 violet,
                 voidOpen,
-                () => ShowInfoPanel("VOID GARDEN", "Route discovered. Full expedition is still being built."));
+                () => StartStage("stage.void", "VOID GARDEN", "Mission_Void"));
 
             CreateOverlayCloseButton();
             overlayRoot.SetActive(true);
