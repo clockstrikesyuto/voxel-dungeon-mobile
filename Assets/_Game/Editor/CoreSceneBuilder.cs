@@ -105,10 +105,10 @@ namespace VoxelDungeon.EditorTools
             controller.center = new Vector3(0f, 1f, 0f);
 
             Health playerHealth = player.AddComponent<Health>();
-            player.AddComponent<HealthDamageReceiver>();
             player.AddComponent<PlayerProgress>();
             TopDownPlayerMotor motor = player.AddComponent<TopDownPlayerMotor>();
             player.AddComponent<KnockbackMotor>();
+            player.AddComponent<HealthDamageReceiver>();
             PlayerCombat combat = player.AddComponent<PlayerCombat>();
             DebugPlayerInput input = player.AddComponent<DebugPlayerInput>();
 
