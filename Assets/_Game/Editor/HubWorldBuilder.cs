@@ -294,7 +294,12 @@ namespace VoxelDungeon.EditorTools
             CreateBlockChild(root.transform, "Portal", new Vector3(0f, 2.85f, 0.05f), new Vector3(3.3f, 4.1f, 0.16f), glow, false);
             CreateBlockChild(root.transform, "Step", new Vector3(0f, 0.22f, -1.1f), new Vector3(6.0f, 0.44f, 2.4f), stone);
 
-            string sceneName = stageId == "stage.ashen" ? "Mission_Ashen" : "Mission_Test";
+            string sceneName = stageId switch
+            {
+                "stage.ashen" => "Mission_Ashen",
+                "stage.void" => "Mission_Void",
+                _ => "Mission_Test"
+            };
 
             HubPoint point = root.AddComponent<HubPoint>();
             point.Configure(HubPointKind.StageGate, stageName, subtitle, stageId, sceneName, 3.8f);
