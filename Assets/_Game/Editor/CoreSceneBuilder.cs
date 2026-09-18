@@ -156,6 +156,7 @@ namespace VoxelDungeon.EditorTools
             CrystalCryptWorldBuilder.Build();
             CreateMobileHud(motor, combat, input, playerHealth);
             player.AddComponent<MissionHeaderUI>();
+            player.AddComponent<StageJourneyUI>();
 
             VerticalSliceBuilder.PopulateMission(player);
 
