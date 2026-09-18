@@ -270,7 +270,7 @@ namespace VoxelDungeon.EditorTools
             pulse.Configure(4.8f, 3.8f, 0.62f, 29);
 
             BossPhaseController phases = boss.AddComponent<BossPhaseController>();
-            phases.Configure(false);
+            phases.Configure(BossPhaseController.BossVariant.Void);
 
             EquipmentDropper equipmentDropper = boss.AddComponent<EquipmentDropper>();
             equipmentDropper.Configure(new[] { "void_edge" }, 1f, true);
