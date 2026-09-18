@@ -1,3 +1,20 @@
+## 0.0.6 - Equipment & Void Garden Expansion
+
+- Added persistent melee/ranged equipment inventory and loadouts.
+- Added weapon rarity, power and attack-speed modifiers.
+- Added equipment drops to Crystal Crypt, Ashen Forge and Void Garden.
+- Added boss-exclusive weapons including Warden Cleaver, Colossus Maul and Void Edge.
+- Added Frontier Arsenal for changing equipped weapons in the physical hub.
+- Converted Frontier Merchant into a working equipment shop.
+- Added Archivist Luma with a progression quest and reward.
+- Added live player weapon silhouettes that update when loadouts change.
+- Added equipped weapon names to the mission HUD.
+- Added a complete third mission, Void Garden, with white ruins, reflecting pools, garden lighting and dedicated encounters.
+- Added Astral Warden with a dedicated three-phase boss profile.
+- Connected Void Garden to the physical hub gate and Frontier Map.
+- Added Void Garden completion persistence.
+- Expanded world progression to Crystal Crypt -> Ashen Forge -> Void Garden.
+
 ## 0.0.5 - Solo Adventure Expansion
 
 - Reworked Crystal Crypt floor construction to remove overlapping coplanar tiles and reduce movement flicker.
