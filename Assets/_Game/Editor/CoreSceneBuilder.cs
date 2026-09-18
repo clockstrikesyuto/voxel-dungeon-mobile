@@ -418,6 +418,8 @@ namespace VoxelDungeon.EditorTools
 
             Camera camera = go.AddComponent<Camera>();
             camera.fieldOfView = 46f;
+            camera.allowHDR = true;
+            camera.allowMSAA = true;
             camera.backgroundColor = new Color(0.018f, 0.03f, 0.045f);
             camera.clearFlags = CameraClearFlags.SolidColor;
             camera.nearClipPlane = 0.1f;
