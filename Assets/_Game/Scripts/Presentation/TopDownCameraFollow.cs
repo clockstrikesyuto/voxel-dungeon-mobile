@@ -11,6 +11,12 @@ namespace VoxelDungeon.Presentation
 
         public void SetTarget(Transform value) => target = value;
 
+        public void ConfigureView(Vector3 newOffset, Vector3 newLookOffset)
+        {
+            offset = newOffset;
+            lookOffset = newLookOffset;
+        }
+
         private void LateUpdate()
         {
             if (target == null) return;
