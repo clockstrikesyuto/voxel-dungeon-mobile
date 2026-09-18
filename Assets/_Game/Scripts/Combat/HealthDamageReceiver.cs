@@ -55,6 +55,9 @@ namespace VoxelDungeon.Combat
             health.ApplyDamage(payload.Amount);
             FloatingDamageText.Spawn(payload.HitPoint, payload.Amount, payload.Critical);
 
+            if (health.IsDead)
+                return;
+
             if (knockback != null)
                 knockback.AddImpulse(payload.Direction, knockbackStrength);
 
