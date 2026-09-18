@@ -5,6 +5,7 @@ using UnityEditor.SceneManagement;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using VoxelDungeon.Combat;
+using VoxelDungeon.AI;
 using VoxelDungeon.Core;
 using VoxelDungeon.Player;
 using VoxelDungeon.Presentation;
@@ -100,6 +101,7 @@ namespace VoxelDungeon.EditorTools
             controller.center = new Vector3(0f, 1f, 0f);
 
             player.AddComponent<TopDownPlayerMotor>();
+            player.AddComponent<PlayerCombat>();
             player.AddComponent<DebugPlayerInput>();
             player.AddComponent<Health>();
             player.AddComponent<HealthDamageReceiver>();
@@ -110,6 +112,31 @@ namespace VoxelDungeon.EditorTools
             camera.transform.LookAt(player.transform.position + Vector3.up);
 
             CreateDirectionalLight();
+
+            Vector3[] enemyPositions =
+            {
+                new Vector3(4f, 1f, 2f),
+                new Vector3(-4f, 1f, 3f),
+                new Vector3(2f, 1f, 6f)
+            };
+
+            for (int i = 0; i < enemyPositions.Length; i++)
+            {
+                GameObject enemy = GameObject.CreatePrimitive(PrimitiveType.Capsule);
+                enemy.name = "Enemy_Debug_" + i;
+                enemy.transform.position = enemyPositions[i];
+
+                Object.DestroyImmediate(enemy.GetComponent<CapsuleCollider>());
+                CharacterController enemyController = enemy.AddComponent<CharacterController>();
+                enemyController.height = 2f;
+                enemyController.radius = 0.5f;
+                enemyController.center = new Vector3(0f, 1f, 0f);
+
+                enemy.AddComponent<Health>();
+                enemy.AddComponent<HealthDamageReceiver>();
+                SimpleEnemyBrain brain = enemy.AddComponent<SimpleEnemyBrain>();
+                brain.SetTarget(player.transform);
+            }
 
             EditorSceneManager.SaveScene(scene, MissionPath);
         }
