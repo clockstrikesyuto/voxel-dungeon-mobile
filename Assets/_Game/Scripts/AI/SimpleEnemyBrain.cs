@@ -12,10 +12,10 @@ namespace VoxelDungeon.AI
         [SerializeField, Min(0.1f)] private float attackRange = 1.6f;
         [SerializeField, Min(0.05f)] private float attackCooldown = 1.1f;
         [SerializeField, Min(1)] private int attackDamage = 10;
+        [SerializeField] private Transform target;
 
         private CharacterController controller;
         private Health health;
-        private Transform target;
         private HealthDamageReceiver targetReceiver;
         private float nextAttackTime;
         private float verticalVelocity;
@@ -23,13 +23,24 @@ namespace VoxelDungeon.AI
         public void SetTarget(Transform value)
         {
             target = value;
-            targetReceiver = value != null ? value.GetComponent<HealthDamageReceiver>() : null;
+            ResolveTargetReceiver();
         }
 
         private void Awake()
         {
             controller = GetComponent<CharacterController>();
             health = GetComponent<Health>();
+            ResolveTargetReceiver();
+        }
+
+        private void Start()
+        {
+            ResolveTargetReceiver();
+        }
+
+        private void ResolveTargetReceiver()
+        {
+            targetReceiver = target != null ? target.GetComponent<HealthDamageReceiver>() : null;
         }
 
         private void OnEnable()
@@ -46,7 +57,7 @@ namespace VoxelDungeon.AI
 
         private void Update()
         {
-            if (health.IsDead || target == null)
+            if (health == null || health.IsDead || target == null)
                 return;
 
             Vector3 toTarget = target.position - transform.position;
@@ -67,6 +78,9 @@ namespace VoxelDungeon.AI
 
                 return;
             }
+
+            if (targetReceiver == null)
+                ResolveTargetReceiver();
 
             if (Time.time >= nextAttackTime && targetReceiver != null && targetReceiver.CanReceiveDamage)
             {
