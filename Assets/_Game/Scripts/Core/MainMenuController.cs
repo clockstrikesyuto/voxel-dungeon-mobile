@@ -106,7 +106,7 @@ namespace VoxelDungeon.Core
             CreateButton("SOLO PLAY", new Vector2(0.5f, 0.40f), new Vector2(520f, 92f), cyan, () =>
             {
                 GameFlowState.Mode = PlayModeKind.Solo;
-                ShowStageSelect();
+                SceneManager.LoadScene("Hub");
             });
 
             CreateButton("MULTIPLAYER", new Vector2(0.5f, 0.285f), new Vector2(520f, 92f), violet, () =>
