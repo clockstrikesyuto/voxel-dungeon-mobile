@@ -14,9 +14,23 @@
 
 ## Combat
 - [ ] Melee hits one valid target only per configured strike window.
-- [ ] Ranged aim assist selects only valid targets.
+- [ ] Melee slash visual appears when attacking.
+- [ ] Hits visibly react with damage number, flash and knockback.
+- [ ] Ranged attack launches a projectile and can use aim assist.
+- [ ] Potion heals only when health is missing and respects cooldown.
+- [ ] Enemy attack shows a readable windup before damage.
+- [ ] Enemy death completes once and removes the enemy.
 - [ ] Damage cannot be applied twice from duplicated network messages.
 - [ ] Player death/down transitions exactly once.
+
+## Mobile HUD
+- [ ] Joystick controls movement with mouse/touch.
+- [ ] Attack button triggers melee.
+- [ ] Dodge button triggers dodge.
+- [ ] Ranged button triggers ranged attack.
+- [ ] Potion button heals when health is missing.
+- [ ] Player HP bar updates after damage/healing.
+- [ ] Enemy HP bars update after damage.
 
 ## Multiplayer
 - [ ] 1 player completes the smoke mission.
