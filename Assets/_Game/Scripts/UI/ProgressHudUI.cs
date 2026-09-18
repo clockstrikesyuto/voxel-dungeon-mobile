@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.UI;
+using VoxelDungeon.Core;
 using VoxelDungeon.Player;
 
 namespace VoxelDungeon.UI
@@ -38,11 +39,11 @@ namespace VoxelDungeon.UI
             rect.anchorMax = new Vector2(1f, 1f);
             rect.pivot = new Vector2(1f, 1f);
             rect.anchoredPosition = new Vector2(-55f, -45f);
-            rect.sizeDelta = new Vector2(420f, 80f);
+            rect.sizeDelta = new Vector2(620f, 120f);
 
             label = go.AddComponent<Text>();
             label.font = Resources.GetBuiltinResource<Font>("LegacyRuntime.ttf");
-            label.fontSize = 30;
+            label.fontSize = 23;
             label.alignment = TextAnchor.UpperRight;
             label.color = Color.white;
         }
@@ -52,7 +53,12 @@ namespace VoxelDungeon.UI
             if (label == null || progress == null)
                 return;
 
-            label.text = $"GOLD {progress.Gold}   MELEE +{progress.MeleePowerBonus}   RANGE +{progress.RangedPowerBonus}";
+            var melee = ProfileProgress.EquippedMelee;
+            var ranged = ProfileProgress.EquippedRanged;
+
+            label.text =
+                $"GOLD {progress.Gold}   MELEE +{progress.MeleePowerBonus}   RANGE +{progress.RangedPowerBonus}\n" +
+                $"{melee.Name}  •  {ranged.Name}";
         }
     }
 }
