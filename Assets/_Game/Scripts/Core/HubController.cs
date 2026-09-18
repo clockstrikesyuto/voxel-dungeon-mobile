@@ -117,7 +117,7 @@ namespace VoxelDungeon.Core
             if (stageId == "stage.ashen")
                 return "Clear CRYSTAL CRYPT to unlock";
             if (stageId == "stage.void")
-                return "Deeper frontier route is still sealed";
+                return "Clear ASHEN FORGE to unlock";
             return "Locked";
         }
 
@@ -129,17 +129,11 @@ namespace VoxelDungeon.Core
             switch (point.Kind)
             {
                 case HubPointKind.StageGate:
-                    if (point.StageId == "stage.ashen")
-                    {
-                        ShowInfoPanel(
-                            "ASHEN FORGE",
-                            "The route is unlocked.\nThe full Ashen Forge mission is the next stage-content update.");
-                        return;
-                    }
-
                     if (point.StageId == "stage.void")
                     {
-                        ShowInfoPanel("VOID GARDEN", "This region is still under construction.");
+                        ShowInfoPanel(
+                            "VOID GARDEN",
+                            "The route has been revealed. The full Void Garden expedition is the next frontier update.");
                         return;
                     }
 
@@ -299,19 +293,22 @@ namespace VoxelDungeon.Core
                 "02  ASHEN FORGE",
                 ashen ? "UNLOCKED" : "LOCKED",
                 ashen
-                    ? "Route discovered. Full mission arrives in the next content pass."
+                    ? "Molten foundries, armored raiders and the Forge Colossus."
                     : "Clear Crystal Crypt first.",
                 warm,
                 ashen,
-                () => ShowInfoPanel("ASHEN FORGE", "Route unlocked. Stage content is being built next."));
+                () => StartStage("stage.ashen", "ASHEN FORGE", "Mission_Ashen"));
 
+            bool voidOpen = ProfileProgress.VoidGardenUnlocked;
             CreateMapCard(
                 "03  VOID GARDEN",
-                "SEALED",
-                "A distant region beyond the current frontier.",
+                voidOpen ? "ROUTE FOUND" : "SEALED",
+                voidOpen
+                    ? "The path is open. Full expedition arrives in the next frontier update."
+                    : "Clear Ashen Forge first.",
                 violet,
-                false,
-                null);
+                voidOpen,
+                () => ShowInfoPanel("VOID GARDEN", "Route discovered. Full expedition is still being built."));
 
             CreateOverlayCloseButton();
             overlayRoot.SetActive(true);
