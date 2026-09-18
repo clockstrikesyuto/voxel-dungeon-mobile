@@ -140,6 +140,8 @@ namespace VoxelDungeon.EditorTools
             brain.SetTarget(player);
 
             boss.AddComponent<BossPulseAttack>();
+            BossPhaseController phaseController = boss.AddComponent<BossPhaseController>();
+            phaseController.Configure(true);
 
             EnemyDropper dropper = boss.AddComponent<EnemyDropper>();
             dropper.Configure(65, 85, 1f, 14, true);
