@@ -48,6 +48,7 @@ namespace VoxelDungeon.EditorTools
 
             CreateBreadcrumbCrystals(cyan, blue, violet);
             CreateAtmosphere();
+            WorldPostProcessingBuilder.ApplyCrypt();
         }
 
         private static void CreateRoom(
