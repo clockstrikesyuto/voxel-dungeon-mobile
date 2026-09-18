@@ -123,6 +123,14 @@ namespace VoxelDungeon.EditorTools
             if (renderer != null)
                 renderer.material.color = color;
 
+            string archetype = name.StartsWith("Scout")
+                ? "Scout"
+                : name.StartsWith("Raider")
+                    ? "Raider"
+                    : "Brute";
+
+            VisualStyleBuilder.ApplyEnemyVisual(enemy, archetype);
+
             Health health = enemy.AddComponent<Health>();
             health.ConfigureMaxHealth(hp);
 
@@ -157,6 +165,8 @@ namespace VoxelDungeon.EditorTools
             Renderer renderer = boss.GetComponent<Renderer>();
             if (renderer != null)
                 renderer.material.color = new Color(0.18f, 0.08f, 0.08f);
+
+            VisualStyleBuilder.ApplyBossVisual(boss);
 
             Health health = boss.AddComponent<Health>();
             health.ConfigureMaxHealth(460);
