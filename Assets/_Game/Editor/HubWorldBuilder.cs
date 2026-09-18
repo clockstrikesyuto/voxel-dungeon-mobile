@@ -51,6 +51,8 @@ namespace VoxelDungeon.EditorTools
             CreateWorldMapTable(new Vector3(0f, 0f, 6.0f), paleStone, cyan, gold);
             CreateForge(new Vector3(-10f, 0f, -6f), paleStone, darkStone, orange, wood, woodLight);
             CreateMerchant(new Vector3(10f, 0f, -6f), paleStone, wood, woodLight, gold);
+            CreateArmory(new Vector3(-17f, 0f, 4f), paleStone, darkStone, steel: stone, cyan, wood);
+            CreateArchivist(new Vector3(17f, 0f, 4f), paleStone, violet, gold, wood);
             CreateTraining(new Vector3(0f, 0f, -15f), paleStone, wood, orange);
 
             CreateStageGate(
@@ -212,6 +214,57 @@ namespace VoxelDungeon.EditorTools
             HubPoint point = root.AddComponent<HubPoint>();
             point.Configure(HubPointKind.Merchant, "FRONTIER MERCHANT", "Browse supplies and rotating loot", radius: 3.6f);
             CreateWorldLabel(root.transform, "MERCHANT", new Vector3(0f, 4.45f, 0.5f), new Color(1f, 0.75f, 0.18f), 34);
+        }
+
+        private static void CreateArmory(
+            Vector3 position,
+            Material stone,
+            Material dark,
+            Material steel,
+            Material glow,
+            Material wood)
+        {
+            GameObject root = new GameObject("FrontierArmory");
+            root.transform.position = position;
+
+            CreateBlockChild(root.transform, "Platform", new Vector3(0f, 0.12f, 0f), new Vector3(6.5f, 0.24f, 5.5f), stone);
+            CreateBlockChild(root.transform, "BackWall", new Vector3(0f, 2.0f, 2.0f), new Vector3(6.5f, 4.0f, 0.40f), dark);
+            CreateBlockChild(root.transform, "WeaponRack", new Vector3(0f, 1.35f, 1.55f), new Vector3(4.8f, 2.2f, 0.25f), wood);
+            CreateBlockChild(root.transform, "Blade_L", new Vector3(-1.6f, 1.55f, 1.35f), new Vector3(0.16f, 1.8f, 0.12f), steel, false);
+            CreateBlockChild(root.transform, "Blade_C", new Vector3(0f, 1.55f, 1.35f), new Vector3(0.16f, 1.8f, 0.12f), glow, false);
+            CreateBlockChild(root.transform, "Blade_R", new Vector3(1.6f, 1.55f, 1.35f), new Vector3(0.16f, 1.8f, 0.12f), steel, false);
+
+            HubPoint point = root.AddComponent<HubPoint>();
+            point.Configure(HubPointKind.Armory, "FRONTIER ARSENAL", "Equip weapons collected on expeditions", radius: 3.5f);
+
+            CreateWorldLabel(root.transform, "ARSENAL", new Vector3(0f, 4.6f, 1.7f), glow.color, 34);
+        }
+
+        private static void CreateArchivist(
+            Vector3 position,
+            Material stone,
+            Material glow,
+            Material gold,
+            Material wood)
+        {
+            GameObject root = new GameObject("ArchivistLuma");
+            root.transform.position = position;
+
+            CreateBlockChild(root.transform, "ResearchFloor", new Vector3(0f, 0.10f, 0f), new Vector3(5.8f, 0.20f, 5.0f), stone);
+            CreateBlockChild(root.transform, "Desk", new Vector3(0f, 0.85f, 0.8f), new Vector3(3.6f, 1.0f, 1.0f), wood);
+            CreateBlockChild(root.transform, "MapCrystal", new Vector3(0f, 1.65f, 0.75f), new Vector3(0.55f, 1.1f, 0.55f), glow, false);
+            CreateBlockChild(root.transform, "Book_L", new Vector3(-1.0f, 1.45f, 0.55f), new Vector3(0.75f, 0.12f, 0.55f), gold, false);
+            CreateBlockChild(root.transform, "Book_R", new Vector3(1.0f, 1.45f, 0.55f), new Vector3(0.75f, 0.12f, 0.55f), gold, false);
+
+            GameObject npc = new GameObject("Luma");
+            npc.transform.SetParent(root.transform, false);
+            CreateBlockChild(npc.transform, "Body", new Vector3(0f, 1.0f, -0.8f), new Vector3(0.65f, 1.2f, 0.50f), glow, false);
+            CreateBlockChild(npc.transform, "Head", new Vector3(0f, 1.85f, -0.8f), new Vector3(0.58f, 0.58f, 0.58f), gold, false);
+
+            HubPoint point = root.AddComponent<HubPoint>();
+            point.Configure(HubPointKind.Quest, "ARCHIVIST LUMA", "Frontier research quest", radius: 3.2f);
+
+            CreateWorldLabel(root.transform, "ARCHIVIST", new Vector3(0f, 4.35f, 0.8f), glow.color, 32);
         }
 
         private static void CreateTraining(Vector3 position, Material stone, Material wood, Material glow)
