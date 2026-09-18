@@ -107,6 +107,8 @@ namespace VoxelDungeon.EditorTools
                 key.shadows = LightShadows.Soft;
                 key.transform.rotation = Quaternion.Euler(42f, -28f, 0f);
             }
+
+            WorldPostProcessingBuilder.ApplyHub();
         }
 
         private static void CreatePond(Vector3 center, Material water, Material stone)
