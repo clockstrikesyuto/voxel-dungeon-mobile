@@ -33,6 +33,7 @@ namespace VoxelDungeon.Player
         private readonly Collider[] aimBuffer = new Collider[32];
 
         private Health health;
+        private PlayerProgress progress;
         private float nextMeleeTime;
         private float nextRangedTime;
         private float nextPotionTime;
@@ -42,6 +43,7 @@ namespace VoxelDungeon.Player
         private void Awake()
         {
             health = GetComponent<Health>();
+            progress = GetComponent<PlayerProgress>();
             baseScale = transform.localScale;
         }
 
@@ -77,7 +79,7 @@ namespace VoxelDungeon.Player
 
                 receiver.ReceiveDamage(new DamagePayload(
                     gameObject,
-                    meleeDamage,
+                    meleeDamage + (progress != null ? progress.MeleePowerBonus : 0),
                     hit.ClosestPoint(center),
                     direction.normalized,
                     false));
@@ -114,7 +116,7 @@ namespace VoxelDungeon.Player
                 gameObject,
                 direction,
                 rangedSpeed,
-                rangedDamage);
+                rangedDamage + (progress != null ? progress.RangedPowerBonus : 0));
 
             transform.forward = direction;
             return true;
