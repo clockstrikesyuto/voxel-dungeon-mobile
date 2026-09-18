@@ -1,3 +1,16 @@
+## 0.0.5 - Solo Adventure Expansion
+
+- Reworked Crystal Crypt floor construction to remove overlapping coplanar tiles and reduce movement flicker.
+- Added room-based encounter activation so enemies wake only when the player enters their combat area.
+- Added sealed boss routes: clear regular encounters, enter the arena, close the rear barrier, then spawn the boss.
+- Added boss entrance title presentation.
+- Added three-phase boss combat with faster pursuit, stronger pulses and radial projectile bursts.
+- Added a complete second playable mission, Ashen Forge, with foundries, lava channels, machinery, stronger encounters, treasure and Forge Colossus.
+- Added Ashen Forge completion persistence and Void Garden route discovery.
+- Connected Ashen Forge to the physical hub gate and Frontier Map.
+- Added stage-specific journey banners and scene identity.
+- Retry now reloads the current mission rather than always returning to Crystal Crypt.
+
 ## 0.0.4 - Frontier Beauty Update
 
 - Added 64x64 procedural pixel textures with point filtering across generated materials.
