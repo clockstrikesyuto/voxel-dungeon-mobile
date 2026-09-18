@@ -8,7 +8,9 @@ namespace VoxelDungeon.Core
         WorldMap,
         Forge,
         Merchant,
-        Training
+        Training,
+        Armory,
+        Quest
     }
 
     public sealed class HubPoint : MonoBehaviour
