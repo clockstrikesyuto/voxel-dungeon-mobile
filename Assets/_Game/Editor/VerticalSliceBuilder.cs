@@ -23,96 +23,122 @@ namespace VoxelDungeon.EditorTools
 
             List<Health> regular = new List<Health>();
 
-            regular.Add(CreateEnemy(
-                "Scout_A",
-                new Vector3(3.2f, 1f, -15f),
-                new Vector3(0.72f, 0.82f, 0.72f),
-                new Color(0.2f, 0.85f, 0.95f),
-                55, 4.1f, 7, 0.75f, 0.22f,
-                player.transform));
+            Health scoutA = CreateEnemy(
+                "Scout_A", new Vector3(3.2f, 1f, -15f),
+                new Vector3(0.72f, 0.82f, 0.72f), new Color(0.2f, 0.85f, 0.95f),
+                55, 4.1f, 7, 0.75f, 0.22f, player.transform);
+            Health scoutB = CreateEnemy(
+                "Scout_B", new Vector3(-4.2f, 1f, -10f),
+                new Vector3(0.72f, 0.82f, 0.72f), new Color(0.2f, 0.85f, 0.95f),
+                55, 4.1f, 7, 0.75f, 0.22f, player.transform);
+            regular.Add(scoutA);
+            regular.Add(scoutB);
 
-            regular.Add(CreateEnemy(
-                "Scout_B",
-                new Vector3(-4.2f, 1f, -10f),
-                new Vector3(0.72f, 0.82f, 0.72f),
-                new Color(0.2f, 0.85f, 0.95f),
-                55, 4.1f, 7, 0.75f, 0.22f,
-                player.transform));
+            Health raiderA = CreateEnemy(
+                "Raider_A", new Vector3(-5.0f, 1f, 1f),
+                Vector3.one, new Color(1f, 0.48f, 0.16f),
+                95, 2.65f, 11, 1.0f, 0.33f, player.transform);
+            Health raiderB = CreateEnemy(
+                "Raider_B", new Vector3(5.0f, 1f, 5f),
+                Vector3.one, new Color(1f, 0.48f, 0.16f),
+                95, 2.65f, 11, 1.0f, 0.33f, player.transform);
+            regular.Add(raiderA);
+            regular.Add(raiderB);
 
-            regular.Add(CreateEnemy(
-                "Raider_A",
-                new Vector3(-5.0f, 1f, 1f),
-                Vector3.one,
-                new Color(1f, 0.48f, 0.16f),
-                95, 2.65f, 11, 1.0f, 0.33f,
-                player.transform));
+            Health scoutC = CreateEnemy(
+                "Scout_C", new Vector3(-5.0f, 1f, 17f),
+                new Vector3(0.72f, 0.82f, 0.72f), new Color(0.2f, 0.85f, 0.95f),
+                65, 4.25f, 8, 0.72f, 0.20f, player.transform);
+            Health bruteA = CreateEnemy(
+                "Brute_A", new Vector3(4.0f, 1.25f, 21f),
+                new Vector3(1.35f, 1.35f, 1.35f), new Color(0.62f, 0.24f, 0.88f),
+                170, 1.65f, 20, 1.4f, 0.62f, player.transform);
+            regular.Add(scoutC);
+            regular.Add(bruteA);
 
-            regular.Add(CreateEnemy(
-                "Raider_B",
-                new Vector3(5.0f, 1f, 5f),
-                Vector3.one,
-                new Color(1f, 0.48f, 0.16f),
-                95, 2.65f, 11, 1.0f, 0.33f,
-                player.transform));
+            Health raiderC = CreateEnemy(
+                "Raider_C", new Vector3(-4.2f, 1f, 33f),
+                Vector3.one, new Color(1f, 0.48f, 0.16f),
+                110, 2.75f, 13, 0.95f, 0.31f, player.transform);
+            Health bruteB = CreateEnemy(
+                "Brute_B", new Vector3(5.0f, 1.25f, 36f),
+                new Vector3(1.35f, 1.35f, 1.35f), new Color(0.62f, 0.24f, 0.88f),
+                190, 1.7f, 22, 1.35f, 0.58f, player.transform);
+            regular.Add(raiderC);
+            regular.Add(bruteB);
 
-            regular.Add(CreateEnemy(
-                "Scout_C",
-                new Vector3(-5.0f, 1f, 17f),
-                new Vector3(0.72f, 0.82f, 0.72f),
-                new Color(0.2f, 0.85f, 0.95f),
-                65, 4.25f, 8, 0.72f, 0.20f,
-                player.transform));
+            CreateEncounterZone(
+                "Encounter_CrystalHall",
+                new Vector3(0f, 1.8f, -13f),
+                new Vector3(14f, 4f, 10f),
+                scoutA.gameObject, scoutB.gameObject);
 
-            regular.Add(CreateEnemy(
-                "Brute_A",
-                new Vector3(4.0f, 1.25f, 21f),
-                new Vector3(1.35f, 1.35f, 1.35f),
-                new Color(0.62f, 0.24f, 0.88f),
-                170, 1.65f, 20, 1.4f, 0.62f,
-                player.transform));
+            CreateEncounterZone(
+                "Encounter_Crossing",
+                new Vector3(0f, 1.8f, 1f),
+                new Vector3(19f, 4f, 14f),
+                raiderA.gameObject, raiderB.gameObject);
 
-            regular.Add(CreateEnemy(
-                "Raider_C",
-                new Vector3(-4.2f, 1f, 33f),
-                Vector3.one,
-                new Color(1f, 0.48f, 0.16f),
-                110, 2.75f, 13, 0.95f, 0.31f,
-                player.transform));
+            CreateEncounterZone(
+                "Encounter_Gallery",
+                new Vector3(0f, 1.8f, 18f),
+                new Vector3(16f, 4f, 12f),
+                scoutC.gameObject, bruteA.gameObject);
 
-            regular.Add(CreateEnemy(
-                "Brute_B",
-                new Vector3(5.0f, 1.25f, 36f),
-                new Vector3(1.35f, 1.35f, 1.35f),
-                new Color(0.62f, 0.24f, 0.88f),
-                190, 1.7f, 22, 1.35f, 0.58f,
-                player.transform));
+            CreateEncounterZone(
+                "Encounter_Sanctum",
+                new Vector3(0f, 1.8f, 34f),
+                new Vector3(18f, 4f, 12f),
+                raiderC.gameObject, bruteB.gameObject);
 
             CreateTreasureChest(
                 new Vector3(-13f, 0.45f, 1f),
                 "CryptChest_Cyan",
                 new Color(0.28f, 0.42f, 0.46f),
                 new Color(0.12f, 0.88f, 1f),
-                18,
-                7);
+                18, 7);
 
             CreateTreasureChest(
                 new Vector3(12f, 0.45f, 18f),
                 "CryptChest_Blue",
                 new Color(0.26f, 0.34f, 0.50f),
                 new Color(0.18f, 0.50f, 1f),
-                24,
-                9);
+                24, 9);
 
             CreateTreasureChest(
                 new Vector3(-7f, 0.45f, 34f),
                 "CryptChest_Violet",
                 new Color(0.32f, 0.25f, 0.44f),
                 new Color(0.63f, 0.30f, 1f),
-                30,
-                11);
+                30, 11);
 
             GameObject boss = CreateBoss(player.transform);
             Health bossHealth = boss.GetComponent<Health>();
+
+            Material gateMaterial = VisualStyleBuilder.GetMaterial(
+                "Crypt_SealedGate",
+                new Color(0.25f, 0.30f, 0.34f),
+                0.28f,
+                0.40f);
+
+            Material barrierMaterial = VisualStyleBuilder.GetMaterial(
+                "Crypt_BossBarrier",
+                new Color(0.62f, 0.28f, 1f),
+                0.0f,
+                0.48f,
+                true);
+
+            GameObject entryGate = CreateGate(
+                "BossEntrySeal",
+                new Vector3(0f, 1.65f, 42.25f),
+                new Vector3(6.4f, 3.3f, 0.40f),
+                gateMaterial);
+
+            GameObject closeBarrier = CreateGate(
+                "BossCloseBarrier",
+                new Vector3(0f, 1.65f, 43.25f),
+                new Vector3(12f, 3.3f, 0.32f),
+                barrierMaterial);
 
             GameObject mission = new GameObject("MissionController");
             MissionController controller = mission.AddComponent<MissionController>();
@@ -120,7 +146,45 @@ namespace VoxelDungeon.EditorTools
                 regular.ToArray(),
                 boss,
                 bossHealth,
-                progress);
+                progress,
+                entryGate);
+
+            GameObject trigger = new GameObject("BossArenaTrigger");
+            trigger.transform.position = new Vector3(0f, 1.8f, 46f);
+            BoxCollider triggerCollider = trigger.AddComponent<BoxCollider>();
+            BossArenaTrigger arenaTrigger = trigger.AddComponent<BossArenaTrigger>();
+            arenaTrigger.Configure(controller, closeBarrier, new Vector3(20f, 4f, 4f));
+        }
+
+        private static void CreateEncounterZone(
+            string name,
+            Vector3 position,
+            Vector3 size,
+            params GameObject[] enemies)
+        {
+            GameObject zone = new GameObject(name);
+            zone.transform.position = position;
+            zone.AddComponent<BoxCollider>();
+            EncounterZone encounter = zone.AddComponent<EncounterZone>();
+            encounter.Configure(enemies, size);
+        }
+
+        private static GameObject CreateGate(
+            string name,
+            Vector3 position,
+            Vector3 scale,
+            Material material)
+        {
+            GameObject gate = GameObject.CreatePrimitive(PrimitiveType.Cube);
+            gate.name = name;
+            gate.transform.position = position;
+            gate.transform.localScale = scale;
+
+            Renderer renderer = gate.GetComponent<Renderer>();
+            if (renderer != null)
+                renderer.sharedMaterial = material;
+
+            return gate;
         }
 
         private static Health CreateEnemy(
