@@ -19,6 +19,18 @@ namespace VoxelDungeon.Combat
 
         private void Awake() => ResetHealth();
 
+        public void ConfigureMaxHealth(int value, bool refill = true)
+        {
+            maxHealth = Mathf.Max(1, value);
+            if (refill)
+                ResetHealth();
+            else
+            {
+                currentHealth = Mathf.Min(currentHealth, maxHealth);
+                Changed?.Invoke(currentHealth, maxHealth);
+            }
+        }
+
         public void ResetHealth()
         {
             dead = false;
