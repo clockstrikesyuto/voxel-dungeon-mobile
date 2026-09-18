@@ -106,7 +106,7 @@ namespace VoxelDungeon.EditorTools
 
             Health playerHealth = player.AddComponent<Health>();
             player.AddComponent<HealthDamageReceiver>();
-            PlayerProgress playerProgress = player.AddComponent<PlayerProgress>();
+            player.AddComponent<PlayerProgress>();
             TopDownPlayerMotor motor = player.AddComponent<TopDownPlayerMotor>();
             player.AddComponent<KnockbackMotor>();
             PlayerCombat combat = player.AddComponent<PlayerCombat>();
