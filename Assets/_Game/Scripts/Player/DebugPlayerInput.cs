@@ -1,4 +1,5 @@
 using UnityEngine;
+using VoxelDungeon.UI;
 #if ENABLE_INPUT_SYSTEM
 using UnityEngine.InputSystem;
 #endif
@@ -9,8 +10,15 @@ namespace VoxelDungeon.Player
     [RequireComponent(typeof(PlayerCombat))]
     public sealed class DebugPlayerInput : MonoBehaviour
     {
+        [SerializeField] private MobileJoystick mobileJoystick;
+
         private TopDownPlayerMotor motor;
         private PlayerCombat combat;
+
+        public void SetMobileJoystick(MobileJoystick joystick)
+        {
+            mobileJoystick = joystick;
+        }
 
         private void Awake()
         {
@@ -51,6 +59,9 @@ namespace VoxelDungeon.Player
                     motor.TryDodge();
             }
 #endif
+
+            if (mobileJoystick != null && mobileJoystick.Value.sqrMagnitude > move.sqrMagnitude)
+                move = mobileJoystick.Value;
 
             motor.SetMoveInput(move);
         }
