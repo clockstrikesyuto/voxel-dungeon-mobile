@@ -72,6 +72,14 @@ namespace VoxelDungeon.Items
                 "colossus_maul", "COLOSSUS MAUL", EquipmentSlot.Melee,
                 ItemRarity.Legendary, 28, 1.22f, "Massive boss-forged weapon"),
 
+            ["moonblade"] = new EquipmentRecord(
+                "moonblade", "MOONBLADE", EquipmentSlot.Melee,
+                ItemRarity.Epic, 19, 0.88f, "Light and fast lunar blade"),
+
+            ["void_edge"] = new EquipmentRecord(
+                "void_edge", "VOID EDGE", EquipmentSlot.Melee,
+                ItemRarity.Legendary, 34, 0.96f, "Blade carried by the garden guardian"),
+
             ["field_bow"] = new EquipmentRecord(
                 "field_bow", "FIELD BOW", EquipmentSlot.Ranged,
                 ItemRarity.Common, 0, 1f, "Reliable starter bow"),
@@ -86,7 +94,11 @@ namespace VoxelDungeon.Items
 
             ["void_staff"] = new EquipmentRecord(
                 "void_staff", "VOID STAFF", EquipmentSlot.Ranged,
-                ItemRarity.Legendary, 26, 1.05f, "Focused arcane projectile")
+                ItemRarity.Legendary, 26, 1.05f, "Focused arcane projectile"),
+
+            ["starbow"] = new EquipmentRecord(
+                "starbow", "STAR BOW", EquipmentSlot.Ranged,
+                ItemRarity.Epic, 18, 0.82f, "Rapid shots infused with garden light")
         };
 
         public static EquipmentRecord Get(string id)
