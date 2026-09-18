@@ -7,6 +7,7 @@ using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem.UI;
+using UnityEngine.Rendering.Universal;
 using VoxelDungeon.Combat;
 using VoxelDungeon.AI;
 using VoxelDungeon.Core;
@@ -335,6 +336,7 @@ namespace VoxelDungeon.EditorTools
             camera.clearFlags = CameraClearFlags.SolidColor;
             camera.nearClipPlane = 0.1f;
             camera.farClipPlane = 250f;
+            camera.GetUniversalAdditionalCameraData().renderPostProcessing = true;
             go.AddComponent<AudioListener>();
             return camera;
         }
