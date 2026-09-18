@@ -108,6 +108,7 @@ namespace VoxelDungeon.EditorTools
             VisualStyleBuilder.ApplyPlayerVisual(player);
 
             Camera camera = CreateCamera("Main Camera", new Vector3(0f, 12f, -10f), Vector3.zero);
+            camera.backgroundColor = new Color(0.58f, 0.78f, 0.90f);
             TopDownCameraFollow follow = camera.gameObject.AddComponent<TopDownCameraFollow>();
             follow.SetTarget(player.transform);
             follow.ConfigureView(new Vector3(0f, 12f, -10f), new Vector3(0f, 1f, 0f));
@@ -124,20 +125,11 @@ namespace VoxelDungeon.EditorTools
         {
             Scene scene = EditorSceneManager.NewScene(NewSceneSetup.EmptyScene, NewSceneMode.Single);
 
-            CreateGround("Mission Ground", new Vector3(0f, -0.5f, 0f), new Vector3(28f, 1f, 28f));
-
-            for (int i = 0; i < 10; i++)
-            {
-                GameObject block = GameObject.CreatePrimitive(PrimitiveType.Cube);
-                block.name = "Dungeon_Block_" + i;
-                float angle = i * Mathf.PI * 2f / 10f;
-                block.transform.position = new Vector3(Mathf.Cos(angle) * 8f, 0.5f, Mathf.Sin(angle) * 8f);
-                block.transform.localScale = new Vector3(1.2f, 1f + (i % 3) * 0.5f, 1.2f);
-            }
+            CreateGround("Mission Ground", new Vector3(0f, -0.5f, 10f), new Vector3(34f, 1f, 88f));
 
             GameObject player = GameObject.CreatePrimitive(PrimitiveType.Capsule);
             player.name = "Player_Debug";
-            player.transform.position = new Vector3(0f, 1f, 0f);
+            player.transform.position = new Vector3(0f, 1f, -31f);
 
             Object.DestroyImmediate(player.GetComponent<CapsuleCollider>());
             CharacterController controller = player.AddComponent<CharacterController>();
@@ -154,13 +146,14 @@ namespace VoxelDungeon.EditorTools
             DebugPlayerInput input = player.AddComponent<DebugPlayerInput>();
             VisualStyleBuilder.ApplyPlayerVisual(player);
 
-            Camera camera = CreateCamera("Main Camera", new Vector3(0f, 9f, -7f), Vector3.zero);
+            Camera camera = CreateCamera("Main Camera", new Vector3(0f, 10f, -8f), Vector3.zero);
+            camera.backgroundColor = new Color(0.18f, 0.28f, 0.34f);
             TopDownCameraFollow follow = camera.gameObject.AddComponent<TopDownCameraFollow>();
             follow.SetTarget(player.transform);
             camera.transform.LookAt(player.transform.position + Vector3.up);
 
             CreateDirectionalLight();
-            VisualStyleBuilder.DecorateMission();
+            CrystalCryptWorldBuilder.Build();
             CreateMobileHud(motor, combat, input, playerHealth);
             player.AddComponent<MissionHeaderUI>();
 
