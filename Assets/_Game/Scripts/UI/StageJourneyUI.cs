@@ -1,6 +1,7 @@
 using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
+using VoxelDungeon.Core;
 
 namespace VoxelDungeon.UI
 {
@@ -11,7 +12,7 @@ namespace VoxelDungeon.UI
         private int currentZone = -1;
         private Coroutine fadeRoutine;
 
-        private readonly string[] zoneNames =
+        private static readonly string[] CryptZones =
         {
             "CRYSTAL CRYPT  •  ENTRY COURT",
             "CRYSTAL CRYPT  •  CRYSTAL HALL",
@@ -19,6 +20,16 @@ namespace VoxelDungeon.UI
             "CRYSTAL CRYPT  •  CRYSTAL GALLERY",
             "CRYSTAL CRYPT  •  INNER SANCTUM",
             "CRYSTAL CRYPT  •  STONE WARDEN"
+        };
+
+        private static readonly string[] AshenZones =
+        {
+            "ASHEN FORGE  •  FORGE GATE",
+            "ASHEN FORGE  •  SMELTER ROW",
+            "ASHEN FORGE  •  CONVEYOR CROSS",
+            "ASHEN FORGE  •  FURNACE HALL",
+            "ASHEN FORGE  •  CORE WORKS",
+            "ASHEN FORGE  •  FORGE COLOSSUS"
         };
 
         private void Start()
@@ -39,7 +50,8 @@ namespace VoxelDungeon.UI
                 return;
 
             currentZone = zone;
-            ShowZone(zoneNames[Mathf.Clamp(zone, 0, zoneNames.Length - 1)]);
+            string[] zones = GameFlowState.SelectedStageId == "stage.ashen" ? AshenZones : CryptZones;
+            ShowZone(zones[Mathf.Clamp(zone, 0, zones.Length - 1)]);
         }
 
         private int ResolveZone(float z)
@@ -78,7 +90,9 @@ namespace VoxelDungeon.UI
             zoneText.fontSize = 24;
             zoneText.fontStyle = FontStyle.Bold;
             zoneText.alignment = TextAnchor.MiddleCenter;
-            zoneText.color = new Color(0.86f, 0.96f, 1f);
+            zoneText.color = GameFlowState.SelectedStageId == "stage.ashen"
+                ? new Color(1f, 0.72f, 0.34f)
+                : new Color(0.86f, 0.96f, 1f);
             zoneText.raycastTarget = false;
         }
 
