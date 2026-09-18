@@ -188,6 +188,7 @@ namespace VoxelDungeon.EditorTools
                 MobileActionButton.ActionKind.Attack,
                 motor,
                 combat);
+            AddButtonLabel(attack, "ATK", 34);
 
             GameObject dodge = CreateUiBlock(
                 "DodgeButton",
@@ -201,6 +202,7 @@ namespace VoxelDungeon.EditorTools
                 MobileActionButton.ActionKind.Dodge,
                 motor,
                 combat);
+            AddButtonLabel(dodge, "DODGE", 22);
 
             GameObject ranged = CreateUiBlock(
                 "RangedButton",
@@ -214,6 +216,7 @@ namespace VoxelDungeon.EditorTools
                 MobileActionButton.ActionKind.Ranged,
                 motor,
                 combat);
+            AddButtonLabel(ranged, "RNG", 28);
 
             GameObject potion = CreateUiBlock(
                 "PotionButton",
@@ -227,6 +230,7 @@ namespace VoxelDungeon.EditorTools
                 MobileActionButton.ActionKind.Potion,
                 motor,
                 combat);
+            AddButtonLabel(potion, "+", 46);
 
             GameObject hpBg = CreateUiBlock(
                 "HealthBar",
@@ -282,7 +286,40 @@ namespace VoxelDungeon.EditorTools
 
             Image image = go.AddComponent<Image>();
             image.color = color;
+
+            bool round = name.Contains("Button") || name.Contains("Joystick") || name == "Handle";
+            if (round)
+            {
+                image.sprite = VisualStyleBuilder.GetRoundSprite();
+                image.preserveAspect = true;
+            }
+
             return go;
+        }
+
+        private static void AddButtonLabel(GameObject button, string labelText, int fontSize)
+        {
+            GameObject labelGo = new GameObject("Label");
+            labelGo.transform.SetParent(button.transform, false);
+
+            RectTransform rect = labelGo.AddComponent<RectTransform>();
+            rect.anchorMin = Vector2.zero;
+            rect.anchorMax = Vector2.one;
+            rect.offsetMin = Vector2.zero;
+            rect.offsetMax = Vector2.zero;
+
+            Text label = labelGo.AddComponent<Text>();
+            label.font = Resources.GetBuiltinResource<Font>("LegacyRuntime.ttf");
+            label.text = labelText;
+            label.fontSize = fontSize;
+            label.fontStyle = FontStyle.Bold;
+            label.alignment = TextAnchor.MiddleCenter;
+            label.color = Color.white;
+            label.raycastTarget = false;
+
+            Shadow shadow = labelGo.AddComponent<Shadow>();
+            shadow.effectDistance = new Vector2(2f, -2f);
+            shadow.effectColor = new Color(0f, 0f, 0f, 0.65f);
         }
 
         private static Camera CreateCamera(string name, Vector3 position, Vector3 euler)
