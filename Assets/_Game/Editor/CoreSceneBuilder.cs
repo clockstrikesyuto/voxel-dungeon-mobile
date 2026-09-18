@@ -126,6 +126,7 @@ namespace VoxelDungeon.EditorTools
             CreateDirectionalLight();
             VisualStyleBuilder.DecorateMission();
             CreateMobileHud(motor, combat, input, playerHealth);
+            player.AddComponent<MissionHeaderUI>();
 
             VerticalSliceBuilder.PopulateMission(player);
 
