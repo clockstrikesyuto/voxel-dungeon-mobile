@@ -12,6 +12,7 @@ namespace VoxelDungeon.EditorTools
         private const string HubProfilePath = ArtFolder + "/HubBrightLook.asset";
         private const string CryptProfilePath = ArtFolder + "/CryptBrightLook.asset";
         private const string AshenProfilePath = ArtFolder + "/AshenForgeLook.asset";
+        private const string VoidProfilePath = ArtFolder + "/VoidGardenLook.asset";
 
         public static void ApplyHub()
         {
@@ -110,6 +111,39 @@ namespace VoxelDungeon.EditorTools
             tone.mode.Override(TonemappingMode.ACES);
 
             CreateVolume("AshenPostProcessing", profile);
+        }
+
+        public static void ApplyVoid()
+        {
+            VolumeProfile profile = GetOrCreate(VoidProfilePath);
+
+            Bloom bloom = GetOrAdd<Bloom>(profile);
+            bloom.active = true;
+            bloom.intensity.Override(0.32f);
+            bloom.threshold.Override(0.92f);
+            bloom.scatter.Override(0.70f);
+
+            ColorAdjustments color = GetOrAdd<ColorAdjustments>(profile);
+            color.active = true;
+            color.postExposure.Override(0.20f);
+            color.contrast.Override(6f);
+            color.saturation.Override(9f);
+
+            WhiteBalance balance = GetOrAdd<WhiteBalance>(profile);
+            balance.active = true;
+            balance.temperature.Override(-8f);
+            balance.tint.Override(6f);
+
+            Vignette vignette = GetOrAdd<Vignette>(profile);
+            vignette.active = true;
+            vignette.intensity.Override(0.07f);
+            vignette.smoothness.Override(0.78f);
+
+            Tonemapping tone = GetOrAdd<Tonemapping>(profile);
+            tone.active = true;
+            tone.mode.Override(TonemappingMode.ACES);
+
+            CreateVolume("VoidPostProcessing", profile);
         }
 
         private static VolumeProfile GetOrCreate(string path)
