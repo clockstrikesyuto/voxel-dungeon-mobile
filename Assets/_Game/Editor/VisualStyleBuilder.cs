@@ -11,6 +11,9 @@ namespace VoxelDungeon.EditorTools
     {
         private const string ArtFolder = "Assets/_Game/Art";
         private const string MatFolder = "Assets/_Game/Art/Materials";
+        private const string UiFolder = "Assets/_Game/Art/UI";
+        private const string RoundSpritePath = "Assets/_Game/Art/UI/soft_circle.png";
+        private const string VolumeProfilePath = "Assets/_Game/Art/MissionLook.asset";
 
         public static void EnsureArtFolders()
         {
@@ -18,6 +21,8 @@ namespace VoxelDungeon.EditorTools
                 AssetDatabase.CreateFolder("Assets/_Game", "Art");
             if (!AssetDatabase.IsValidFolder(MatFolder))
                 AssetDatabase.CreateFolder("Assets/_Game/Art", "Materials");
+            if (!AssetDatabase.IsValidFolder(UiFolder))
+                AssetDatabase.CreateFolder("Assets/_Game/Art", "UI");
         }
 
         public static Material GetMaterial(string name, Color color, float metallic = 0f, float smoothness = 0.35f, bool emissive = false)
@@ -54,6 +59,50 @@ namespace VoxelDungeon.EditorTools
 
             EditorUtility.SetDirty(mat);
             return mat;
+        }
+
+        public static Sprite GetRoundSprite()
+        {
+            EnsureArtFolders();
+
+            Sprite sprite = AssetDatabase.LoadAssetAtPath<Sprite>(RoundSpritePath);
+            if (sprite != null)
+                return sprite;
+
+            const int size = 128;
+            Texture2D tex = new Texture2D(size, size, TextureFormat.RGBA32, false);
+            tex.name = "SoftCircle";
+
+            Vector2 center = new Vector2((size - 1) * 0.5f, (size - 1) * 0.5f);
+            float radius = size * 0.47f;
+            float soft = size * 0.035f;
+
+            for (int y = 0; y < size; y++)
+            {
+                for (int x = 0; x < size; x++)
+                {
+                    float d = Vector2.Distance(new Vector2(x, y), center);
+                    float alpha = 1f - Mathf.SmoothStep(radius - soft, radius + soft, d);
+                    tex.SetPixel(x, y, new Color(1f, 1f, 1f, alpha));
+                }
+            }
+
+            tex.Apply();
+            File.WriteAllBytes(RoundSpritePath, tex.EncodeToPNG());
+            Object.DestroyImmediate(tex);
+
+            AssetDatabase.ImportAsset(RoundSpritePath, ImportAssetOptions.ForceUpdate);
+            TextureImporter importer = AssetImporter.GetAtPath(RoundSpritePath) as TextureImporter;
+            if (importer != null)
+            {
+                importer.textureType = TextureImporterType.Sprite;
+                importer.spriteImportMode = SpriteImportMode.Single;
+                importer.alphaIsTransparency = true;
+                importer.mipmapEnabled = false;
+                importer.SaveAndReimport();
+            }
+
+            return AssetDatabase.LoadAssetAtPath<Sprite>(RoundSpritePath);
         }
 
         public static void ApplyPlayerVisual(GameObject root)
@@ -213,6 +262,48 @@ namespace VoxelDungeon.EditorTools
 
             CreatePointLight("CyanGlow", new Vector3(-7f, 2f, 5f), new Color(0.1f, 0.8f, 1f), 3.2f, 7f);
             CreatePointLight("VioletGlow", new Vector3(7f, 2f, 5f), new Color(0.6f, 0.2f, 1f), 3.0f, 7f);
+            CreatePostProcessing();
+        }
+
+        private static void CreatePostProcessing()
+        {
+            VolumeProfile profile = AssetDatabase.LoadAssetAtPath<VolumeProfile>(VolumeProfilePath);
+            if (profile == null)
+            {
+                profile = ScriptableObject.CreateInstance<VolumeProfile>();
+                AssetDatabase.CreateAsset(profile, VolumeProfilePath);
+            }
+
+            Bloom bloom;
+            if (!profile.TryGet(out bloom))
+                bloom = profile.Add<Bloom>(true);
+            bloom.active = true;
+            bloom.intensity.Override(0.42f);
+            bloom.threshold.Override(0.9f);
+            bloom.scatter.Override(0.65f);
+
+            Vignette vignette;
+            if (!profile.TryGet(out vignette))
+                vignette = profile.Add<Vignette>(true);
+            vignette.active = true;
+            vignette.intensity.Override(0.18f);
+            vignette.smoothness.Override(0.7f);
+
+            ColorAdjustments color;
+            if (!profile.TryGet(out color))
+                color = profile.Add<ColorAdjustments>(true);
+            color.active = true;
+            color.contrast.Override(10f);
+            color.saturation.Override(6f);
+            color.postExposure.Override(-0.05f);
+
+            EditorUtility.SetDirty(profile);
+
+            GameObject go = new GameObject("GlobalPostProcessing");
+            Volume volume = go.AddComponent<Volume>();
+            volume.isGlobal = true;
+            volume.priority = 10f;
+            volume.sharedProfile = profile;
         }
 
         private static void CreateCrystalCluster(Vector3 pos, Material mat)
