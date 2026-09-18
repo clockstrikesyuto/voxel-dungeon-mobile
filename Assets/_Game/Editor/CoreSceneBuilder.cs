@@ -105,6 +105,7 @@ namespace VoxelDungeon.EditorTools
             controller.center = new Vector3(0f, 1f, 0f);
 
             TopDownPlayerMotor motor = player.AddComponent<TopDownPlayerMotor>();
+            player.AddComponent<KnockbackMotor>();
             PlayerCombat combat = player.AddComponent<PlayerCombat>();
             DebugPlayerInput input = player.AddComponent<DebugPlayerInput>();
             Health playerHealth = player.AddComponent<Health>();
@@ -138,6 +139,7 @@ namespace VoxelDungeon.EditorTools
                 enemyController.center = new Vector3(0f, 1f, 0f);
 
                 enemy.AddComponent<Health>();
+                enemy.AddComponent<KnockbackMotor>();
                 enemy.AddComponent<HealthDamageReceiver>();
                 enemy.AddComponent<WorldHealthBar>();
                 SimpleEnemyBrain brain = enemy.AddComponent<SimpleEnemyBrain>();
@@ -219,6 +221,32 @@ namespace VoxelDungeon.EditorTools
                 new Color(0.2f, 0.65f, 1f, 0.8f));
             dodge.AddComponent<MobileActionButton>().Configure(
                 MobileActionButton.ActionKind.Dodge,
+                motor,
+                combat);
+
+            GameObject ranged = CreateUiBlock(
+                "RangedButton",
+                safeRect,
+                new Vector2(1f, 0f),
+                new Vector2(1f, 0f),
+                new Vector2(-335f, 305f),
+                new Vector2(135f, 135f),
+                new Color(0.55f, 0.32f, 1f, 0.82f));
+            ranged.AddComponent<MobileActionButton>().Configure(
+                MobileActionButton.ActionKind.Ranged,
+                motor,
+                combat);
+
+            GameObject potion = CreateUiBlock(
+                "PotionButton",
+                safeRect,
+                new Vector2(1f, 0f),
+                new Vector2(1f, 0f),
+                new Vector2(-520f, 205f),
+                new Vector2(115f, 115f),
+                new Color(0.2f, 0.85f, 0.4f, 0.82f));
+            potion.AddComponent<MobileActionButton>().Configure(
+                MobileActionButton.ActionKind.Potion,
                 motor,
                 combat);
 
