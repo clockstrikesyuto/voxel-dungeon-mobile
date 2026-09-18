@@ -139,6 +139,7 @@ namespace VoxelDungeon.EditorTools
 
                 enemy.AddComponent<Health>();
                 enemy.AddComponent<HealthDamageReceiver>();
+                enemy.AddComponent<WorldHealthBar>();
                 SimpleEnemyBrain brain = enemy.AddComponent<SimpleEnemyBrain>();
                 brain.SetTarget(player.transform);
             }
