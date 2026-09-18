@@ -54,11 +54,19 @@ namespace VoxelDungeon.UI
             int melee = progress != null ? progress.MeleePowerBonus : 0;
             int ranged = progress != null ? progress.RangedPowerBonus : 0;
 
+            ProfileProgress.AddGold(gold);
+            ProfileProgress.CompleteStage(GameFlowState.SelectedStageId);
+
+            string unlockLine = GameFlowState.SelectedStageId == "stage.crypt"
+                ? "\nNEW ROUTE  ASHEN FORGE UNLOCKED"
+                : string.Empty;
+
             string body =
                 $"GOLD   {gold}\n" +
                 $"LOOT   {loot}\n" +
                 $"MELEE POWER   +{melee}\n" +
-                $"RANGED POWER  +{ranged}";
+                $"RANGED POWER  +{ranged}" +
+                unlockLine;
 
             CreateText(
                 panel.transform,
@@ -72,18 +80,27 @@ namespace VoxelDungeon.UI
 
             CreateButton(
                 panel.transform,
-                "RETRY",
-                new Vector2(0.42f, 0.18f),
+                "RETURN HUB",
+                new Vector2(0.34f, 0.16f),
                 new Vector2(300f, 78f),
-                new Color(0.1f, 0.7f, 0.85f),
+                new Color(0.12f, 0.78f, 0.90f),
+                font,
+                () => SceneManager.LoadScene("Hub"));
+
+            CreateButton(
+                panel.transform,
+                "RETRY",
+                new Vector2(0.50f, 0.16f),
+                new Vector2(260f, 78f),
+                new Color(0.2f, 0.55f, 0.72f),
                 font,
                 () => SceneManager.LoadScene("Mission_Test"));
 
             CreateButton(
                 panel.transform,
                 "TITLE",
-                new Vector2(0.58f, 0.18f),
-                new Vector2(300f, 78f),
+                new Vector2(0.66f, 0.16f),
+                new Vector2(260f, 78f),
                 new Color(0.5f, 0.28f, 0.9f),
                 font,
                 () =>
