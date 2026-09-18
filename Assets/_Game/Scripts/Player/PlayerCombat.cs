@@ -1,6 +1,7 @@
 using System.Collections;
 using UnityEngine;
 using VoxelDungeon.Combat;
+using VoxelDungeon.Core;
 using VoxelDungeon.Presentation;
 
 namespace VoxelDungeon.Player
@@ -79,7 +80,9 @@ namespace VoxelDungeon.Player
 
                 receiver.ReceiveDamage(new DamagePayload(
                     gameObject,
-                    meleeDamage + (progress != null ? progress.MeleePowerBonus : 0),
+                    meleeDamage
+                        + (progress != null ? progress.MeleePowerBonus : 0)
+                        + ProfileProgress.MeleePower,
                     hit.ClosestPoint(center),
                     direction.normalized,
                     false));
@@ -116,7 +119,9 @@ namespace VoxelDungeon.Player
                 gameObject,
                 direction,
                 rangedSpeed,
-                rangedDamage + (progress != null ? progress.RangedPowerBonus : 0));
+                rangedDamage
+                    + (progress != null ? progress.RangedPowerBonus : 0)
+                    + ProfileProgress.RangedPower);
 
             transform.forward = direction;
             return true;
