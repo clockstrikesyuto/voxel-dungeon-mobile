@@ -32,6 +32,16 @@ namespace VoxelDungeon.UI
             "ASHEN FORGE  •  FORGE COLOSSUS"
         };
 
+        private static readonly string[] VoidZones =
+        {
+            "VOID GARDEN  •  GARDEN APPROACH",
+            "VOID GARDEN  •  MOON TERRACE",
+            "VOID GARDEN  •  MIRROR GROVE",
+            "VOID GARDEN  •  STAR SHRINE",
+            "VOID GARDEN  •  ASTRAL COURT",
+            "VOID GARDEN  •  ASTRAL WARDEN"
+        };
+
         private void Start()
         {
             Build();
@@ -50,7 +60,12 @@ namespace VoxelDungeon.UI
                 return;
 
             currentZone = zone;
-            string[] zones = GameFlowState.SelectedStageId == "stage.ashen" ? AshenZones : CryptZones;
+            string[] zones = GameFlowState.SelectedStageId switch
+            {
+                "stage.ashen" => AshenZones,
+                "stage.void" => VoidZones,
+                _ => CryptZones
+            };
             ShowZone(zones[Mathf.Clamp(zone, 0, zones.Length - 1)]);
         }
 
@@ -90,9 +105,12 @@ namespace VoxelDungeon.UI
             zoneText.fontSize = 24;
             zoneText.fontStyle = FontStyle.Bold;
             zoneText.alignment = TextAnchor.MiddleCenter;
-            zoneText.color = GameFlowState.SelectedStageId == "stage.ashen"
-                ? new Color(1f, 0.72f, 0.34f)
-                : new Color(0.86f, 0.96f, 1f);
+            zoneText.color = GameFlowState.SelectedStageId switch
+            {
+                "stage.ashen" => new Color(1f, 0.72f, 0.34f),
+                "stage.void" => new Color(0.72f, 0.54f, 1f),
+                _ => new Color(0.86f, 0.96f, 1f)
+            };
             zoneText.raycastTarget = false;
         }
 
