@@ -10,8 +10,10 @@ namespace VoxelDungeon.Combat
         [SerializeField, Min(1f)] private float hitPulseScale = 1.14f;
         [SerializeField, Min(0.01f)] private float hitPulseDuration = 0.08f;
         [SerializeField, Min(0.01f)] private float flashDuration = 0.07f;
+        [SerializeField, Min(0f)] private float knockbackStrength = 3.2f;
 
         private Health health;
+        private KnockbackMotor knockback;
         private Vector3 baseScale;
         private Coroutine pulseRoutine;
         private Coroutine flashRoutine;
@@ -25,6 +27,7 @@ namespace VoxelDungeon.Combat
         private void Awake()
         {
             health = GetComponent<Health>();
+            knockback = GetComponent<KnockbackMotor>();
             baseScale = transform.localScale;
 
             cachedRenderer = GetComponentInChildren<Renderer>();
@@ -51,6 +54,9 @@ namespace VoxelDungeon.Combat
 
             health.ApplyDamage(payload.Amount);
             FloatingDamageText.Spawn(payload.HitPoint, payload.Amount, payload.Critical);
+
+            if (knockback != null)
+                knockback.AddImpulse(payload.Direction, knockbackStrength);
 
             if (pulseRoutine != null)
                 StopCoroutine(pulseRoutine);
