@@ -22,6 +22,7 @@ namespace VoxelDungeon.EditorTools
         private const string SceneFolder = "Assets/_Game/Scenes";
         private const string BootPath = SceneFolder + "/Boot.unity";
         private const string CampPath = SceneFolder + "/Camp.unity";
+        private const string HubPath = SceneFolder + "/Hub.unity";
         private const string MissionPath = SceneFolder + "/Mission_Test.unity";
 
         [MenuItem("Tools/Voxel Dungeon/Create Core Scenes")]
@@ -30,12 +31,13 @@ namespace VoxelDungeon.EditorTools
             EnsureFolder();
             CreateBoot();
             CreateCamp();
+            CreateHub();
             CreateMission();
             ConfigureBuildScenes();
             AssetDatabase.SaveAssets();
             AssetDatabase.Refresh();
             EditorSceneManager.OpenScene(BootPath);
-            Debug.Log("[VoxelDungeon] Created Boot, Camp and Mission_Test scenes and added them to build settings.");
+            Debug.Log("[VoxelDungeon] Created Boot, Hub, Camp and Mission_Test scenes and added them to build settings.");
         }
 
         private static void EnsureFolder()
@@ -82,6 +84,40 @@ namespace VoxelDungeon.EditorTools
             CreateDirectionalLight();
 
             EditorSceneManager.SaveScene(scene, CampPath);
+        }
+
+
+        private static void CreateHub()
+        {
+            Scene scene = EditorSceneManager.NewScene(NewSceneSetup.EmptyScene, NewSceneMode.Single);
+
+            CreateGround("Hub Ground", new Vector3(0f, -0.5f, 0f), new Vector3(64f, 1f, 64f));
+
+            GameObject player = GameObject.CreatePrimitive(PrimitiveType.Capsule);
+            player.name = "Player_Hub";
+            player.transform.position = new Vector3(0f, 1f, -3f);
+
+            Object.DestroyImmediate(player.GetComponent<CapsuleCollider>());
+            CharacterController controller = player.AddComponent<CharacterController>();
+            controller.height = 2f;
+            controller.radius = 0.5f;
+            controller.center = new Vector3(0f, 1f, 0f);
+
+            TopDownPlayerMotor motor = player.AddComponent<TopDownPlayerMotor>();
+            HubPlayerInput input = player.AddComponent<HubPlayerInput>();
+            VisualStyleBuilder.ApplyPlayerVisual(player);
+
+            Camera camera = CreateCamera("Main Camera", new Vector3(0f, 12f, -10f), Vector3.zero);
+            TopDownCameraFollow follow = camera.gameObject.AddComponent<TopDownCameraFollow>();
+            follow.SetTarget(player.transform);
+            follow.ConfigureView(new Vector3(0f, 12f, -10f), new Vector3(0f, 1f, 0f));
+            camera.transform.LookAt(player.transform.position + Vector3.up);
+
+            CreateDirectionalLight();
+            HubWorldBuilder.PopulateHub(player);
+            CreateHubMobileHud(input);
+
+            EditorSceneManager.SaveScene(scene, HubPath);
         }
 
         private static void CreateMission()
@@ -131,6 +167,58 @@ namespace VoxelDungeon.EditorTools
             VerticalSliceBuilder.PopulateMission(player);
 
             EditorSceneManager.SaveScene(scene, MissionPath);
+        }
+
+
+        private static void CreateHubMobileHud(HubPlayerInput input)
+        {
+            GameObject canvasGo = new GameObject("HubControls");
+            Canvas canvas = canvasGo.AddComponent<Canvas>();
+            canvas.renderMode = RenderMode.ScreenSpaceOverlay;
+            canvas.sortingOrder = 20;
+
+            CanvasScaler scaler = canvasGo.AddComponent<CanvasScaler>();
+            scaler.uiScaleMode = CanvasScaler.ScaleMode.ScaleWithScreenSize;
+            scaler.referenceResolution = new Vector2(1920f, 1080f);
+            scaler.matchWidthOrHeight = 0.5f;
+            canvasGo.AddComponent<GraphicRaycaster>();
+
+            GameObject safeRoot = new GameObject("SafeArea_HubControls");
+            safeRoot.transform.SetParent(canvasGo.transform, false);
+            RectTransform safeRect = safeRoot.AddComponent<RectTransform>();
+            safeRect.anchorMin = Vector2.zero;
+            safeRect.anchorMax = Vector2.one;
+            safeRect.offsetMin = Vector2.zero;
+            safeRect.offsetMax = Vector2.zero;
+            safeRoot.AddComponent<SafeAreaFitter>();
+
+            GameObject joystickBg = CreateUiBlock(
+                "HubMoveJoystick",
+                safeRect,
+                new Vector2(0f, 0f),
+                new Vector2(0f, 0f),
+                new Vector2(190f, 190f),
+                new Vector2(230f, 230f),
+                new Color(0.08f, 0.1f, 0.14f, 0.48f));
+
+            GameObject joystickHandle = CreateUiBlock(
+                "Handle",
+                joystickBg.GetComponent<RectTransform>(),
+                new Vector2(0.5f, 0.5f),
+                new Vector2(0.5f, 0.5f),
+                Vector2.zero,
+                new Vector2(95f, 95f),
+                new Color(0.85f, 0.9f, 1f, 0.82f));
+
+            MobileJoystick joystick = joystickBg.AddComponent<MobileJoystick>();
+            joystick.Configure(
+                joystickBg.GetComponent<RectTransform>(),
+                joystickHandle.GetComponent<RectTransform>());
+            input.SetMobileJoystick(joystick);
+
+            GameObject eventSystemGo = new GameObject("EventSystem");
+            eventSystemGo.AddComponent<EventSystem>();
+            eventSystemGo.AddComponent<InputSystemUIInputModule>();
         }
 
         private static void CreateMobileHud(
@@ -369,6 +457,7 @@ namespace VoxelDungeon.EditorTools
             EditorBuildSettings.scenes = new[]
             {
                 new EditorBuildSettingsScene(BootPath, true),
+                new EditorBuildSettingsScene(HubPath, true),
                 new EditorBuildSettingsScene(CampPath, true),
                 new EditorBuildSettingsScene(MissionPath, true)
             };
