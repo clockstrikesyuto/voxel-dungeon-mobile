@@ -17,10 +17,8 @@ namespace VoxelDungeon.Combat
         private Vector3 baseScale;
         private Coroutine pulseRoutine;
         private Coroutine flashRoutine;
-        private Renderer cachedRenderer;
+        private Renderer[] cachedRenderers;
         private MaterialPropertyBlock propertyBlock;
-        private string colorProperty;
-        private Color baseColor = Color.white;
 
         public bool CanReceiveDamage => health != null && !health.IsDead;
 
@@ -30,22 +28,8 @@ namespace VoxelDungeon.Combat
             knockback = GetComponent<KnockbackMotor>();
             baseScale = transform.localScale;
 
-            cachedRenderer = GetComponentInChildren<Renderer>();
-            if (cachedRenderer != null && cachedRenderer.sharedMaterial != null)
-            {
-                if (cachedRenderer.sharedMaterial.HasProperty("_BaseColor"))
-                {
-                    colorProperty = "_BaseColor";
-                    baseColor = cachedRenderer.sharedMaterial.GetColor(colorProperty);
-                }
-                else if (cachedRenderer.sharedMaterial.HasProperty("_Color"))
-                {
-                    colorProperty = "_Color";
-                    baseColor = cachedRenderer.sharedMaterial.GetColor(colorProperty);
-                }
-
-                propertyBlock = new MaterialPropertyBlock();
-            }
+            cachedRenderers = GetComponentsInChildren<Renderer>(true);
+            propertyBlock = new MaterialPropertyBlock();
         }
 
         public void ReceiveDamage(in DamagePayload payload)
@@ -80,18 +64,47 @@ namespace VoxelDungeon.Combat
 
         private IEnumerator HitFlash()
         {
-            if (cachedRenderer == null || propertyBlock == null || string.IsNullOrEmpty(colorProperty))
+            if (cachedRenderers == null || propertyBlock == null)
                 yield break;
 
-            cachedRenderer.GetPropertyBlock(propertyBlock);
-            propertyBlock.SetColor(colorProperty, Color.white * 1.5f);
-            cachedRenderer.SetPropertyBlock(propertyBlock);
+            Color[] baseColors = new Color[cachedRenderers.Length];
+            string[] props = new string[cachedRenderers.Length];
+
+            for (int i = 0; i < cachedRenderers.Length; i++)
+            {
+                Renderer renderer = cachedRenderers[i];
+                if (renderer == null || !renderer.enabled || renderer.sharedMaterial == null)
+                    continue;
+
+                string prop = renderer.sharedMaterial.HasProperty("_BaseColor")
+                    ? "_BaseColor"
+                    : renderer.sharedMaterial.HasProperty("_Color")
+                        ? "_Color"
+                        : null;
+
+                if (string.IsNullOrEmpty(prop))
+                    continue;
+
+                props[i] = prop;
+                baseColors[i] = renderer.sharedMaterial.GetColor(prop);
+                renderer.GetPropertyBlock(propertyBlock);
+                propertyBlock.SetColor(prop, Color.white * 1.55f);
+                renderer.SetPropertyBlock(propertyBlock);
+            }
 
             yield return new WaitForSeconds(flashDuration);
 
-            cachedRenderer.GetPropertyBlock(propertyBlock);
-            propertyBlock.SetColor(colorProperty, baseColor);
-            cachedRenderer.SetPropertyBlock(propertyBlock);
+            for (int i = 0; i < cachedRenderers.Length; i++)
+            {
+                Renderer renderer = cachedRenderers[i];
+                if (renderer == null || string.IsNullOrEmpty(props[i]))
+                    continue;
+
+                renderer.GetPropertyBlock(propertyBlock);
+                propertyBlock.SetColor(props[i], baseColors[i]);
+                renderer.SetPropertyBlock(propertyBlock);
+            }
+
             flashRoutine = null;
         }
     }
