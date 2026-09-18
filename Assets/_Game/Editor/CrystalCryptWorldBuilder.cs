@@ -28,21 +28,21 @@ namespace VoxelDungeon.EditorTools
             }
 
             CreateRoom("EntryCourt", new Vector3(0f, 0f, -28f), 18f, 12f, floorLight, wall, trim, cyan, 0);
-            CreateCorridor("EntryPassage", new Vector3(0f, 0f, -20f), 6f, 7f, baseFloor, wall, cyan);
+            CreateCorridor("EntryPassage", new Vector3(0f, 0f, -20.5f), 6f, 3f, baseFloor, wall, cyan);
 
             CreateRoom("CrystalHall", new Vector3(0f, 0f, -13f), 16f, 12f, baseFloor, wall, trim, cyan, 1);
-            CreateCorridor("HallPassage", new Vector3(0f, 0f, -6f), 6f, 6f, baseFloor, wall, blue);
+            // Crystal Hall and Crossing touch directly; no overlapping floor strip is needed.
 
             CreateRoom("Crossing", new Vector3(0f, 0f, 1f), 22f, 16f, floorLight, wall, trim, blue, 2);
             CreateSideAlcove(new Vector3(-13f, 0f, 1f), new Vector3(7f, 0.08f, 8f), floorLight, wall, cyan);
-            CreateCorridor("CrossingPassage", new Vector3(0f, 0f, 11f), 6f, 7f, baseFloor, wallDark, blue);
+            CreateCorridor("CrossingPassage", new Vector3(0f, 0f, 10f), 6f, 2f, baseFloor, wallDark, blue);
 
             CreateRoom("CrystalGallery", new Vector3(0f, 0f, 18f), 18f, 14f, baseFloor, wallDark, trim, blue, 3);
             CreateSideAlcove(new Vector3(12f, 0f, 18f), new Vector3(7f, 0.08f, 8f), baseFloor, wallDark, violet);
-            CreateCorridor("DeepPassage", new Vector3(0f, 0f, 27f), 6f, 7f, baseFloor, wallDark, violet);
+            CreateCorridor("DeepPassage", new Vector3(0f, 0f, 26f), 6f, 2f, baseFloor, wallDark, violet);
 
             CreateRoom("InnerSanctum", new Vector3(0f, 0f, 34f), 20f, 14f, baseFloor, wallDark, trim, violet, 4);
-            CreateCorridor("BossApproach", new Vector3(0f, 0f, 43f), 7f, 8f, bossStone, bossStone, violet);
+            CreateCorridor("BossApproach", new Vector3(0f, 0f, 41.5f), 7f, 1f, bossStone, bossStone, violet);
 
             CreateBossArena(new Vector3(0f, 0f, 52f), 26f, 20f, bossStone, wallDark, gold, violet);
 
@@ -173,28 +173,36 @@ namespace VoxelDungeon.EditorTools
 
         private static void CreateFloorTiles(Transform parent, float width, float depth, Material material, int variant)
         {
-            float tile = 2.35f;
-            int xCount = Mathf.Max(1, Mathf.FloorToInt(width / tile));
-            int zCount = Mathf.Max(1, Mathf.FloorToInt(depth / tile));
+            CreateBlockChild(
+                parent,
+                "FloorSlab",
+                new Vector3(0f, 0.055f, 0f),
+                new Vector3(width - 0.12f, 0.08f, depth - 0.12f),
+                material,
+                false);
 
-            for (int x = 0; x < xCount; x++)
+            // Sparse decorative inlays sit clearly above the slab, avoiding coplanar overlap.
+            if (width >= 12f && depth >= 10f)
             {
-                for (int z = 0; z < zCount; z++)
+                Material inlay = VisualStyleBuilder.GetMaterial(
+                    "Crypt_FloorInlay",
+                    new Color(0.42f, 0.52f, 0.56f),
+                    0.08f,
+                    0.38f);
+
+                int count = Mathf.Clamp(Mathf.FloorToInt(width / 6f), 2, 4);
+                for (int i = 0; i < count; i++)
                 {
-                    float px = -width * 0.5f + tile * 0.5f + x * tile;
-                    float pz = -depth * 0.5f + tile * 0.5f + z * tile;
-                    float inset = ((x + z + variant) % 3 == 0) ? 0.08f : 0f;
+                    float x = Mathf.Lerp(-width * 0.28f, width * 0.28f, count == 1 ? 0.5f : i / (float)(count - 1));
+                    float z = ((i + variant) % 2 == 0) ? -depth * 0.20f : depth * 0.20f;
 
-                    GameObject plate = CreateBlockChild(
+                    CreateBlockChild(
                         parent,
-                        "FloorTile",
-                        new Vector3(px, 0.035f + inset, pz),
-                        new Vector3(tile - 0.10f, 0.07f, tile - 0.10f),
-                        material,
+                        "FloorInlay",
+                        new Vector3(x, 0.105f, z),
+                        new Vector3(1.25f, 0.018f, 1.25f),
+                        inlay,
                         false);
-
-                    if ((x + z + variant) % 7 == 0)
-                        plate.transform.localRotation = Quaternion.Euler(0f, 90f, 0f);
                 }
             }
         }
