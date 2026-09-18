@@ -12,6 +12,8 @@ namespace VoxelDungeon.Combat
         public int MaxHealth => maxHealth;
         public int CurrentHealth => currentHealth;
         public bool IsDead => dead;
+        public bool IsFull => currentHealth >= maxHealth;
+
         public event Action<int, int> Changed;
         public event Action Died;
 
@@ -27,13 +29,25 @@ namespace VoxelDungeon.Combat
         public void ApplyDamage(int amount)
         {
             if (dead || amount <= 0) return;
+
             currentHealth = Mathf.Max(0, currentHealth - amount);
             Changed?.Invoke(currentHealth, maxHealth);
+
             if (currentHealth == 0)
             {
                 dead = true;
                 Died?.Invoke();
             }
+        }
+
+        public bool Heal(int amount)
+        {
+            if (dead || amount <= 0 || currentHealth >= maxHealth)
+                return false;
+
+            currentHealth = Mathf.Min(maxHealth, currentHealth + amount);
+            Changed?.Invoke(currentHealth, maxHealth);
+            return true;
         }
     }
 }
