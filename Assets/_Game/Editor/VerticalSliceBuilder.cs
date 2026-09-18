@@ -25,7 +25,7 @@ namespace VoxelDungeon.EditorTools
 
             regular.Add(CreateEnemy(
                 "Scout_A",
-                new Vector3(5.5f, 1f, 2.5f),
+                new Vector3(3.2f, 1f, -15f),
                 new Vector3(0.72f, 0.82f, 0.72f),
                 new Color(0.2f, 0.85f, 0.95f),
                 55, 4.1f, 7, 0.75f, 0.22f,
@@ -33,7 +33,7 @@ namespace VoxelDungeon.EditorTools
 
             regular.Add(CreateEnemy(
                 "Scout_B",
-                new Vector3(-5.5f, 1f, 2.5f),
+                new Vector3(-4.2f, 1f, -10f),
                 new Vector3(0.72f, 0.82f, 0.72f),
                 new Color(0.2f, 0.85f, 0.95f),
                 55, 4.1f, 7, 0.75f, 0.22f,
@@ -41,7 +41,7 @@ namespace VoxelDungeon.EditorTools
 
             regular.Add(CreateEnemy(
                 "Raider_A",
-                new Vector3(4f, 1f, -4f),
+                new Vector3(-5.0f, 1f, 1f),
                 Vector3.one,
                 new Color(1f, 0.48f, 0.16f),
                 95, 2.65f, 11, 1.0f, 0.33f,
@@ -49,39 +49,67 @@ namespace VoxelDungeon.EditorTools
 
             regular.Add(CreateEnemy(
                 "Raider_B",
-                new Vector3(-4f, 1f, -4f),
+                new Vector3(5.0f, 1f, 5f),
                 Vector3.one,
                 new Color(1f, 0.48f, 0.16f),
                 95, 2.65f, 11, 1.0f, 0.33f,
                 player.transform));
 
             regular.Add(CreateEnemy(
+                "Scout_C",
+                new Vector3(-5.0f, 1f, 17f),
+                new Vector3(0.72f, 0.82f, 0.72f),
+                new Color(0.2f, 0.85f, 0.95f),
+                65, 4.25f, 8, 0.72f, 0.20f,
+                player.transform));
+
+            regular.Add(CreateEnemy(
                 "Brute_A",
-                new Vector3(7f, 1.25f, -1.5f),
+                new Vector3(4.0f, 1.25f, 21f),
                 new Vector3(1.35f, 1.35f, 1.35f),
                 new Color(0.62f, 0.24f, 0.88f),
                 170, 1.65f, 20, 1.4f, 0.62f,
                 player.transform));
 
             regular.Add(CreateEnemy(
+                "Raider_C",
+                new Vector3(-4.2f, 1f, 33f),
+                Vector3.one,
+                new Color(1f, 0.48f, 0.16f),
+                110, 2.75f, 13, 0.95f, 0.31f,
+                player.transform));
+
+            regular.Add(CreateEnemy(
                 "Brute_B",
-                new Vector3(-7f, 1.25f, -1.5f),
+                new Vector3(5.0f, 1.25f, 36f),
                 new Vector3(1.35f, 1.35f, 1.35f),
                 new Color(0.62f, 0.24f, 0.88f),
-                170, 1.65f, 20, 1.4f, 0.62f,
+                190, 1.7f, 22, 1.35f, 0.58f,
                 player.transform));
 
             CreateTreasureChest(
-                new Vector3(-7.5f, 0.45f, 7f),
-                new Color(0.35f, 0.18f, 0.06f),
+                new Vector3(-13f, 0.45f, 1f),
+                "CryptChest_Cyan",
+                new Color(0.28f, 0.42f, 0.46f),
+                new Color(0.12f, 0.88f, 1f),
                 18,
                 7);
 
             CreateTreasureChest(
-                new Vector3(7.5f, 0.45f, 7f),
-                new Color(0.15f, 0.26f, 0.42f),
+                new Vector3(12f, 0.45f, 18f),
+                "CryptChest_Blue",
+                new Color(0.26f, 0.34f, 0.50f),
+                new Color(0.18f, 0.50f, 1f),
                 24,
                 9);
+
+            CreateTreasureChest(
+                new Vector3(-7f, 0.45f, 34f),
+                "CryptChest_Violet",
+                new Color(0.32f, 0.25f, 0.44f),
+                new Color(0.63f, 0.30f, 1f),
+                30,
+                11);
 
             GameObject boss = CreateBoss(player.transform);
             Health bossHealth = boss.GetComponent<Health>();
@@ -143,7 +171,7 @@ namespace VoxelDungeon.EditorTools
             brain.SetTarget(player);
 
             EnemyDropper dropper = enemy.AddComponent<EnemyDropper>();
-            dropper.Configure(2, 7, 0.22f, 3, false);
+            dropper.Configure(3, 8, 0.24f, 3, false);
 
             return health;
         }
@@ -152,14 +180,14 @@ namespace VoxelDungeon.EditorTools
         {
             GameObject boss = GameObject.CreatePrimitive(PrimitiveType.Capsule);
             boss.name = "Boss_StoneWarden";
-            boss.transform.position = new Vector3(0f, 1.8f, 8f);
-            boss.transform.localScale = new Vector3(1.75f, 1.75f, 1.75f);
+            boss.transform.position = new Vector3(0f, 1.8f, 52f);
+            boss.transform.localScale = new Vector3(1.9f, 1.9f, 1.9f);
 
             Object.DestroyImmediate(boss.GetComponent<CapsuleCollider>());
 
             CharacterController character = boss.AddComponent<CharacterController>();
             character.height = 2f;
-            character.radius = 0.55f;
+            character.radius = 0.60f;
             character.center = new Vector3(0f, 1f, 0f);
 
             Renderer renderer = boss.GetComponent<Renderer>();
@@ -169,20 +197,20 @@ namespace VoxelDungeon.EditorTools
             VisualStyleBuilder.ApplyBossVisual(boss);
 
             Health health = boss.AddComponent<Health>();
-            health.ConfigureMaxHealth(460);
+            health.ConfigureMaxHealth(520);
 
             boss.AddComponent<KnockbackMotor>();
             boss.AddComponent<HealthDamageReceiver>();
             boss.AddComponent<WorldHealthBar>();
 
             SimpleEnemyBrain brain = boss.AddComponent<SimpleEnemyBrain>();
-            brain.Configure(2.0f, 18f, 1.9f, 1.15f, 0.58f, 24);
+            brain.Configure(2.05f, 20f, 2.0f, 1.10f, 0.58f, 26);
             brain.SetTarget(player);
 
             boss.AddComponent<BossPulseAttack>();
 
             EnemyDropper dropper = boss.AddComponent<EnemyDropper>();
-            dropper.Configure(35, 50, 1f, 9, true);
+            dropper.Configure(45, 60, 1f, 10, true);
 
             boss.SetActive(false);
             return boss;
@@ -190,10 +218,25 @@ namespace VoxelDungeon.EditorTools
 
         private static void CreateTreasureChest(
             Vector3 position,
-            Color color,
+            string materialPrefix,
+            Color bodyColor,
+            Color accentColor,
             int gold,
             int power)
         {
+            Material bodyMaterial = VisualStyleBuilder.GetMaterial(
+                materialPrefix + "_Body",
+                bodyColor,
+                0.05f,
+                0.32f);
+
+            Material accentMaterial = VisualStyleBuilder.GetMaterial(
+                materialPrefix + "_Accent",
+                accentColor,
+                0.45f,
+                0.55f,
+                true);
+
             GameObject root = new GameObject("TreasureChest");
             root.transform.position = position;
 
@@ -201,23 +244,33 @@ namespace VoxelDungeon.EditorTools
             body.name = "Body";
             body.transform.SetParent(root.transform, false);
             body.transform.localPosition = Vector3.zero;
-            body.transform.localScale = new Vector3(1.35f, 0.65f, 0.9f);
+            body.transform.localScale = new Vector3(1.45f, 0.72f, 0.95f);
 
             GameObject lid = GameObject.CreatePrimitive(PrimitiveType.Cube);
             lid.name = "Lid";
             lid.transform.SetParent(root.transform, false);
-            lid.transform.localPosition = new Vector3(0f, 0.55f, -0.32f);
-            lid.transform.localScale = new Vector3(1.38f, 0.22f, 0.92f);
+            lid.transform.localPosition = new Vector3(0f, 0.58f, -0.34f);
+            lid.transform.localScale = new Vector3(1.48f, 0.24f, 0.98f);
+
+            GameObject lockPlate = GameObject.CreatePrimitive(PrimitiveType.Cube);
+            lockPlate.name = "Lock";
+            lockPlate.transform.SetParent(root.transform, false);
+            lockPlate.transform.localPosition = new Vector3(0f, 0.18f, 0.51f);
+            lockPlate.transform.localScale = new Vector3(0.32f, 0.42f, 0.08f);
 
             Renderer bodyRenderer = body.GetComponent<Renderer>();
             Renderer lidRenderer = lid.GetComponent<Renderer>();
-            if (bodyRenderer != null) bodyRenderer.material.color = color;
-            if (lidRenderer != null) lidRenderer.material.color = color * 1.25f;
+            Renderer lockRenderer = lockPlate.GetComponent<Renderer>();
+            if (bodyRenderer != null) bodyRenderer.sharedMaterial = bodyMaterial;
+            if (lidRenderer != null) lidRenderer.sharedMaterial = bodyMaterial;
+            if (lockRenderer != null) lockRenderer.sharedMaterial = accentMaterial;
 
             Collider bodyCollider = body.GetComponent<Collider>();
             Collider lidCollider = lid.GetComponent<Collider>();
+            Collider lockCollider = lockPlate.GetComponent<Collider>();
             if (bodyCollider != null) Object.DestroyImmediate(bodyCollider);
             if (lidCollider != null) Object.DestroyImmediate(lidCollider);
+            if (lockCollider != null) Object.DestroyImmediate(lockCollider);
 
             TreasureChest chest = root.AddComponent<TreasureChest>();
             chest.Configure(lid.transform, gold, power);
