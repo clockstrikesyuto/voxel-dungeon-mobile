@@ -27,9 +27,9 @@ namespace VoxelDungeon.Core
             if (closeBarrier != null)
             {
                 Vector3 scale = closeBarrier.transform.localScale;
-                scale.x = Mathf.Max(scale.x, size.x + 4f);
-                scale.y = Mathf.Max(scale.y, size.y + 1.5f);
-                scale.z = Mathf.Max(0.34f, scale.z);
+                scale.x = Mathf.Max(scale.x, size.x + 8f);
+                scale.y = Mathf.Max(scale.y, size.y + 3f);
+                scale.z = Mathf.Max(0.42f, scale.z);
                 closeBarrier.transform.localScale = scale;
 
                 Collider barrierCollider = closeBarrier.GetComponent<Collider>();
