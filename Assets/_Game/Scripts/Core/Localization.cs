@@ -129,6 +129,26 @@ namespace VoxelDungeon.Core
             };
         }
 
+        public static string BossName(string rawName)
+        {
+            string key = (rawName ?? string.Empty)
+                .Replace("Boss_", string.Empty)
+                .Replace("_", " ");
+
+            if (!IsJapanese)
+                return key.ToUpperInvariant();
+
+            string normalized = key.ToUpperInvariant();
+            if (normalized.Contains("STONEWARDEN") || normalized.Contains("STONE WARDEN"))
+                return "ストーンウォーデン";
+            if (normalized.Contains("FORGECOLOSSUS") || normalized.Contains("FORGE COLOSSUS"))
+                return "フォージコロッサス";
+            if (normalized.Contains("ASTRALWARDEN") || normalized.Contains("ASTRAL WARDEN"))
+                return "アストラルウォーデン";
+
+            return key;
+        }
+
         public static string EquipmentName(string id, string fallback = null)
         {
             if (!IsJapanese)
