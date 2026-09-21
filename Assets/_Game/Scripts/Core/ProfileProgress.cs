@@ -304,8 +304,32 @@ namespace VoxelDungeon.Core
 
         public static EquipmentRoll GetEquipmentRoll(string itemId)
         {
+            return BuildEquipmentRoll(itemId, EnsureEquipmentRoll(itemId));
+        }
+
+        public static bool TryImproveEquipmentRoll(string itemId)
+        {
+            if (!OwnsEquipment(itemId))
+                return false;
+
+            string key = "profile.roll." + itemId;
+            int currentSeed = EnsureEquipmentRoll(itemId);
+            EquipmentRoll current = BuildEquipmentRoll(itemId, currentSeed);
+
+            int candidateSeed = UnityEngine.Random.Range(1000, int.MaxValue);
+            EquipmentRoll candidate = BuildEquipmentRoll(itemId, candidateSeed);
+
+            if (RollScore(candidate) <= RollScore(current))
+                return false;
+
+            PlayerPrefs.SetInt(key, candidateSeed);
+            PlayerPrefs.Save();
+            return true;
+        }
+
+        private static EquipmentRoll BuildEquipmentRoll(string itemId, int seed)
+        {
             EquipmentRecord item = EquipmentCatalog.Get(itemId);
-            int seed = EnsureEquipmentRoll(itemId);
             System.Random random = new System.Random(seed);
 
             int tier = item.Rarity switch
@@ -331,6 +355,16 @@ namespace VoxelDungeon.Core
             float speed = random.Next(0, tier + 1) * 0.005f;
 
             return new EquipmentRoll(power, defense, vitality, crit, speed);
+        }
+
+        private static float RollScore(EquipmentRoll roll)
+        {
+            return
+                roll.PowerBonus * 2.2f +
+                roll.DefenseBonus * 2.0f +
+                roll.VitalityBonus * 0.45f +
+                roll.CritBonus * 180f +
+                roll.MoveSpeedBonus * 220f;
         }
 
         private static int EnsureEquipmentRoll(string itemId, bool reroll = false)
