@@ -90,6 +90,10 @@ namespace VoxelDungeon.Player
 
             ResolveVisualRoot();
 
+            Transform hairTop = transform.Find("PlayerVisual/HairTop");
+            if (hairTop != null)
+                hairTop.gameObject.SetActive(string.IsNullOrEmpty(headId));
+
             for (int i = visualRoot.childCount - 1; i >= 0; i--)
                 Destroy(visualRoot.GetChild(i).gameObject);
 
