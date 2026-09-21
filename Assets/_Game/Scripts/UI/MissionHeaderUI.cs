@@ -26,7 +26,7 @@ namespace VoxelDungeon.UI
 
             Text title = root.AddComponent<Text>();
             title.font = font;
-            title.text = GameFlowState.SelectedStageName;
+            title.text = Localization.StageName(GameFlowState.SelectedStageId);
             title.fontSize = 26;
             title.fontStyle = FontStyle.Bold;
             title.alignment = TextAnchor.UpperCenter;
@@ -45,7 +45,9 @@ namespace VoxelDungeon.UI
 
             Text sub = subGo.AddComponent<Text>();
             sub.font = font;
-            sub.text = GameFlowState.Mode == PlayModeKind.Solo ? "SOLO MISSION" : "MULTIPLAYER MISSION";
+            sub.text = GameFlowState.Mode == PlayModeKind.Solo
+                ? Localization.T("solo_mission")
+                : Localization.T("multiplayer_mission");
             sub.fontSize = 16;
             sub.fontStyle = FontStyle.Bold;
             sub.alignment = TextAnchor.LowerCenter;
