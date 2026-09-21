@@ -158,7 +158,7 @@ namespace VoxelDungeon.Player
             textRect.offsetMax = Vector2.zero;
 
             label = textGo.AddComponent<Text>();
-            label.font = Resources.GetBuiltinResource<Font>("LegacyRuntime.ttf");
+            label.font = UiFontProvider.Get();
             label.text = message;
             label.fontSize = 30;
             label.fontStyle = FontStyle.Bold;
