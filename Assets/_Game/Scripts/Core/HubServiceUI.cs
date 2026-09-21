@@ -123,7 +123,7 @@ namespace VoxelDungeon.Core
 
                 Color rarity = EquipmentCatalog.GetRarityColor(item.Rarity);
 
-                AddText(row.transform, item.Name, new Vector2(0.03f, 0.50f), new Vector2(0.46f, 0.95f), 22, FontStyle.Bold, TextAnchor.MiddleLeft, rarity);
+                AddText(row.transform, Localization.EquipmentName(item.Id, item.Name), new Vector2(0.03f, 0.50f), new Vector2(0.46f, 0.95f), 22, FontStyle.Bold, TextAnchor.MiddleLeft, rarity);
                 AddText(row.transform, $"POWER +{item.Power}   {item.Trait}", new Vector2(0.03f, 0.05f), new Vector2(0.62f, 0.50f), 15, FontStyle.Normal, TextAnchor.MiddleLeft, new Color(0.68f, 0.75f, 0.82f));
 
                 bool equipped = item.Slot == EquipmentSlot.Melee
@@ -147,7 +147,11 @@ namespace VoxelDungeon.Core
 
         private void BuildMerchant()
         {
-            AddHeader("FRONTIER MERCHANT", $"Gold {ProfileProgress.Gold}  •  Gear, armor and expedition supplies");
+            AddHeader(
+                Localization.IsJapanese ? "フロンティア商人" : "FRONTIER MERCHANT",
+                Localization.IsJapanese
+                    ? $"ゴールド {ProfileProgress.Gold}  •  装備と探索用品"
+                    : $"Gold {ProfileProgress.Gold}  •  Gear, armor and expedition supplies");
 
             if (ProfileProgress.VoidGardenUnlocked)
             {
@@ -168,12 +172,12 @@ namespace VoxelDungeon.Core
                 BuildShopItem("crystal_steps", 60, 0.44f);
             }
 
-            BuildSupplyItem("HEALING POTION", "healing_potion", 18, 0.30f);
-            BuildSupplyItem("FIRE BOMB", "fire_bomb", 28, 0.19f);
+            BuildSupplyItem(Localization.ConsumableName("healing_potion"), "healing_potion", 18, 0.30f);
+            BuildSupplyItem(Localization.ConsumableName("fire_bomb"), "fire_bomb", 28, 0.19f);
 
             AddText(
                 panel,
-                "Boss-exclusive equipment remains expedition-only.",
+                Localization.IsJapanese ? "ボス限定装備は探索でのみ入手できます。" : "Boss-exclusive equipment remains expedition-only.",
                 new Vector2(0.12f, 0.12f),
                 new Vector2(0.88f, 0.17f),
                 15,
@@ -201,7 +205,9 @@ namespace VoxelDungeon.Core
 
             CreateButton(
                 row.transform,
-                owned ? "OWNED" : $"{cost} GOLD",
+                owned
+                    ? (Localization.IsJapanese ? "所持済み" : "OWNED")
+                    : $"{cost} {(Localization.IsJapanese ? "G" : "GOLD")}",
                 new Vector2(0.70f, 0.18f),
                 new Vector2(0.95f, 0.82f),
                 owned ? new Color(0.28f, 0.48f, 0.36f) : warm,
@@ -234,7 +240,7 @@ namespace VoxelDungeon.Core
 
             AddText(
                 row.transform,
-                $"OWNED {owned}",
+                Localization.IsJapanese ? $"所持 {owned}" : $"OWNED {owned}",
                 new Vector2(0.52f, 0.14f),
                 new Vector2(0.70f, 0.86f),
                 15,
@@ -262,23 +268,29 @@ namespace VoxelDungeon.Core
 
         private void BuildArchivist()
         {
-            string title = "ARCHIVIST LUMA";
+            string title = Localization.IsJapanese ? "記録官ルマ" : "ARCHIVIST LUMA";
             string body;
             string buttonLabel = null;
             Action action = null;
 
             if (!ProfileProgress.CrystalCryptCleared)
             {
-                body = "The crystals beneath the frontier are reacting to something deeper.\nClear CRYSTAL CRYPT and return to me.";
+                body = Localization.IsJapanese
+                    ? "フロンティア地下の結晶が、さらに深い場所に反応しています。\nクリスタル洞窟をクリアして戻ってきてください。"
+                    : "The crystals beneath the frontier are reacting to something deeper.\nClear CRYSTAL CRYPT and return to me.";
             }
             else if (!ProfileProgress.AshenForgeCleared)
             {
-                body = "You found the first resonance. The forge is amplifying it.\nClear ASHEN FORGE and bring back its core reading.";
+                body = Localization.IsJapanese
+                    ? "最初の共鳴を確認しました。鍛冶場がそれを増幅しています。\n灼熱の鍛冶場をクリアしてください。"
+                    : "You found the first resonance. The forge is amplifying it.\nClear ASHEN FORGE and bring back its core reading.";
             }
             else if (!ProfileProgress.ArchivistRewardClaimed)
             {
-                body = "You mapped both resonance points. Take this prototype before entering the Void route.\nReward: 80 GOLD + VOID STAFF.";
-                buttonLabel = "CLAIM REWARD";
+                body = Localization.IsJapanese
+                    ? "2つの共鳴地点を記録できました。虚空ルートへ向かう前にこれをどうぞ。\n報酬：80ゴールド＋ヴォイドスタッフ"
+                    : "You mapped both resonance points. Take this prototype before entering the Void route.\nReward: 80 GOLD + VOID STAFF.";
+                buttonLabel = Localization.IsJapanese ? "報酬を受け取る" : "CLAIM REWARD";
                 action = () =>
                 {
                     ProfileProgress.ClaimArchivistReward();
@@ -287,10 +299,12 @@ namespace VoxelDungeon.Core
             }
             else
             {
-                body = "The Void Garden route is stable enough to enter.\nYour next expedition waits beyond the violet gate.";
+                body = Localization.IsJapanese
+                    ? "虚空の庭園へのルートは安定しました。\n紫の門の先に次の冒険が待っています。"
+                    : "The Void Garden route is stable enough to enter.\nYour next expedition waits beyond the violet gate.";
             }
 
-            AddHeader(title, "Frontier research quest");
+            AddHeader(title, Localization.IsJapanese ? "フロンティア調査クエスト" : "Frontier research quest");
             AddText(panel, body, new Vector2(0.13f, 0.38f), new Vector2(0.87f, 0.68f), 27, FontStyle.Normal, TextAnchor.MiddleCenter, Color.white);
 
             if (buttonLabel != null)
@@ -323,7 +337,7 @@ namespace VoxelDungeon.Core
         {
             CreateButton(
                 panel,
-                "CLOSE",
+                Localization.IsJapanese ? "閉じる" : "CLOSE",
                 new Vector2(0.39f, 0.035f),
                 new Vector2(0.61f, 0.105f),
                 new Color(0.36f, 0.44f, 0.52f),
