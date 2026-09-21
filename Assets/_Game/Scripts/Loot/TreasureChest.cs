@@ -54,6 +54,29 @@ namespace VoxelDungeon.Loot
                 : LootPickup.LootKind.RangedPower;
 
             LootPickup.Spawn(transform.position + transform.right * 0.75f, kind, powerReward);
+
+            AdventureItemPickup.Spawn(
+                transform.position - transform.right * 0.75f,
+                Random.value < 0.72f
+                    ? StageLootCatalog.PrimaryMaterial()
+                    : StageLootCatalog.RareMaterial(),
+                Random.Range(1, 4));
+
+            if (Random.value < 0.42f)
+            {
+                EquipmentPickup.Spawn(
+                    transform.position + transform.forward * 0.95f,
+                    StageLootCatalog.RollEquipment());
+            }
+
+            if (Random.value < 0.34f)
+            {
+                AdventureItemPickup.Spawn(
+                    transform.position - transform.forward * 0.85f,
+                    "healing_potion",
+                    1,
+                    true);
+            }
         }
 
         private IEnumerator OpenLid()
