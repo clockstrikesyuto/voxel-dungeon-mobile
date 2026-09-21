@@ -1,5 +1,6 @@
 using UnityEngine;
 using VoxelDungeon.Core;
+using VoxelDungeon.Items;
 
 namespace VoxelDungeon.Player
 {
@@ -7,6 +8,10 @@ namespace VoxelDungeon.Player
     {
         private string lastMeleeId;
         private string lastRangedId;
+        private string lastHeadId;
+        private string lastBodyId;
+        private string lastBootsId;
+        private string lastAccessoryId;
         private Transform visualRoot;
         private float nextRefresh;
 
@@ -62,20 +67,79 @@ namespace VoxelDungeon.Player
         {
             string meleeId = ProfileProgress.EquippedMeleeId;
             string rangedId = ProfileProgress.EquippedRangedId;
+            string headId = ProfileProgress.EquippedHeadId;
+            string bodyId = ProfileProgress.EquippedBodyId;
+            string bootsId = ProfileProgress.EquippedBootsId;
+            string accessoryId = ProfileProgress.EquippedAccessoryId;
 
-            if (!force && meleeId == lastMeleeId && rangedId == lastRangedId)
+            if (!force &&
+                meleeId == lastMeleeId &&
+                rangedId == lastRangedId &&
+                headId == lastHeadId &&
+                bodyId == lastBodyId &&
+                bootsId == lastBootsId &&
+                accessoryId == lastAccessoryId)
                 return;
 
             lastMeleeId = meleeId;
             lastRangedId = rangedId;
+            lastHeadId = headId;
+            lastBodyId = bodyId;
+            lastBootsId = bootsId;
+            lastAccessoryId = accessoryId;
 
             ResolveVisualRoot();
 
             for (int i = visualRoot.childCount - 1; i >= 0; i--)
                 Destroy(visualRoot.GetChild(i).gameObject);
 
+            BuildArmor(headId, bodyId, bootsId, accessoryId);
             BuildMelee(meleeId);
             BuildRanged(rangedId);
+        }
+
+        private void BuildArmor(string headId, string bodyId, string bootsId, string accessoryId)
+        {
+            Color headColor = EquipmentCatalog.GetRarityColor(EquipmentCatalog.Get(headId).Rarity);
+            Color bodyColor = EquipmentCatalog.GetRarityColor(EquipmentCatalog.Get(bodyId).Rarity);
+            Color bootsColor = EquipmentCatalog.GetRarityColor(EquipmentCatalog.Get(bootsId).Rarity);
+            Color accessoryColor = EquipmentCatalog.GetRarityColor(EquipmentCatalog.Get(accessoryId).Rarity);
+
+            CreateCube(
+                "ArmorHead",
+                new Vector3(0f, 1.98f, -0.02f),
+                headId == "frontier_cap"
+                    ? new Vector3(0.68f, 0.16f, 0.68f)
+                    : new Vector3(0.72f, 0.24f, 0.72f),
+                headColor);
+
+            CreateCube(
+                "ArmorChest",
+                new Vector3(0f, 1.02f, 0.325f),
+                bodyId == "frontier_vest"
+                    ? new Vector3(0.58f, 0.42f, 0.055f)
+                    : new Vector3(0.72f, 0.55f, 0.075f),
+                bodyColor);
+
+            CreateCube(
+                "ArmorBoot_L",
+                new Vector3(-0.22f, 0.02f, 0.10f),
+                new Vector3(0.33f, 0.22f, 0.48f),
+                bootsColor);
+
+            CreateCube(
+                "ArmorBoot_R",
+                new Vector3(0.22f, 0.02f, 0.10f),
+                new Vector3(0.33f, 0.22f, 0.48f),
+                bootsColor);
+
+            GameObject charm = CreateCube(
+                "AccessoryCharm",
+                new Vector3(-0.25f, 0.86f, 0.39f),
+                new Vector3(0.14f, 0.22f, 0.08f),
+                accessoryColor);
+
+            charm.transform.localRotation = Quaternion.Euler(0f, 0f, 18f);
         }
 
         private void BuildMelee(string id)
