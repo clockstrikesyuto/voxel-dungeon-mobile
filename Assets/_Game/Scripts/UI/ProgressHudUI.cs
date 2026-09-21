@@ -39,7 +39,7 @@ namespace VoxelDungeon.UI
             rect.anchorMax = new Vector2(1f, 1f);
             rect.pivot = new Vector2(1f, 1f);
             rect.anchoredPosition = new Vector2(-55f, -45f);
-            rect.sizeDelta = new Vector2(620f, 120f);
+            rect.sizeDelta = new Vector2(720f, 155f);
 
             label = go.AddComponent<Text>();
             label.font = Resources.GetBuiltinResource<Font>("LegacyRuntime.ttf");
@@ -57,6 +57,7 @@ namespace VoxelDungeon.UI
             var ranged = ProfileProgress.EquippedRanged;
 
             label.text =
+                $"LV {ProfileProgress.Level}  EXP {ProfileProgress.Experience}/{ProfileProgress.ExperienceToNextLevel}  POTION {ProfileProgress.GetConsumable("healing_potion")}\n" +
                 $"GOLD {progress.Gold}   MELEE +{progress.MeleePowerBonus}   RANGE +{progress.RangedPowerBonus}\n" +
                 $"{melee.Name}  •  {ranged.Name}";
         }
