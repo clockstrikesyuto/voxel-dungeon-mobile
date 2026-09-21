@@ -26,8 +26,26 @@ namespace VoxelDungeon.Player
             if (recovering)
                 return;
 
-            respawnPosition = position + Vector3.up * 0.18f;
+            respawnPosition = ResolveSafeGround(position);
             checkpointName = string.IsNullOrEmpty(label) ? "CHECKPOINT" : label;
+        }
+
+        private Vector3 ResolveSafeGround(Vector3 requested)
+        {
+            Vector3 origin = requested + Vector3.up * 4f;
+
+            if (Physics.Raycast(
+                    origin,
+                    Vector3.down,
+                    out RaycastHit hit,
+                    10f,
+                    Physics.AllLayers,
+                    QueryTriggerInteraction.Ignore))
+            {
+                return hit.point + Vector3.up * 0.10f;
+            }
+
+            return requested + Vector3.up * 0.18f;
         }
 
         public bool BeginRecovery()
