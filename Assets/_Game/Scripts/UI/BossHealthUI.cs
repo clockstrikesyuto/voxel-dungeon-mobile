@@ -2,6 +2,7 @@ using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
 using VoxelDungeon.Combat;
+using VoxelDungeon.Core;
 
 namespace VoxelDungeon.UI
 {
@@ -73,7 +74,7 @@ namespace VoxelDungeon.UI
 
             Text nameText = nameGo.AddComponent<Text>();
             nameText.font = UiFontProvider.Get();
-            nameText.text = bossName.Replace("Boss_", string.Empty).Replace("_", " ").ToUpperInvariant();
+            nameText.text = Localization.BossName(bossName);
             nameText.fontSize = 28;
             nameText.fontStyle = FontStyle.Bold;
             nameText.alignment = TextAnchor.MiddleCenter;
