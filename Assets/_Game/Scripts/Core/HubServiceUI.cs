@@ -53,7 +53,7 @@ namespace VoxelDungeon.Core
 
         private void Initialize()
         {
-            font = Resources.GetBuiltinResource<Font>("LegacyRuntime.ttf");
+            font = UiFontProvider.Get();
 
             GameObject canvasGo = new GameObject("Canvas");
             canvasGo.transform.SetParent(transform, false);
