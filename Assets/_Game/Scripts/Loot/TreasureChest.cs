@@ -71,11 +71,18 @@ namespace VoxelDungeon.Loot
 
             if (Random.value < 0.34f)
             {
-                string consumable = Random.value < 0.65f
+                float consumableRoll = Random.value;
+                string consumable = consumableRoll < 0.42f
                     ? "healing_potion"
-                    : Random.value < 0.55f
+                    : consumableRoll < 0.58f
                         ? "fire_bomb"
-                        : "frost_flask";
+                        : consumableRoll < 0.72f
+                            ? "frost_flask"
+                            : consumableRoll < 0.82f
+                                ? "power_tonic"
+                                : consumableRoll < 0.91f
+                                    ? "guard_tonic"
+                                    : "haste_tonic";
 
                 AdventureItemPickup.Spawn(
                     transform.position - transform.forward * 0.85f,
