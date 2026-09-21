@@ -62,6 +62,7 @@ namespace VoxelDungeon.Loot
 
             int xp = boss ? 55 : Random.Range(8, 14);
             ProfileProgress.AddExperience(xp);
+            MissionRunStats.AddExperience(xp);
 
             string material = ResolveStageMaterial();
             float materialChance = boss ? 1f : 0.34f;
