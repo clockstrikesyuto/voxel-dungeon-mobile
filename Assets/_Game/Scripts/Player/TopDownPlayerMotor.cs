@@ -1,4 +1,5 @@
 using UnityEngine;
+using VoxelDungeon.Core;
 
 namespace VoxelDungeon.Player
 {
@@ -72,7 +73,8 @@ namespace VoxelDungeon.Player
                 return;
             }
 
-            Vector3 desired = new Vector3(moveInput.x, 0f, moveInput.y) * moveSpeed;
+            float loadoutSpeed = moveSpeed * (1f + ProfileProgress.TotalMoveSpeedBonus);
+            Vector3 desired = new Vector3(moveInput.x, 0f, moveInput.y) * loadoutSpeed;
             planarVelocity = Vector3.MoveTowards(planarVelocity, desired, acceleration * Time.deltaTime);
 
             if (controller.isGrounded && verticalVelocity < 0f)
