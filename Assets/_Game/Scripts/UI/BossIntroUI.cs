@@ -1,6 +1,7 @@
 using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
+using VoxelDungeon.Core;
 
 namespace VoxelDungeon.UI
 {
@@ -44,8 +45,8 @@ namespace VoxelDungeon.UI
             group.alpha = 0f;
 
             Text text = textGo.AddComponent<Text>();
-            text.font = Resources.GetBuiltinResource<Font>("LegacyRuntime.ttf");
-            text.text = bossName.Replace("Boss_", string.Empty).Replace("_", " ").ToUpperInvariant();
+            text.font = UiFontProvider.Get();
+            text.text = Localization.BossName(bossName);
             text.fontSize = 58;
             text.fontStyle = FontStyle.Bold;
             text.alignment = TextAnchor.MiddleCenter;
