@@ -427,6 +427,34 @@ namespace VoxelDungeon.EditorTools
                 combat);
             AddButtonLabel(potion, "+", 46);
 
+            GameObject fireBomb = CreateUiBlock(
+                "FireBombButton",
+                safeRect,
+                new Vector2(1f, 0f),
+                new Vector2(1f, 0f),
+                new Vector2(-545f, 355f),
+                new Vector2(105f, 105f),
+                new Color(1f, 0.30f, 0.06f, 0.84f));
+            fireBomb.AddComponent<MobileActionButton>().Configure(
+                MobileActionButton.ActionKind.FireBomb,
+                motor,
+                combat);
+            AddButtonLabel(fireBomb, "FIRE", 18);
+
+            GameObject frost = CreateUiBlock(
+                "FrostFlaskButton",
+                safeRect,
+                new Vector2(1f, 0f),
+                new Vector2(1f, 0f),
+                new Vector2(-665f, 270f),
+                new Vector2(105f, 105f),
+                new Color(0.24f, 0.72f, 1f, 0.84f));
+            frost.AddComponent<MobileActionButton>().Configure(
+                MobileActionButton.ActionKind.FrostFlask,
+                motor,
+                combat);
+            AddButtonLabel(frost, "ICE", 20);
+
             GameObject hpBg = CreateUiBlock(
                 "HealthBar",
                 safeRect,
