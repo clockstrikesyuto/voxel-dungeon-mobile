@@ -110,9 +110,9 @@ namespace VoxelDungeon.Player
 
         private void BuildArmor(string headId, string bodyId, string bootsId, string accessoryId)
         {
-            Color headColor = EquipmentCatalog.GetRarityColor(EquipmentCatalog.Get(headId).Rarity);
-            Color bodyColor = EquipmentCatalog.GetRarityColor(EquipmentCatalog.Get(bodyId).Rarity);
-            Color bootsColor = EquipmentCatalog.GetRarityColor(EquipmentCatalog.Get(bootsId).Rarity);
+            Color headColor = GetEquipmentVisualColor(headId);
+            Color bodyColor = GetEquipmentVisualColor(bodyId);
+            Color bootsColor = GetEquipmentVisualColor(bootsId);
             Color accessoryColor = EquipmentCatalog.GetRarityColor(EquipmentCatalog.Get(accessoryId).Rarity);
 
             CreateCube(
