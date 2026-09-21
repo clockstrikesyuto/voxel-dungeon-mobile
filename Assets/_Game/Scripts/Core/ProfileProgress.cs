@@ -31,6 +31,7 @@ namespace VoxelDungeon.Core
         private const string GoldKey = "profile.gold";
         private const string MeleeKey = "profile.melee";
         private const string RangedKey = "profile.ranged";
+        private const string ArmorKey = "profile.armor";
         private const string CryptClearKey = "profile.crypt.clear";
         private const string AshenClearKey = "profile.ashen.clear";
         private const string VoidClearKey = "profile.void.clear";
@@ -73,6 +74,7 @@ namespace VoxelDungeon.Core
         public static int Gold => PlayerPrefs.GetInt(GoldKey, 0);
         public static int MeleePower => PlayerPrefs.GetInt(MeleeKey, 0);
         public static int RangedPower => PlayerPrefs.GetInt(RangedKey, 0);
+        public static int ArmorPower => PlayerPrefs.GetInt(ArmorKey, 0);
         public static bool CrystalCryptCleared => PlayerPrefs.GetInt(CryptClearKey, 0) == 1;
         public static bool AshenForgeCleared => PlayerPrefs.GetInt(AshenClearKey, 0) == 1;
         public static bool VoidGardenCleared => PlayerPrefs.GetInt(VoidClearKey, 0) == 1;
@@ -178,6 +180,16 @@ namespace VoxelDungeon.Core
                 return false;
 
             PlayerPrefs.SetInt(RangedKey, RangedPower + Mathf.Max(1, power));
+            PlayerPrefs.Save();
+            return true;
+        }
+
+        public static bool UpgradeArmor(int cost, int defense)
+        {
+            if (!SpendGold(cost))
+                return false;
+
+            PlayerPrefs.SetInt(ArmorKey, ArmorPower + Mathf.Max(1, defense));
             PlayerPrefs.Save();
             return true;
         }
@@ -337,7 +349,7 @@ namespace VoxelDungeon.Core
         }
 
         public static int TotalDefense =>
-            SumEquipped(item => item.Defense, roll => roll.DefenseBonus) + GuardRank * 2;
+            SumEquipped(item => item.Defense, roll => roll.DefenseBonus) + GuardRank * 2 + ArmorPower;
 
         public static int TotalVitality =>
             SumEquipped(item => item.Vitality, roll => roll.VitalityBonus) + GuardRank * 3;
@@ -508,7 +520,7 @@ namespace VoxelDungeon.Core
         {
             string[] directKeys =
             {
-                GoldKey, MeleeKey, RangedKey,
+                GoldKey, MeleeKey, RangedKey, ArmorKey,
                 CryptClearKey, AshenClearKey, VoidClearKey,
                 OwnedEquipmentKey,
                 EquippedMeleeKey, EquippedRangedKey, EquippedHeadKey,
