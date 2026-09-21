@@ -94,12 +94,55 @@ namespace VoxelDungeon.Core
                 return;
 
             bool unlocked = nearest.IsUnlocked();
-            promptTitle.text = nearest.DisplayName;
-            promptSubtitle.text = unlocked ? nearest.Subtitle : GetLockedText(nearest.StageId);
+            promptTitle.text = GetPointDisplayName(nearest);
+            promptSubtitle.text = unlocked
+                ? GetPointSubtitle(nearest)
+                : GetLockedText(nearest.StageId);
             interactButton.interactable = unlocked;
             interactButton.GetComponentInChildren<Text>().text = unlocked
                 ? GetActionLabel(nearest.Kind)
                 : Localization.T("locked");
+        }
+
+        private string GetPointDisplayName(HubPoint point)
+        {
+            if (point == null)
+                return string.Empty;
+
+            if (point.Kind == HubPointKind.StageGate)
+                return Localization.StageName(point.StageId);
+
+            if (!Localization.IsJapanese)
+                return point.DisplayName;
+
+            return point.Kind switch
+            {
+                HubPointKind.WorldMap => "フロンティアマップ",
+                HubPointKind.Forge => "エンバー鍛冶場",
+                HubPointKind.Merchant => "フロンティア商人",
+                HubPointKind.Training => "訓練場",
+                HubPointKind.Armory => "装備庫",
+                HubPointKind.Quest => "記録官ルマ",
+                _ => point.DisplayName
+            };
+        }
+
+        private string GetPointSubtitle(HubPoint point)
+        {
+            if (point == null || !Localization.IsJapanese)
+                return point != null ? point.Subtitle : string.Empty;
+
+            return point.Kind switch
+            {
+                HubPointKind.StageGate => "冒険へ出発する",
+                HubPointKind.WorldMap => "次の冒険先を地図から選択",
+                HubPointKind.Forge => "ゴールドで恒久能力を強化",
+                HubPointKind.Merchant => "装備や探索用品を購入",
+                HubPointKind.Training => "移動と戦闘を練習",
+                HubPointKind.Armory => "装備・素材・スキルを管理",
+                HubPointKind.Quest => "調査クエストを確認",
+                _ => point.Subtitle
+            };
         }
 
         private string GetActionLabel(HubPointKind kind)
