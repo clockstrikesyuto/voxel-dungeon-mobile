@@ -158,7 +158,7 @@ namespace VoxelDungeon.Core
                 "01",
                 Localization.StageName("stage.crypt"),
                 Localization.StageDescription("stage.crypt"),
-                "NORMAL",
+                Localization.IsJapanese ? "通常" : "NORMAL",
                 new Vector2(0.5f, 0.59f),
                 cyan,
                 true,
@@ -173,25 +173,41 @@ namespace VoxelDungeon.Core
                         ShowLobby();
                 });
 
+            bool ashenOpen = ProfileProgress.AshenForgeUnlocked;
             CreateStageCard(
                 "02",
                 Localization.StageName("stage.ashen"),
                 Localization.StageDescription("stage.ashen"),
-                "COMING SOON",
+                ashenOpen
+                    ? (Localization.IsJapanese ? "解放済み" : "UNLOCKED")
+                    : Localization.T("locked"),
                 new Vector2(0.5f, 0.37f),
                 warm,
-                false,
-                null);
+                ashenOpen,
+                () =>
+                {
+                    GameFlowState.SelectedStageId = "stage.ashen";
+                    GameFlowState.SelectedStageName = Localization.StageName("stage.ashen");
+                    ShowLobby();
+                });
 
+            bool voidOpen = ProfileProgress.VoidGardenUnlocked;
             CreateStageCard(
                 "03",
                 Localization.StageName("stage.void"),
                 Localization.StageDescription("stage.void"),
-                "COMING SOON",
+                voidOpen
+                    ? (Localization.IsJapanese ? "解放済み" : "UNLOCKED")
+                    : Localization.T("locked"),
                 new Vector2(0.5f, 0.15f),
                 violet,
-                false,
-                null);
+                voidOpen,
+                () =>
+                {
+                    GameFlowState.SelectedStageId = "stage.void";
+                    GameFlowState.SelectedStageName = Localization.StageName("stage.void");
+                    ShowLobby();
+                });
 
             CreateBackButton(GameFlowState.Mode == PlayModeKind.Solo ? ShowTitle : ShowMultiplayer);
         }
@@ -208,33 +224,40 @@ namespace VoxelDungeon.Core
                     : $"UP TO {NetworkDesignContract.MaxPlayers} PLAYERS");
             AddText(Localization.IsJapanese ? "ルームコードでオンライン参加。" : "Play online with a room code.", new Vector2(0.5f, 0.66f), new Vector2(750f, 60f), 26, FontStyle.Normal, new Color(0.72f, 0.78f, 0.86f));
 
-            CreateButton("CREATE ROOM", new Vector2(0.5f, 0.51f), new Vector2(520f, 92f), cyan, () =>
+            CreateButton(Localization.IsJapanese ? "ルーム作成" : "CREATE ROOM", new Vector2(0.5f, 0.51f), new Vector2(520f, 92f), cyan, () =>
             {
                 GameFlowState.RoomCode = GenerateRoomCode();
                 ShowStageSelect();
             });
 
-            CreateButton("JOIN ROOM", new Vector2(0.5f, 0.39f), new Vector2(520f, 92f), violet, ShowJoinRoom);
+            CreateButton(Localization.IsJapanese ? "ルーム参加" : "JOIN ROOM", new Vector2(0.5f, 0.39f), new Vector2(520f, 92f), violet, ShowJoinRoom);
 
-            AddText("Relay/online synchronization is the next networking pass.", new Vector2(0.5f, 0.23f), new Vector2(920f, 55f), 19, FontStyle.Normal, new Color(0.5f, 0.58f, 0.68f));
+            AddText(Localization.IsJapanese
+                ? "オンライン同期は次のネットワーク実装で接続予定です。"
+                : "Relay/online synchronization is the next networking pass.", new Vector2(0.5f, 0.23f), new Vector2(920f, 55f), 19, FontStyle.Normal, new Color(0.5f, 0.58f, 0.68f));
             CreateBackButton(ShowTitle);
         }
 
         private void ShowJoinRoom()
         {
             ClearContent();
-            AddTopHeader("JOIN ROOM", "ENTER 6-CHARACTER CODE");
+            AddTopHeader(
+                Localization.IsJapanese ? "ルーム参加" : "JOIN ROOM",
+                Localization.IsJapanese ? "6文字のコードを入力" : "ENTER 6-CHARACTER CODE");
 
             InputField input = CreateInputField(new Vector2(0.5f, 0.52f), new Vector2(500f, 86f));
-            AddText("Current build validates the lobby flow; Relay connection comes next.", new Vector2(0.5f, 0.38f), new Vector2(900f, 55f), 19, FontStyle.Normal, new Color(0.55f, 0.62f, 0.72f));
+            AddText(Localization.IsJapanese
+                ? "現在はロビー画面まで。オンライン接続は次の実装で追加します。"
+                : "Current build validates the lobby flow; Relay connection comes next.", new Vector2(0.5f, 0.38f), new Vector2(900f, 55f), 19, FontStyle.Normal, new Color(0.55f, 0.62f, 0.72f));
 
-            Button join = CreateButton("CONTINUE", new Vector2(0.5f, 0.26f), new Vector2(500f, 86f), violet, () =>
+            Button join = CreateButton(Localization.IsJapanese ? "続ける" : "CONTINUE", new Vector2(0.5f, 0.26f), new Vector2(500f, 86f), violet, () =>
             {
                 string code = (input.text ?? string.Empty).Trim().ToUpperInvariant();
                 if (code.Length != 6)
                 {
                     input.text = string.Empty;
-                    input.placeholder.GetComponent<Text>().text = "ENTER 6 CHARACTERS";
+                    input.placeholder.GetComponent<Text>().text =
+                        Localization.IsJapanese ? "6文字入力" : "ENTER 6 CHARACTERS";
                     return;
                 }
 
@@ -253,16 +276,16 @@ namespace VoxelDungeon.Core
             if (string.IsNullOrEmpty(GameFlowState.RoomCode))
                 GameFlowState.RoomCode = GenerateRoomCode();
 
-            AddTopHeader("ROOM LOBBY", GameFlowState.SelectedStageName);
-            AddText("ROOM CODE", new Vector2(0.5f, 0.62f), new Vector2(520f, 50f), 22, FontStyle.Bold, new Color(0.62f, 0.68f, 0.76f));
+            AddTopHeader(Localization.IsJapanese ? "ルームロビー" : "ROOM LOBBY", GameFlowState.SelectedStageName);
+            AddText(Localization.IsJapanese ? "ルームコード" : "ROOM CODE", new Vector2(0.5f, 0.62f), new Vector2(520f, 50f), 22, FontStyle.Bold, new Color(0.62f, 0.68f, 0.76f));
             AddText(GameFlowState.RoomCode, new Vector2(0.5f, 0.53f), new Vector2(700f, 100f), 62, FontStyle.Bold, cyan);
 
-            CreatePlayerSlot("PLAYER 1", "HOST / READY", new Vector2(0.5f, 0.39f), true);
-            CreatePlayerSlot("PLAYER 2", "WAITING...", new Vector2(0.5f, 0.31f), false);
-            CreatePlayerSlot("PLAYER 3", "WAITING...", new Vector2(0.5f, 0.23f), false);
-            CreatePlayerSlot("PLAYER 4", "WAITING...", new Vector2(0.5f, 0.15f), false);
+            CreatePlayerSlot(Localization.IsJapanese ? "プレイヤー 1" : "PLAYER 1", Localization.IsJapanese ? "ホスト / 準備OK" : "HOST / READY", new Vector2(0.5f, 0.39f), true);
+            CreatePlayerSlot(Localization.IsJapanese ? "プレイヤー 2" : "PLAYER 2", Localization.IsJapanese ? "待機中..." : "WAITING...", new Vector2(0.5f, 0.31f), false);
+            CreatePlayerSlot(Localization.IsJapanese ? "プレイヤー 3" : "PLAYER 3", Localization.IsJapanese ? "待機中..." : "WAITING...", new Vector2(0.5f, 0.23f), false);
+            CreatePlayerSlot(Localization.IsJapanese ? "プレイヤー 4" : "PLAYER 4", Localization.IsJapanese ? "待機中..." : "WAITING...", new Vector2(0.5f, 0.15f), false);
 
-            AddText("ONLINE CONNECT / READY SYNC NEXT", new Vector2(0.5f, 0.065f), new Vector2(780f, 42f), 18, FontStyle.Bold, violet);
+            AddText(Localization.IsJapanese ? "オンライン接続 / 準備同期は次回実装" : "ONLINE CONNECT / READY SYNC NEXT", new Vector2(0.5f, 0.065f), new Vector2(780f, 42f), 18, FontStyle.Bold, violet);
             CreateBackButton(ShowMultiplayer);
         }
 
