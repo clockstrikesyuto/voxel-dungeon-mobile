@@ -5,9 +5,9 @@ namespace VoxelDungeon.Presentation
     public sealed class TopDownCameraFollow : MonoBehaviour
     {
         [SerializeField] private Transform target;
-        [SerializeField] private Vector3 offset = new Vector3(0f, 9f, -7f);
+        [SerializeField] private Vector3 offset = new Vector3(0f, 12.5f, -10.5f);
         [SerializeField, Min(0f)] private float followSharpness = 12f;
-        [SerializeField] private Vector3 lookOffset = new Vector3(0f, 1f, 0f);
+        [SerializeField] private Vector3 lookOffset = new Vector3(0f, 0.85f, 0f);
 
         public void SetTarget(Transform value) => target = value;
 
