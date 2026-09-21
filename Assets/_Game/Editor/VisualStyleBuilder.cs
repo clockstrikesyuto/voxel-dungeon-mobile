@@ -444,7 +444,9 @@ namespace VoxelDungeon.EditorTools
 
             GameObject visual = new GameObject(name);
             visual.transform.SetParent(root.transform, false);
-            visual.transform.localPosition = new Vector3(0f, -0.95f, 0f);
+            // CharacterController transform is already the actor's ground origin.
+            // Keep visual geometry on the same origin so feet do not sink below floors.
+            visual.transform.localPosition = Vector3.zero;
             return visual;
         }
 
