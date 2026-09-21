@@ -36,6 +36,19 @@ namespace VoxelDungeon.AI
             ResolveTargetReceiver();
         }
 
+        public void BeginEncounter()
+        {
+            StopAllCoroutines();
+            attacking = false;
+            dying = false;
+            verticalVelocity = 0f;
+            nextAttackTime = Time.time + 0.20f;
+            aggroRange = Mathf.Max(aggroRange, 40f);
+
+            EnsureTarget();
+            enabled = true;
+        }
+
         public void Configure(
             float speed,
             float aggro,
