@@ -12,6 +12,7 @@ namespace VoxelDungeon.Combat
         private int damage;
         private float remainingLifetime;
         private float radius;
+        private bool critical;
 
         public void Initialize(
             GameObject owner,
@@ -19,7 +20,8 @@ namespace VoxelDungeon.Combat
             float projectileSpeed,
             int projectileDamage,
             float lifetime = 2.5f,
-            float hitRadius = 0.28f)
+            float hitRadius = 0.28f,
+            bool isCritical = false)
         {
             source = owner;
             direction = moveDirection.normalized;
@@ -27,6 +29,7 @@ namespace VoxelDungeon.Combat
             damage = projectileDamage;
             remainingLifetime = lifetime;
             radius = hitRadius;
+            critical = isCritical;
         }
 
         private void Update()
@@ -96,7 +99,7 @@ namespace VoxelDungeon.Combat
                 damage,
                 hitPoint,
                 direction,
-                false));
+                critical));
 
             Destroy(gameObject);
             return true;
