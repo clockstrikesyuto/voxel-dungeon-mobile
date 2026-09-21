@@ -28,7 +28,8 @@ namespace VoxelDungeon.Player
                 return;
 
             respawnPosition = ResolveSafeGround(position);
-            checkpointName = string.IsNullOrEmpty(label) ? "CHECKPOINT" : label;
+            checkpointName = Localization.CheckpointName(
+                string.IsNullOrEmpty(label) ? "CHECKPOINT" : label);
         }
 
         private Vector3 ResolveSafeGround(Vector3 requested)
@@ -63,7 +64,9 @@ namespace VoxelDungeon.Player
             recovering = true;
 
             RecoveryFadeUI fade = RecoveryFadeUI.Show(
-                $"RETURNING TO {checkpointName}");
+                Localization.IsJapanese
+                    ? $"{checkpointName}へ復帰中"
+                    : $"RETURNING TO {checkpointName}");
 
             if (fade != null)
                 yield return fade.FadeIn();
