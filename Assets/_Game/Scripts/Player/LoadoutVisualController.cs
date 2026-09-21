@@ -59,7 +59,7 @@ namespace VoxelDungeon.Player
 
             GameObject go = new GameObject("LoadoutVisual");
             go.transform.SetParent(transform, false);
-            go.transform.localPosition = new Vector3(0f, -0.95f, 0f);
+            go.transform.localPosition = Vector3.zero;
             visualRoot = go.transform;
         }
 
@@ -123,13 +123,13 @@ namespace VoxelDungeon.Player
 
             CreateCube(
                 "ArmorBoot_L",
-                new Vector3(-0.22f, 0.02f, 0.10f),
+                new Vector3(-0.22f, 0.13f, 0.10f),
                 new Vector3(0.33f, 0.22f, 0.48f),
                 bootsColor);
 
             CreateCube(
                 "ArmorBoot_R",
-                new Vector3(0.22f, 0.02f, 0.10f),
+                new Vector3(0.22f, 0.13f, 0.10f),
                 new Vector3(0.33f, 0.22f, 0.48f),
                 bootsColor);
 
