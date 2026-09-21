@@ -220,41 +220,62 @@ namespace VoxelDungeon.EditorTools
         {
             GameObject root = new GameObject("UnderworldBackdrop");
 
-            // Visual only: no collider, so falling still reaches the recovery threshold.
-            CreateBlock(root.transform, "DeepFloor", new Vector3(0f, -24f, 10f), new Vector3(60f, 1.4f, 110f), deepStone, false);
+            Color abyssColor = stageId == "stage.ashen"
+                ? new Color(0.34f, 0.08f, 0.025f)
+                : stageId == "stage.void"
+                    ? new Color(0.16f, 0.16f, 0.30f)
+                    : new Color(0.12f, 0.14f, 0.34f);
 
-            for (int i = 0; i < 18; i++)
+            Material abyss = VisualStyleBuilder.GetMaterial(
+                Prefix(stageId) + "_Abyss",
+                abyssColor,
+                0.02f,
+                0.72f,
+                true);
+
+            // Every gap now reveals the same unmistakable abyss layer.
+            // It is visual-only so actors still fall through it.
+            CreateBlock(
+                root.transform,
+                "AbyssSurface",
+                new Vector3(0f, -3.8f, 10f),
+                new Vector3(76f, 0.55f, 122f),
+                abyss,
+                false);
+
+            for (int i = 0; i < 20; i++)
             {
-                float x = -22f + (i % 6) * 8.8f;
-                float z = -30f + (i / 6) * 35f + (i % 2) * 6f;
-                float y = -15f - (i % 4) * 2.1f;
+                float x = -24f + (i % 5) * 12f;
+                float z = -38f + (i / 5) * 30f + (i % 2) * 5f;
+                float y = -2.8f - (i % 3) * 0.55f;
 
-                GameObject beacon = CreateBlock(
+                GameObject vein = CreateBlock(
                     root.transform,
-                    "AbyssGlow",
+                    "AbyssVein",
                     new Vector3(x, y, z),
-                    new Vector3(0.5f + (i % 3) * 0.18f, 2.4f + (i % 4), 0.5f + (i % 2) * 0.2f),
+                    new Vector3(0.28f, 0.18f, 6.5f + (i % 4) * 2f),
                     glow,
                     false);
-                beacon.transform.rotation = Quaternion.Euler(i * 7f, i * 23f, i % 2 == 0 ? 12f : -12f);
+
+                vein.transform.rotation = Quaternion.Euler(0f, 18f + i * 11f, 0f);
             }
 
             Color lightColor = stageId == "stage.ashen"
-                ? new Color(1f, 0.20f, 0.03f)
+                ? new Color(1f, 0.24f, 0.05f)
                 : stageId == "stage.void"
-                    ? new Color(0.36f, 0.80f, 0.58f)
-                    : new Color(0.18f, 0.55f, 1f);
+                    ? new Color(0.46f, 0.52f, 1f)
+                    : new Color(0.32f, 0.48f, 1f);
 
-            for (int i = 0; i < 3; i++)
+            for (int i = 0; i < 4; i++)
             {
                 GameObject lightGo = new GameObject("AbyssLight");
                 lightGo.transform.SetParent(root.transform, false);
-                lightGo.transform.position = new Vector3((i - 1) * 13f, -14f, -8f + i * 20f);
+                lightGo.transform.position = new Vector3((i - 1.5f) * 12f, -2.2f, -24f + i * 23f);
                 Light light = lightGo.AddComponent<Light>();
                 light.type = LightType.Point;
                 light.color = lightColor;
-                light.intensity = 3.2f;
-                light.range = 18f;
+                light.intensity = 1.8f;
+                light.range = 16f;
                 light.shadows = LightShadows.None;
             }
         }
