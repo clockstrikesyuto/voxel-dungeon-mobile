@@ -1,95 +1,80 @@
+using System.Collections;
 using UnityEngine;
+using VoxelDungeon.Combat;
 
 namespace VoxelDungeon.Player
 {
     [RequireComponent(typeof(CharacterController))]
     public sealed class FallRecovery : MonoBehaviour
     {
-        [SerializeField] private float recoveryY = -8f;
-        [SerializeField] private float safeSampleInterval = 0.20f;
-        [SerializeField] private float safeGroundedTime = 0.12f;
+        [SerializeField] private float recoveryY = -28f;
 
         private CharacterController controller;
-        private TopDownPlayerMotor motor;
+        private TopDownPlayerMotor playerMotor;
+        private StageCheckpointSystem checkpoints;
+        private KnockbackMotor knockback;
 
-        private Vector3 lastSafePosition;
-        private float nextSampleTime;
-        private float groundedSince = -1f;
-        private bool hasSafePosition;
-        private bool recovering;
+        private Vector3 homePosition;
+        private bool enemyRecovering;
+        private float recoveryLockUntil;
+
+        private bool IsPlayer => playerMotor != null;
 
         private void Awake()
         {
             controller = GetComponent<CharacterController>();
-            motor = GetComponent<TopDownPlayerMotor>();
-            lastSafePosition = transform.position;
-            hasSafePosition = true;
+            playerMotor = GetComponent<TopDownPlayerMotor>();
+            knockback = GetComponent<KnockbackMotor>();
+            homePosition = transform.position + Vector3.up * 0.18f;
+
+            if (playerMotor != null)
+            {
+                checkpoints = GetComponent<StageCheckpointSystem>();
+                if (checkpoints == null)
+                    checkpoints = gameObject.AddComponent<StageCheckpointSystem>();
+            }
         }
 
         private void Update()
         {
-            if (recovering)
+            if (transform.position.y >= recoveryY || Time.time < recoveryLockUntil)
                 return;
 
-            TrackSafePosition();
+            if (IsPlayer)
+            {
+                if (checkpoints == null)
+                    checkpoints = GetComponent<StageCheckpointSystem>();
 
-            if (transform.position.y < recoveryY)
-                Recover();
-        }
-
-        private void TrackSafePosition()
-        {
-            if (controller == null)
+                checkpoints?.BeginRecovery();
+                recoveryLockUntil = Time.time + 0.75f;
                 return;
-
-            if (controller.isGrounded)
-            {
-                if (groundedSince < 0f)
-                    groundedSince = Time.time;
-
-                if (Time.time >= nextSampleTime &&
-                    Time.time - groundedSince >= safeGroundedTime)
-                {
-                    Vector3 candidate = transform.position;
-
-                    // Keep the recovery point slightly above the surface to avoid
-                    // spawning inside a floor collider.
-                    candidate.y += 0.18f;
-
-                    lastSafePosition = candidate;
-                    hasSafePosition = true;
-                    nextSampleTime = Time.time + safeSampleInterval;
-                }
             }
-            else
-            {
-                groundedSince = -1f;
-            }
+
+            if (!enemyRecovering)
+                StartCoroutine(RecoverEnemy());
         }
 
-        private void Recover()
+        private IEnumerator RecoverEnemy()
         {
-            recovering = true;
+            enemyRecovering = true;
 
-            Vector3 target = hasSafePosition
-                ? lastSafePosition
-                : Vector3.up * 1.5f;
+            // Let the fall read visually before snapping an AI actor home.
+            yield return new WaitForSeconds(0.22f);
 
             bool wasEnabled = controller != null && controller.enabled;
-            if (controller != null && wasEnabled)
+            if (wasEnabled)
                 controller.enabled = false;
 
-            transform.position = target;
+            transform.position = homePosition;
 
-            if (motor != null)
-                motor.ResetMotion();
-
-            if (controller != null && wasEnabled)
+            if (wasEnabled)
                 controller.enabled = true;
 
-            groundedSince = -1f;
-            nextSampleTime = Time.time + safeSampleInterval;
-            recovering = false;
+            if (knockback != null)
+                knockback.ResetMotion();
+
+            recoveryLockUntil = Time.time + 1.25f;
+            enemyRecovering = false;
         }
     }
 }
