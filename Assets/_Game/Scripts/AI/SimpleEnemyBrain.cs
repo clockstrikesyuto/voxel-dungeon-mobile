@@ -1,6 +1,7 @@
 using System.Collections;
 using UnityEngine;
 using VoxelDungeon.Combat;
+using VoxelDungeon.Player;
 
 namespace VoxelDungeon.AI
 {
@@ -53,6 +54,8 @@ namespace VoxelDungeon.AI
 
         private void Awake()
         {
+            if (GetComponent<FallRecovery>() == null)
+                gameObject.AddComponent<FallRecovery>();
             controller = GetComponent<CharacterController>();
             health = GetComponent<Health>();
 
