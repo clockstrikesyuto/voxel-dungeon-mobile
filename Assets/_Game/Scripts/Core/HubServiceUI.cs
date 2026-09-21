@@ -198,7 +198,11 @@ namespace VoxelDungeon.Core
 
             Color rarity = EquipmentCatalog.GetRarityColor(item.Rarity);
             AddText(row.transform, item.Name, new Vector2(0.04f, 0.50f), new Vector2(0.58f, 0.94f), 25, FontStyle.Bold, TextAnchor.MiddleLeft, rarity);
-            AddText(row.transform, $"PWR {item.Power}   DEF {item.Defense}   HP +{item.Vitality}  •  {item.Trait}", new Vector2(0.04f, 0.08f), new Vector2(0.66f, 0.50f), 15, FontStyle.Normal, TextAnchor.MiddleLeft, new Color(0.68f, 0.74f, 0.82f));
+            AddText(
+                row.transform,
+                Localization.IsJapanese
+                    ? $"攻 {item.Power}   防 {item.Defense}   HP +{item.Vitality}  •  {Localization.EquipmentTrait(item.Id, item.Trait)}"
+                    : $"PWR {item.Power}   DEF {item.Defense}   HP +{item.Vitality}  •  {item.Trait}", new Vector2(0.04f, 0.08f), new Vector2(0.66f, 0.50f), 15, FontStyle.Normal, TextAnchor.MiddleLeft, new Color(0.68f, 0.74f, 0.82f));
 
             bool owned = ProfileProgress.OwnsEquipment(id);
             bool affordable = ProfileProgress.Gold >= cost;
