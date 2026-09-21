@@ -1,5 +1,4 @@
 using UnityEngine;
-using VoxelDungeon.Combat;
 
 namespace VoxelDungeon.Player
 {
@@ -12,7 +11,6 @@ namespace VoxelDungeon.Player
 
         private CharacterController controller;
         private TopDownPlayerMotor motor;
-        private Health health;
 
         private Vector3 lastSafePosition;
         private float nextSampleTime;
@@ -24,8 +22,6 @@ namespace VoxelDungeon.Player
         {
             controller = GetComponent<CharacterController>();
             motor = GetComponent<TopDownPlayerMotor>();
-            health = GetComponent<Health>();
-
             lastSafePosition = transform.position;
             hasSafePosition = true;
         }
@@ -90,11 +86,6 @@ namespace VoxelDungeon.Player
 
             if (controller != null && wasEnabled)
                 controller.enabled = true;
-
-            // Falling is a positioning failure, not an instant death.
-            // Keep the player alive and return control immediately.
-            if (health != null && health.IsDead)
-                health.ResetHealth();
 
             groundedSince = -1f;
             nextSampleTime = Time.time + safeSampleInterval;
