@@ -211,10 +211,6 @@ namespace VoxelDungeon.EditorTools
             character.radius = 0.5f;
             character.center = new Vector3(0f, 1f, 0f);
 
-            Renderer renderer = enemy.GetComponent<Renderer>();
-            if (renderer != null)
-                renderer.material.color = color;
-
             string archetype = name.StartsWith("Scout")
                 ? "Scout"
                 : name.StartsWith("Raider")
@@ -256,10 +252,6 @@ namespace VoxelDungeon.EditorTools
             character.height = 2f;
             character.radius = 0.60f;
             character.center = new Vector3(0f, 1f, 0f);
-
-            Renderer renderer = boss.GetComponent<Renderer>();
-            if (renderer != null)
-                renderer.material.color = new Color(0.18f, 0.08f, 0.08f);
 
             VisualStyleBuilder.ApplyBossVisual(boss);
 
