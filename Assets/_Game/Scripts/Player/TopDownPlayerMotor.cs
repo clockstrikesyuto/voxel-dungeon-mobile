@@ -15,6 +15,7 @@ namespace VoxelDungeon.Player
         [SerializeField, Min(0.05f)] private float dodgeCooldown = 0.65f;
 
         private CharacterController controller;
+        private PlayerBuffState buffs;
         private Vector2 moveInput;
         private Vector3 planarVelocity;
         private Vector3 dodgeDirection;
@@ -28,6 +29,7 @@ namespace VoxelDungeon.Player
         private void Awake()
         {
             controller = GetComponent<CharacterController>();
+            buffs = GetComponent<PlayerBuffState>();
 
             if (GetComponent<FallRecovery>() == null)
                 gameObject.AddComponent<FallRecovery>();
@@ -73,7 +75,8 @@ namespace VoxelDungeon.Player
                 return;
             }
 
-            float loadoutSpeed = moveSpeed * (1f + ProfileProgress.TotalMoveSpeedBonus);
+            float temporarySpeed = buffs != null ? buffs.MoveSpeedBonus : 0f;
+            float loadoutSpeed = moveSpeed * (1f + ProfileProgress.TotalMoveSpeedBonus + temporarySpeed);
             Vector3 desired = new Vector3(moveInput.x, 0f, moveInput.y) * loadoutSpeed;
             planarVelocity = Vector3.MoveTowards(planarVelocity, desired, acceleration * Time.deltaTime);
 
