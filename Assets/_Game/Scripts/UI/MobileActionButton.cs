@@ -13,7 +13,8 @@ namespace VoxelDungeon.UI
             Ranged,
             Potion,
             FireBomb,
-            FrostFlask
+            FrostFlask,
+            Tonic
         }
 
         [SerializeField] private ActionKind action;
@@ -48,6 +49,9 @@ namespace VoxelDungeon.UI
                     break;
                 case ActionKind.FrostFlask:
                     combat?.TryFrostFlask();
+                    break;
+                case ActionKind.Tonic:
+                    combat?.TryUtilityTonic();
                     break;
             }
         }
