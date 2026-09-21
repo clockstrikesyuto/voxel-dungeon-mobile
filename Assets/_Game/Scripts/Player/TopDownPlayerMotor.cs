@@ -30,6 +30,8 @@ namespace VoxelDungeon.Player
         {
             controller = GetComponent<CharacterController>();
             buffs = GetComponent<PlayerBuffState>();
+            if (buffs == null)
+                buffs = gameObject.AddComponent<PlayerBuffState>();
 
             if (GetComponent<FallRecovery>() == null)
                 gameObject.AddComponent<FallRecovery>();
