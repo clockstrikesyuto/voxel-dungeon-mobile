@@ -147,23 +147,36 @@ namespace VoxelDungeon.Core
 
         private void BuildMerchant()
         {
-            AddHeader("FRONTIER MERCHANT", $"Gold {ProfileProgress.Gold}  •  Curated frontier equipment");
+            AddHeader("FRONTIER MERCHANT", $"Gold {ProfileProgress.Gold}  •  Gear, armor and expedition supplies");
 
-            BuildShopItem("crystal_saber", 55, 0.66f);
-            BuildShopItem("crystal_bow", 55, 0.54f);
-
-            if (ProfileProgress.AshenForgeUnlocked)
+            if (ProfileProgress.VoidGardenUnlocked)
             {
-                BuildShopItem("ember_axe", 95, 0.42f);
-                BuildShopItem("ember_repeater", 115, 0.30f);
+                BuildShopItem("moonblade", 145, 0.68f);
+                BuildShopItem("void_mantle", 165, 0.56f);
+                BuildShopItem("moonstep_boots", 150, 0.44f);
             }
+            else if (ProfileProgress.AshenForgeUnlocked)
+            {
+                BuildShopItem("ember_axe", 95, 0.68f);
+                BuildShopItem("ember_plate", 115, 0.56f);
+                BuildShopItem("ember_greaves", 105, 0.44f);
+            }
+            else
+            {
+                BuildShopItem("crystal_saber", 55, 0.68f);
+                BuildShopItem("crystal_mail", 70, 0.56f);
+                BuildShopItem("crystal_steps", 60, 0.44f);
+            }
+
+            BuildSupplyItem("HEALING POTION", "healing_potion", 18, 0.30f);
+            BuildSupplyItem("FIRE BOMB", "fire_bomb", 28, 0.19f);
 
             AddText(
                 panel,
-                "Boss-only equipment cannot be purchased.",
-                new Vector2(0.12f, 0.15f),
-                new Vector2(0.88f, 0.21f),
-                17,
+                "Boss-exclusive equipment remains expedition-only.",
+                new Vector2(0.12f, 0.12f),
+                new Vector2(0.88f, 0.17f),
+                15,
                 FontStyle.Normal,
                 TextAnchor.MiddleCenter,
                 new Color(0.58f, 0.65f, 0.72f));
@@ -181,7 +194,7 @@ namespace VoxelDungeon.Core
 
             Color rarity = EquipmentCatalog.GetRarityColor(item.Rarity);
             AddText(row.transform, item.Name, new Vector2(0.04f, 0.50f), new Vector2(0.58f, 0.94f), 25, FontStyle.Bold, TextAnchor.MiddleLeft, rarity);
-            AddText(row.transform, $"POWER +{item.Power}  •  {item.Trait}", new Vector2(0.04f, 0.08f), new Vector2(0.64f, 0.50f), 16, FontStyle.Normal, TextAnchor.MiddleLeft, new Color(0.68f, 0.74f, 0.82f));
+            AddText(row.transform, $"PWR {item.Power}   DEF {item.Defense}   HP +{item.Vitality}  •  {item.Trait}", new Vector2(0.04f, 0.08f), new Vector2(0.66f, 0.50f), 15, FontStyle.Normal, TextAnchor.MiddleLeft, new Color(0.68f, 0.74f, 0.82f));
 
             bool owned = ProfileProgress.OwnsEquipment(id);
             bool affordable = ProfileProgress.Gold >= cost;
@@ -198,6 +211,53 @@ namespace VoxelDungeon.Core
                         Rebuild(BuildMerchant);
                 },
                 !owned && affordable);
+        }
+
+        private void BuildSupplyItem(string label, string itemId, int cost, float top)
+        {
+            GameObject row = AddPanel(
+                new Vector2(0.10f, top - 0.078f),
+                new Vector2(0.90f, top),
+                new Color(0.035f, 0.052f, 0.07f, 0.96f));
+
+            int owned = ProfileProgress.GetConsumable(itemId);
+
+            AddText(
+                row.transform,
+                label,
+                new Vector2(0.04f, 0.14f),
+                new Vector2(0.56f, 0.86f),
+                20,
+                FontStyle.Bold,
+                TextAnchor.MiddleLeft,
+                cyan);
+
+            AddText(
+                row.transform,
+                $"OWNED {owned}",
+                new Vector2(0.52f, 0.14f),
+                new Vector2(0.70f, 0.86f),
+                15,
+                FontStyle.Normal,
+                TextAnchor.MiddleCenter,
+                new Color(0.65f, 0.72f, 0.80f));
+
+            bool affordable = ProfileProgress.Gold >= cost;
+            CreateButton(
+                row.transform,
+                $"{cost} GOLD",
+                new Vector2(0.72f, 0.16f),
+                new Vector2(0.95f, 0.84f),
+                warm,
+                () =>
+                {
+                    if (!ProfileProgress.SpendGold(cost))
+                        return;
+
+                    ProfileProgress.AddConsumable(itemId, 1);
+                    Rebuild(BuildMerchant);
+                },
+                affordable);
         }
 
         private void BuildArchivist()
