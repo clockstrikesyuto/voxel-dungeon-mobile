@@ -21,7 +21,7 @@ namespace VoxelDungeon.UI
             ProfileProgress.CompleteStage(GameFlowState.SelectedStageId);
 
             string retryScene = SceneManager.GetActiveScene().name;
-            Font font = Resources.GetBuiltinResource<Font>("LegacyRuntime.ttf");
+            Font font = UiFontProvider.Get();
 
             GameObject canvasGo = new GameObject("MissionResultCanvas");
             Canvas canvas = canvasGo.AddComponent<Canvas>();
