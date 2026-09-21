@@ -50,8 +50,31 @@ namespace VoxelDungeon.Loot
 
         private void Collect()
         {
+            EquipmentRecord item = EquipmentCatalog.Get(itemId);
+
             if (ProfileProgress.AddEquipment(itemId))
-                EquipmentToastUI.Show(EquipmentCatalog.Get(itemId));
+            {
+                EquipmentToastUI.Show(item);
+            }
+            else if (ProfileProgress.TryImproveEquipmentRoll(itemId))
+            {
+                EquipmentToastUI.Show(item);
+            }
+            else
+            {
+                int rarityTier = item.Rarity switch
+                {
+                    ItemRarity.Legendary => 4,
+                    ItemRarity.Epic => 3,
+                    ItemRarity.Rare => 2,
+                    _ => 1
+                };
+
+                ProfileProgress.AddGold(5 + rarityTier * 5);
+                ProfileProgress.AddMaterial(
+                    StageLootCatalog.PrimaryMaterial(),
+                    Mathf.Max(1, rarityTier - 1));
+            }
 
             Destroy(gameObject);
         }
