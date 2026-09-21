@@ -53,6 +53,15 @@ namespace VoxelDungeon.Player
                 if (Keyboard.current.eKey.wasPressedThisFrame)
                     combat.TryFrostFlask();
 
+                if (Keyboard.current.digit1Key.wasPressedThisFrame)
+                    combat.TryPowerTonic();
+
+                if (Keyboard.current.digit2Key.wasPressedThisFrame)
+                    combat.TryGuardTonic();
+
+                if (Keyboard.current.digit3Key.wasPressedThisFrame)
+                    combat.TryHasteTonic();
+
                 if (Keyboard.current.leftShiftKey.wasPressedThisFrame ||
                     Keyboard.current.rightShiftKey.wasPressedThisFrame)
                     motor.TryDodge();
