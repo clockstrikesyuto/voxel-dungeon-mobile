@@ -1,5 +1,6 @@
 using UnityEngine;
 using VoxelDungeon.Player;
+using VoxelDungeon.Core;
 
 namespace VoxelDungeon.Loot
 {
@@ -67,6 +68,7 @@ namespace VoxelDungeon.Loot
             {
                 case LootKind.Gold:
                     progress.AddGold(amount);
+                    MissionRunStats.AddGold(amount);
                     break;
                 case LootKind.MeleePower:
                     progress.AddMeleePower(amount);
