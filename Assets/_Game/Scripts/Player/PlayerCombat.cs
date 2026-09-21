@@ -38,6 +38,7 @@ namespace VoxelDungeon.Player
         private Health health;
         private PlayerProgress progress;
         private PlayerBuffState buffs;
+        private PlayerActionAnimator actionAnimator;
         private float nextMeleeTime;
         private float nextRangedTime;
         private float nextPotionTime;
@@ -52,6 +53,10 @@ namespace VoxelDungeon.Player
             buffs = GetComponent<PlayerBuffState>();
             if (buffs == null)
                 buffs = gameObject.AddComponent<PlayerBuffState>();
+
+            actionAnimator = GetComponent<PlayerActionAnimator>();
+            if (actionAnimator == null)
+                actionAnimator = gameObject.AddComponent<PlayerActionAnimator>();
 
             baseScale = transform.localScale;
         }
@@ -73,6 +78,7 @@ namespace VoxelDungeon.Player
             EquipmentRecord meleeItem = ProfileProgress.EquippedMelee;
             nextMeleeTime = Time.time + meleeCooldown * Mathf.Max(0.35f, meleeItem.CooldownMultiplier);
             PlayAttackPulse();
+            actionAnimator?.PlayMelee(meleeItem.Id);
             MeleeArcVisual.Spawn(transform);
 
             float attackRadius = meleeRadius;
@@ -165,6 +171,7 @@ namespace VoxelDungeon.Player
             EquipmentRecord rangedItem = ProfileProgress.EquippedRanged;
             nextRangedTime = Time.time + rangedCooldown * Mathf.Max(0.35f, rangedItem.CooldownMultiplier);
             PlayAttackPulse();
+            actionAnimator?.PlayRanged(rangedItem.Id);
 
             Vector3 direction = FindAimDirection();
 
