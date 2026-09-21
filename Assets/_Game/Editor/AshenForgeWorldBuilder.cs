@@ -167,7 +167,8 @@ namespace VoxelDungeon.EditorTools
 
         private static void CreateSlab(Transform parent, float width, float depth, Material material)
         {
-            CreateBlock(parent, "FloorSlab", new Vector3(0f, 0.055f, 0f), new Vector3(width - 0.12f, 0.08f, depth - 0.12f), material, false);
+            // Visible floor must always be walkable. Decorative overlays may remain non-collidable.
+            CreateBlock(parent, "FloorSlab", new Vector3(0f, 0.055f, 0f), new Vector3(width - 0.12f, 0.08f, depth - 0.12f), material, true);
         }
 
         private static GameObject CreateBlock(
