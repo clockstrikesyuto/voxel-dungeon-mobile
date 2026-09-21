@@ -101,21 +101,46 @@ namespace VoxelDungeon.Core
 
             AddText("VOXEL DUNGEON", new Vector2(0.5f, 0.72f), new Vector2(980f, 150f), 82, FontStyle.Bold, Color.white);
             AddText("CRYSTAL FRONTIER", new Vector2(0.5f, 0.625f), new Vector2(760f, 70f), 30, FontStyle.Bold, cyan);
-            AddText("DESCEND. LOOT. GROW STRONGER.", new Vector2(0.5f, 0.55f), new Vector2(800f, 55f), 22, FontStyle.Normal, new Color(0.72f, 0.78f, 0.86f));
+            AddText(
+                Localization.IsJapanese ? "探索して、拾って、強くなる。" : "DESCEND. LOOT. GROW STRONGER.",
+                new Vector2(0.5f, 0.55f),
+                new Vector2(900f, 55f),
+                22,
+                FontStyle.Normal,
+                new Color(0.72f, 0.78f, 0.86f));
 
-            CreateButton("SOLO PLAY", new Vector2(0.5f, 0.40f), new Vector2(520f, 92f), cyan, () =>
+            CreateButton(Localization.T("solo"), new Vector2(0.5f, 0.40f), new Vector2(520f, 92f), cyan, () =>
             {
                 GameFlowState.Mode = PlayModeKind.Solo;
                 SceneManager.LoadScene("Hub");
             });
 
-            CreateButton("MULTIPLAYER", new Vector2(0.5f, 0.285f), new Vector2(520f, 92f), violet, () =>
+            CreateButton(Localization.T("multi"), new Vector2(0.5f, 0.285f), new Vector2(520f, 92f), violet, () =>
             {
                 GameFlowState.Mode = PlayModeKind.Multiplayer;
                 ShowMultiplayer();
             });
 
-            AddText("1-4 PLAYERS  •  MOBILE-FIRST ACTION RPG", new Vector2(0.5f, 0.11f), new Vector2(900f, 50f), 20, FontStyle.Normal, new Color(0.52f, 0.6f, 0.7f));
+            AddText(
+                Localization.IsJapanese ? "1〜4人  •  モバイル対応アクションRPG" : "1-4 PLAYERS  •  MOBILE-FIRST ACTION RPG",
+                new Vector2(0.5f, 0.11f),
+                new Vector2(900f, 50f),
+                20,
+                FontStyle.Normal,
+                new Color(0.52f, 0.6f, 0.7f));
+
+            CreateButton(
+                Localization.IsJapanese ? "LANGUAGE: 日本語" : "LANGUAGE: English",
+                new Vector2(0.86f, 0.08f),
+                new Vector2(300f, 64f),
+                new Color(0.36f, 0.44f, 0.52f),
+                () =>
+                {
+                    Localization.Current = Localization.IsJapanese
+                        ? GameLanguage.English
+                        : GameLanguage.Japanese;
+                    ShowTitle();
+                });
         }
 
         private void ShowStageSelect()
@@ -123,12 +148,16 @@ namespace VoxelDungeon.Core
             currentScreen = ScreenKind.StageSelect;
             ClearContent();
 
-            AddTopHeader("SELECT STAGE", GameFlowState.Mode == PlayModeKind.Solo ? "SOLO" : "MULTIPLAYER");
+            AddTopHeader(
+                Localization.IsJapanese ? "ステージ選択" : "SELECT STAGE",
+                GameFlowState.Mode == PlayModeKind.Solo
+                    ? (Localization.IsJapanese ? "ソロ" : "SOLO")
+                    : Localization.T("multi"));
 
             CreateStageCard(
                 "01",
-                "CRYSTAL CRYPT",
-                "Ancient halls lit by unstable crystal veins.",
+                Localization.StageName("stage.crypt"),
+                Localization.StageDescription("stage.crypt"),
                 "NORMAL",
                 new Vector2(0.5f, 0.59f),
                 cyan,
@@ -136,7 +165,7 @@ namespace VoxelDungeon.Core
                 () =>
                 {
                     GameFlowState.SelectedStageId = "stage.crypt";
-                    GameFlowState.SelectedStageName = "CRYSTAL CRYPT";
+                    GameFlowState.SelectedStageName = Localization.StageName("stage.crypt");
 
                     if (GameFlowState.Mode == PlayModeKind.Solo)
                         SceneManager.LoadScene("Mission_Test");
@@ -146,8 +175,8 @@ namespace VoxelDungeon.Core
 
             CreateStageCard(
                 "02",
-                "ASHEN FORGE",
-                "Molten machinery and armored raiders.",
+                Localization.StageName("stage.ashen"),
+                Localization.StageDescription("stage.ashen"),
                 "COMING SOON",
                 new Vector2(0.5f, 0.37f),
                 warm,
@@ -156,8 +185,8 @@ namespace VoxelDungeon.Core
 
             CreateStageCard(
                 "03",
-                "VOID GARDEN",
-                "A corrupted sanctuary beyond the frontier.",
+                Localization.StageName("stage.void"),
+                Localization.StageDescription("stage.void"),
                 "COMING SOON",
                 new Vector2(0.5f, 0.15f),
                 violet,
@@ -172,8 +201,12 @@ namespace VoxelDungeon.Core
             currentScreen = ScreenKind.Multiplayer;
             ClearContent();
 
-            AddTopHeader("MULTIPLAYER", $"UP TO {NetworkDesignContract.MaxPlayers} PLAYERS");
-            AddText("Play online with a room code.", new Vector2(0.5f, 0.66f), new Vector2(750f, 60f), 26, FontStyle.Normal, new Color(0.72f, 0.78f, 0.86f));
+            AddTopHeader(
+                Localization.T("multi"),
+                Localization.IsJapanese
+                    ? $"最大 {NetworkDesignContract.MaxPlayers} 人"
+                    : $"UP TO {NetworkDesignContract.MaxPlayers} PLAYERS");
+            AddText(Localization.IsJapanese ? "ルームコードでオンライン参加。" : "Play online with a room code.", new Vector2(0.5f, 0.66f), new Vector2(750f, 60f), 26, FontStyle.Normal, new Color(0.72f, 0.78f, 0.86f));
 
             CreateButton("CREATE ROOM", new Vector2(0.5f, 0.51f), new Vector2(520f, 92f), cyan, () =>
             {
@@ -318,7 +351,7 @@ namespace VoxelDungeon.Core
 
         private void CreateBackButton(Action action)
         {
-            Button b = CreateButton("BACK", new Vector2(0.09f, 0.08f), new Vector2(190f, 64f), new Color(0.38f, 0.44f, 0.52f), action);
+            Button b = CreateButton(Localization.T("back"), new Vector2(0.09f, 0.08f), new Vector2(190f, 64f), new Color(0.38f, 0.44f, 0.52f), action);
             b.GetComponentInChildren<Text>().fontSize = 20;
         }
 
