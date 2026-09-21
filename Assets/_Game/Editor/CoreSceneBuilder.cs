@@ -433,8 +433,8 @@ namespace VoxelDungeon.EditorTools
                 new Vector2(1f, 0f),
                 new Vector2(1f, 0f),
                 new Vector2(-545f, 355f),
-                new Vector2(105f, 105f),
-                new Color(1f, 0.30f, 0.06f, 0.84f));
+                new Vector2(120f, 120f),
+                new Color(1f, 0.30f, 0.06f, 0.94f));
             fireBomb.AddComponent<MobileActionButton>().Configure(
                 MobileActionButton.ActionKind.FireBomb,
                 motor,
@@ -447,8 +447,8 @@ namespace VoxelDungeon.EditorTools
                 new Vector2(1f, 0f),
                 new Vector2(1f, 0f),
                 new Vector2(-665f, 270f),
-                new Vector2(105f, 105f),
-                new Color(0.24f, 0.72f, 1f, 0.84f));
+                new Vector2(120f, 120f),
+                new Color(0.24f, 0.72f, 1f, 0.94f));
             frost.AddComponent<MobileActionButton>().Configure(
                 MobileActionButton.ActionKind.FrostFlask,
                 motor,
@@ -461,8 +461,8 @@ namespace VoxelDungeon.EditorTools
                 new Vector2(1f, 0f),
                 new Vector2(1f, 0f),
                 new Vector2(-690f, 390f),
-                new Vector2(98f, 98f),
-                new Color(0.78f, 0.42f, 1f, 0.84f));
+                new Vector2(112f, 112f),
+                new Color(0.78f, 0.42f, 1f, 0.94f));
             tonic.AddComponent<MobileActionButton>().Configure(
                 MobileActionButton.ActionKind.Tonic,
                 motor,
@@ -522,13 +522,24 @@ namespace VoxelDungeon.EditorTools
             }
 
             Image image = go.AddComponent<Image>();
-            image.color = color;
 
             bool round = name.Contains("Button") || name.Contains("Joystick") || name == "Handle";
+            image.color = round
+                ? new Color(color.r, color.g, color.b, Mathf.Max(color.a, 0.94f))
+                : color;
+
             if (round)
             {
                 image.sprite = VisualStyleBuilder.GetRoundSprite();
                 image.preserveAspect = true;
+
+                if (name.Contains("Button"))
+                {
+                    Outline outline = go.AddComponent<Outline>();
+                    outline.effectColor = new Color(1f, 1f, 1f, 0.46f);
+                    outline.effectDistance = new Vector2(3f, -3f);
+                    outline.useGraphicAlpha = true;
+                }
             }
 
             return go;
