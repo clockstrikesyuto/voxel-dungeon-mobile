@@ -217,17 +217,17 @@ namespace VoxelDungeon.EditorTools
             RenderSettings.fog = true;
             RenderSettings.fogColor = new Color(0.26f, 0.20f, 0.17f);
             RenderSettings.fogMode = FogMode.ExponentialSquared;
-            RenderSettings.fogDensity = 0.0070f;
+            RenderSettings.fogDensity = 0.0042f;
             RenderSettings.ambientMode = AmbientMode.Trilight;
-            RenderSettings.ambientSkyColor = new Color(0.46f, 0.38f, 0.30f);
-            RenderSettings.ambientEquatorColor = new Color(0.30f, 0.25f, 0.22f);
-            RenderSettings.ambientGroundColor = new Color(0.16f, 0.14f, 0.13f);
+            RenderSettings.ambientSkyColor = new Color(0.58f, 0.48f, 0.38f);
+            RenderSettings.ambientEquatorColor = new Color(0.40f, 0.33f, 0.28f);
+            RenderSettings.ambientGroundColor = new Color(0.25f, 0.21f, 0.19f);
 
             Light key = Object.FindFirstObjectByType<Light>();
             if (key != null && key.type == LightType.Directional)
             {
                 key.color = new Color(1f, 0.70f, 0.42f);
-                key.intensity = 1.25f;
+                key.intensity = 1.62f;
                 key.shadows = LightShadows.Soft;
             }
         }
