@@ -2,6 +2,7 @@ using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
 using VoxelDungeon.Items;
+using VoxelDungeon.Core;
 
 namespace VoxelDungeon.Loot
 {
@@ -46,12 +47,14 @@ namespace VoxelDungeon.Loot
             group.alpha = 0f;
 
             Text text = panel.AddComponent<Text>();
-            text.font = Resources.GetBuiltinResource<Font>("LegacyRuntime.ttf");
+            text.font = UiFontProvider.Get();
             text.fontSize = 25;
             text.fontStyle = FontStyle.Bold;
             text.alignment = TextAnchor.MiddleCenter;
             text.color = Color.white;
-            text.text = $"NEW EQUIPMENT\n{item.Name}   POWER +{item.Power}";
+            text.text = Localization.IsJapanese
+                ? $"装備を獲得\n{Localization.EquipmentName(item.Id, item.Name)}   攻撃 +{item.Power}"
+                : $"NEW EQUIPMENT\n{Localization.EquipmentName(item.Id, item.Name)}   POWER +{item.Power}";
             text.raycastTarget = false;
 
             float age = 0f;
