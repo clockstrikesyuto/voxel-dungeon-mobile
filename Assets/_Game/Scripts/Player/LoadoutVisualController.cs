@@ -152,6 +152,29 @@ namespace VoxelDungeon.Player
             charm.transform.localRotation = Quaternion.Euler(0f, 0f, 18f);
         }
 
+        private static Color GetEquipmentVisualColor(string id)
+        {
+            return id switch
+            {
+                "frontier_cap" => new Color(0.10f, 0.16f, 0.20f),
+                "crystal_hood" => new Color(0.10f, 0.42f, 0.50f),
+                "forge_helm" => new Color(0.25f, 0.27f, 0.29f),
+                "astral_crown" => new Color(0.66f, 0.70f, 0.78f),
+
+                "frontier_vest" => new Color(0.12f, 0.32f, 0.38f),
+                "crystal_mail" => new Color(0.18f, 0.50f, 0.56f),
+                "ember_plate" => new Color(0.34f, 0.27f, 0.22f),
+                "void_mantle" => new Color(0.24f, 0.20f, 0.34f),
+
+                "trail_boots" => new Color(0.25f, 0.14f, 0.08f),
+                "crystal_steps" => new Color(0.14f, 0.38f, 0.44f),
+                "ember_greaves" => new Color(0.28f, 0.25f, 0.23f),
+                "moonstep_boots" => new Color(0.48f, 0.48f, 0.62f),
+
+                _ => new Color(0.32f, 0.36f, 0.40f)
+            };
+        }
+
         private void BuildMelee(string id)
         {
             Color metal = new Color(0.78f, 0.88f, 0.92f);
