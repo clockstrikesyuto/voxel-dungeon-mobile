@@ -12,7 +12,7 @@ namespace VoxelDungeon.UI
             if (safe == null)
                 return;
 
-            Font font = Resources.GetBuiltinResource<Font>("LegacyRuntime.ttf");
+            Font font = UiFontProvider.Get();
 
             GameObject root = new GameObject("MissionHeader");
             root.transform.SetParent(safe.transform, false);
