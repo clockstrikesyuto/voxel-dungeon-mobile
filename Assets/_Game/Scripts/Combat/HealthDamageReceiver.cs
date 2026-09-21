@@ -42,7 +42,9 @@ namespace VoxelDungeon.Combat
 
             if (GetComponent<PlayerProgress>() != null)
             {
-                int defense = Mathf.Max(0, ProfileProgress.TotalDefense);
+                PlayerBuffState buffs = GetComponent<PlayerBuffState>();
+                int temporaryDefense = buffs != null ? buffs.DefenseBonus : 0;
+                int defense = Mathf.Max(0, ProfileProgress.TotalDefense + temporaryDefense);
                 float multiplier = 100f / (100f + defense * 4f);
                 appliedAmount = Mathf.Max(1, Mathf.RoundToInt(payload.Amount * multiplier));
             }
