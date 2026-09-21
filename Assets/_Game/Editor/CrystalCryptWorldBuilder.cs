@@ -173,13 +173,14 @@ namespace VoxelDungeon.EditorTools
 
         private static void CreateFloorTiles(Transform parent, float width, float depth, Material material, int variant)
         {
+            // Visible floor must always be walkable.
             CreateBlockChild(
                 parent,
                 "FloorSlab",
                 new Vector3(0f, 0.055f, 0f),
                 new Vector3(width - 0.12f, 0.08f, depth - 0.12f),
                 material,
-                false);
+                true);
 
             // Sparse decorative inlays sit clearly above the slab, avoiding coplanar overlap.
             if (width >= 12f && depth >= 10f)
