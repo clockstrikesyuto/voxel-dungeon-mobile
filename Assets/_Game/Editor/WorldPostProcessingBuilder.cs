@@ -26,7 +26,7 @@ namespace VoxelDungeon.EditorTools
 
             ColorAdjustments color = GetOrAdd<ColorAdjustments>(profile);
             color.active = true;
-            color.postExposure.Override(0.34f);
+            color.postExposure.Override(0.55f);
             color.contrast.Override(5f);
             color.saturation.Override(10f);
 
@@ -53,14 +53,14 @@ namespace VoxelDungeon.EditorTools
 
             Bloom bloom = GetOrAdd<Bloom>(profile);
             bloom.active = true;
-            bloom.intensity.Override(0.38f);
+            bloom.intensity.Override(0.28f);
             bloom.threshold.Override(0.88f);
             bloom.scatter.Override(0.68f);
 
             ColorAdjustments color = GetOrAdd<ColorAdjustments>(profile);
             color.active = true;
-            color.postExposure.Override(0.12f);
-            color.contrast.Override(8f);
+            color.postExposure.Override(0.55f);
+            color.contrast.Override(3f);
             color.saturation.Override(8f);
 
             WhiteBalance balance = GetOrAdd<WhiteBalance>(profile);
@@ -70,7 +70,7 @@ namespace VoxelDungeon.EditorTools
 
             Vignette vignette = GetOrAdd<Vignette>(profile);
             vignette.active = true;
-            vignette.intensity.Override(0.10f);
+            vignette.intensity.Override(0.035f);
             vignette.smoothness.Override(0.72f);
 
             Tonemapping tone = GetOrAdd<Tonemapping>(profile);
@@ -86,14 +86,14 @@ namespace VoxelDungeon.EditorTools
 
             Bloom bloom = GetOrAdd<Bloom>(profile);
             bloom.active = true;
-            bloom.intensity.Override(0.44f);
+            bloom.intensity.Override(0.34f);
             bloom.threshold.Override(0.82f);
             bloom.scatter.Override(0.66f);
 
             ColorAdjustments color = GetOrAdd<ColorAdjustments>(profile);
             color.active = true;
-            color.postExposure.Override(0.06f);
-            color.contrast.Override(10f);
+            color.postExposure.Override(0.42f);
+            color.contrast.Override(5f);
             color.saturation.Override(12f);
 
             WhiteBalance balance = GetOrAdd<WhiteBalance>(profile);
@@ -103,7 +103,7 @@ namespace VoxelDungeon.EditorTools
 
             Vignette vignette = GetOrAdd<Vignette>(profile);
             vignette.active = true;
-            vignette.intensity.Override(0.11f);
+            vignette.intensity.Override(0.045f);
             vignette.smoothness.Override(0.72f);
 
             Tonemapping tone = GetOrAdd<Tonemapping>(profile);
@@ -125,7 +125,7 @@ namespace VoxelDungeon.EditorTools
 
             ColorAdjustments color = GetOrAdd<ColorAdjustments>(profile);
             color.active = true;
-            color.postExposure.Override(0.20f);
+            color.postExposure.Override(0.52f);
             color.contrast.Override(6f);
             color.saturation.Override(9f);
 
@@ -136,7 +136,7 @@ namespace VoxelDungeon.EditorTools
 
             Vignette vignette = GetOrAdd<Vignette>(profile);
             vignette.active = true;
-            vignette.intensity.Override(0.07f);
+            vignette.intensity.Override(0.035f);
             vignette.smoothness.Override(0.78f);
 
             Tonemapping tone = GetOrAdd<Tonemapping>(profile);
