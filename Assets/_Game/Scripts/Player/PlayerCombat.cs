@@ -75,10 +75,40 @@ namespace VoxelDungeon.Player
             PlayAttackPulse();
             MeleeArcVisual.Spawn(transform);
 
-            Vector3 center = transform.position + Vector3.up * 0.9f + transform.forward * meleeForwardOffset;
+            float attackRadius = meleeRadius;
+            float forwardOffset = meleeForwardOffset;
+            float weaponCritBonus = 0f;
+            float weaponDamageMultiplier = 1f;
+
+            switch (meleeItem.Id)
+            {
+                case "crystal_daggers":
+                    attackRadius = 0.95f;
+                    forwardOffset = 0.90f;
+                    weaponCritBonus = 0.12f;
+                    break;
+                case "forge_spear":
+                    attackRadius = 1.0f;
+                    forwardOffset = 1.65f;
+                    break;
+                case "colossus_maul":
+                    attackRadius = 1.55f;
+                    forwardOffset = 1.18f;
+                    weaponDamageMultiplier = 1.12f;
+                    break;
+                case "ember_axe":
+                    weaponDamageMultiplier = 1.08f;
+                    break;
+                case "void_edge":
+                    weaponCritBonus = 0.05f;
+                    weaponDamageMultiplier = 1.10f;
+                    break;
+            }
+
+            Vector3 center = transform.position + Vector3.up * 0.9f + transform.forward * forwardOffset;
             int count = Physics.OverlapSphereNonAlloc(
                 center,
-                meleeRadius,
+                attackRadius,
                 hitBuffer,
                 Physics.AllLayers,
                 QueryTriggerInteraction.Ignore);
@@ -104,10 +134,14 @@ namespace VoxelDungeon.Player
                     + ProfileProgress.EquippedWeaponRollPower(EquipmentSlot.Melee)
                     + ProfileProgress.MightRank * 2;
 
-                bool critical = Random.value < ProfileProgress.TotalCritChance;
+                bool critical = Random.value <
+                    Mathf.Clamp01(ProfileProgress.TotalCritChance + weaponCritBonus);
+
                 float buffMultiplier = buffs != null ? buffs.DamageMultiplier : 1f;
                 int finalDamage = Mathf.RoundToInt(
-                    (critical ? baseDamage * 1.65f : baseDamage) * buffMultiplier);
+                    (critical ? baseDamage * 1.65f : baseDamage) *
+                    buffMultiplier *
+                    weaponDamageMultiplier);
 
                 receiver.ReceiveDamage(new DamagePayload(
                     gameObject,
@@ -115,6 +149,9 @@ namespace VoxelDungeon.Player
                     hit.ClosestPoint(center),
                     direction.normalized,
                     critical));
+
+                if (meleeItem.Id == "warden_cleaver" && health != null)
+                    health.Heal(2);
             }
 
             return true;
@@ -153,18 +190,48 @@ namespace VoxelDungeon.Player
                 + ProfileProgress.EquippedWeaponRollPower(EquipmentSlot.Ranged)
                 + ProfileProgress.MightRank * 2;
 
-            bool critical = Random.value < ProfileProgress.TotalCritChance;
+            float projectileSpeed = rangedSpeed;
+            float projectileRadius = 0.28f;
+            float rangedCritBonus = 0f;
+            float rangedDamageMultiplier = 1f;
+
+            switch (rangedItem.Id)
+            {
+                case "ember_repeater":
+                    projectileSpeed += 4f;
+                    projectileRadius = 0.24f;
+                    break;
+                case "void_staff":
+                    projectileRadius = 0.42f;
+                    rangedDamageMultiplier = 1.08f;
+                    break;
+                case "starbow":
+                    projectileSpeed += 2f;
+                    rangedCritBonus = 0.08f;
+                    break;
+                case "astral_crossbow":
+                    projectileSpeed += 3f;
+                    projectileRadius = 0.34f;
+                    rangedDamageMultiplier = 1.18f;
+                    break;
+            }
+
+            bool critical = Random.value <
+                Mathf.Clamp01(ProfileProgress.TotalCritChance + rangedCritBonus);
+
             float buffMultiplier = buffs != null ? buffs.DamageMultiplier : 1f;
             int finalDamage = Mathf.RoundToInt(
-                (critical ? baseDamage * 1.65f : baseDamage) * buffMultiplier);
+                (critical ? baseDamage * 1.65f : baseDamage) *
+                buffMultiplier *
+                rangedDamageMultiplier);
 
             projectileLogic.Initialize(
                 gameObject,
                 direction,
-                rangedSpeed,
+                projectileSpeed,
                 finalDamage,
                 3.0f,
-                0.28f,
+                projectileRadius,
                 critical);
 
             transform.forward = direction;
