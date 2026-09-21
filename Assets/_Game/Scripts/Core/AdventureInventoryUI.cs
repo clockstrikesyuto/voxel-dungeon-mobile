@@ -198,7 +198,10 @@ namespace VoxelDungeon.Core
                 $"Ancient Relic   {ProfileProgress.GetMaterial("ancient_relic")}\n\n" +
                 $"Healing Potion  {ProfileProgress.GetConsumable("healing_potion")}\n" +
                 $"Fire Bomb       {ProfileProgress.GetConsumable("fire_bomb")}\n" +
-                $"Frost Flask     {ProfileProgress.GetConsumable("frost_flask")}";
+                $"Frost Flask     {ProfileProgress.GetConsumable("frost_flask")}\n" +
+                $"Power Tonic     {ProfileProgress.GetConsumable("power_tonic")}\n" +
+                $"Guard Tonic     {ProfileProgress.GetConsumable("guard_tonic")}\n" +
+                $"Haste Tonic     {ProfileProgress.GetConsumable("haste_tonic")}";
 
             AddText(
                 info.GetComponent<RectTransform>(),
