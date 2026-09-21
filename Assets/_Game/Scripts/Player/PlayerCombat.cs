@@ -3,6 +3,7 @@ using UnityEngine;
 using VoxelDungeon.Combat;
 using VoxelDungeon.Core;
 using VoxelDungeon.Items;
+using VoxelDungeon.Loot;
 using VoxelDungeon.Presentation;
 
 namespace VoxelDungeon.Player
@@ -39,6 +40,7 @@ namespace VoxelDungeon.Player
         private float nextMeleeTime;
         private float nextRangedTime;
         private float nextPotionTime;
+        private float nextItemTime;
         private Vector3 baseScale;
         private Coroutine pulseRoutine;
 
@@ -180,6 +182,70 @@ namespace VoxelDungeon.Player
 
             nextPotionTime = Time.time + potionCooldown;
             StartCoroutine(PotionPulse());
+            return true;
+        }
+
+        public bool TryFireBomb()
+        {
+            return TryThrowAdventureItem(
+                "fire_bomb",
+                false,
+                44 + ProfileProgress.MightRank * 2,
+                3.2f);
+        }
+
+        public bool TryFrostFlask()
+        {
+            return TryThrowAdventureItem(
+                "frost_flask",
+                true,
+                24 + ProfileProgress.MightRank,
+                3.6f);
+        }
+
+        private bool TryThrowAdventureItem(
+            string itemId,
+            bool frost,
+            int damage,
+            float radius)
+        {
+            if (Time.time < nextItemTime ||
+                ProfileProgress.GetConsumable(itemId) <= 0)
+                return false;
+
+            Vector3 direction = FindAimDirection();
+
+            GameObject projectile = GameObject.CreatePrimitive(PrimitiveType.Sphere);
+            projectile.name = frost ? "FrostFlask" : "FireBomb";
+            projectile.transform.position =
+                transform.position + Vector3.up * 0.85f + direction * 0.85f;
+            projectile.transform.localScale = Vector3.one * 0.34f;
+
+            Collider collider = projectile.GetComponent<Collider>();
+            if (collider != null)
+                Destroy(collider);
+
+            Renderer renderer = projectile.GetComponent<Renderer>();
+            if (renderer != null)
+            {
+                renderer.material.color = frost
+                    ? new Color(0.26f, 0.78f, 1f)
+                    : new Color(1f, 0.30f, 0.06f);
+            }
+
+            AdventureBombProjectile bomb =
+                projectile.AddComponent<AdventureBombProjectile>();
+            bomb.Initialize(
+                gameObject,
+                direction,
+                damage,
+                radius,
+                9.5f,
+                frost);
+
+            ProfileProgress.ConsumeItem(itemId);
+            nextItemTime = Time.time + 1.15f;
+            transform.forward = direction;
             return true;
         }
 
