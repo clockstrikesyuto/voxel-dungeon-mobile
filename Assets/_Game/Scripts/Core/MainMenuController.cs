@@ -30,7 +30,7 @@ namespace VoxelDungeon.Core
 
         private void Start()
         {
-            font = Resources.GetBuiltinResource<Font>("LegacyRuntime.ttf");
+            font = UiFontProvider.Get();
             BuildCanvas();
             ShowTitle();
         }
