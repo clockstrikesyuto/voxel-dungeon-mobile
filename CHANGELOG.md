@@ -1,5 +1,18 @@
 # Changelog
 
+## 0.0.8 - Character Motion & Combat Polish
+
+- Added alternating leg and arm movement while walking.
+- Added visible melee weapon swing animations with weapon-specific motion.
+- Added ranged weapon ready/release animations.
+- Added player hit-reaction animation.
+- Grouped equipped melee and ranged visuals into animation rigs.
+- Raised normal enemy health bars dynamically above character bounds.
+- Moved the boss health HUD slightly higher.
+- Made visible Crystal Crypt, Ashen Forge and Void Garden floor slabs collidable so decorative floor areas no longer hide accidental fall-through gaps.
+- Fixed unlocked solo stages to launch directly instead of entering the multiplayer lobby.
+
+
 ## 0.0.7 - Adventure Expansion Polish
 
 - Fixed actor visual roots so feet align with the ground plane.
