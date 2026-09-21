@@ -115,6 +115,49 @@ namespace VoxelDungeon.EditorTools
                     false);
                 shard.transform.rotation = Quaternion.Euler(0f, i * 22f, side * 15f);
             }
+
+            // Irregular side-rock layers give the cave depth without covering
+            // the top-down gameplay lane.
+            for (int i = 0; i < 12; i++)
+            {
+                float side = i % 2 == 0 ? -1f : 1f;
+                float t = i / 11f;
+                float z = Mathf.Lerp(centerZ - half + 1f, centerZ + half - 1f, t);
+                float x = side * (7.8f + (i % 3) * 0.65f);
+
+                GameObject rock = CreateBlock(
+                    root.transform,
+                    "CaveRock",
+                    new Vector3(x, 0.55f + (i % 4) * 0.18f, z),
+                    new Vector3(
+                        1.2f + (i % 3) * 0.55f,
+                        1.0f + (i % 4) * 0.45f,
+                        1.4f + ((i + 1) % 3) * 0.50f),
+                    i % 3 == 0 ? accent : wall,
+                    true);
+
+                rock.transform.rotation = Quaternion.Euler(
+                    (i % 3 - 1) * 4f,
+                    i * 27f,
+                    side * (4f + (i % 2) * 5f));
+            }
+
+            for (int i = 0; i < 3; i++)
+            {
+                GameObject lightGo = new GameObject("CaveFillLight");
+                lightGo.transform.SetParent(root.transform, false);
+                lightGo.transform.position = new Vector3(
+                    (i % 2 == 0 ? -1f : 1f) * 5.6f,
+                    2.4f,
+                    Mathf.Lerp(centerZ - half + 3f, centerZ + half - 3f, i / 2f));
+
+                Light light = lightGo.AddComponent<Light>();
+                light.type = LightType.Point;
+                light.color = glow.color;
+                light.intensity = 1.5f;
+                light.range = 9f;
+                light.shadows = LightShadows.None;
+            }
         }
 
         private static void CreateArch(Transform root, Vector3 position, Material stone, Material glow)
