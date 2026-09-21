@@ -191,6 +191,65 @@ namespace VoxelDungeon.Core
             };
         }
 
+        public static string EquipmentTrait(string id, string fallback)
+        {
+            if (!IsJapanese)
+                return fallback;
+
+            return id switch
+            {
+                "rustblade" => "扱いやすい標準剣",
+                "crystal_saber" => "結晶製の素早い剣",
+                "crystal_daggers" => "高速クリティカル向け双短剣",
+                "warden_cleaver" => "高威力の重量武器",
+                "ember_axe" => "鍛冶場で作られた戦斧",
+                "forge_spear" => "長いリーチを持つ槍",
+                "colossus_maul" => "ボス由来の巨大な槌",
+                "moonblade" => "軽く素早い月光の剣",
+                "void_edge" => "虚空の力を宿す刃",
+                "field_bow" => "安定した標準弓",
+                "crystal_bow" => "素早い結晶の矢",
+                "ember_repeater" => "連射に優れた射撃武器",
+                "void_staff" => "虚空の魔力を放つ杖",
+                "starbow" => "星光を宿す高速弓",
+                "astral_crossbow" => "高威力のアストラルボルト",
+                "frontier_cap" => "軽量な探索用の帽子",
+                "crystal_hood" => "結晶の光と共鳴するフード",
+                "forge_helm" => "熱に強い金属製ヘルム",
+                "astral_crown" => "庭園の守護者の冠",
+                "frontier_vest" => "軽量な探索用防具",
+                "crystal_mail" => "結晶鱗を重ねた防具",
+                "ember_plate" => "鍛冶場の重装甲",
+                "void_mantle" => "軽やかな虚空のマント",
+                "trail_boots" => "探索向けの丈夫なブーツ",
+                "crystal_steps" => "軽快な洞窟用ブーツ",
+                "ember_greaves" => "溶岩地帯向けの脚甲",
+                "moonstep_boots" => "非常に軽い月光ブーツ",
+                "scout_charm" => "小さな幸運のお守り",
+                "crystal_charm" => "結晶の共鳴を高める",
+                "forge_emblem" => "耐久力を高める紋章",
+                "void_talisman" => "不安定な虚空の護符",
+                _ => fallback
+            };
+        }
+
+        public static string CheckpointName(string english)
+        {
+            if (!IsJapanese)
+                return english;
+
+            return english switch
+            {
+                "START" => "スタート",
+                "CAVE MOUTH" => "洞窟入口",
+                "OUTER ROUTE" => "外縁ルート",
+                "DEEP PASSAGE" => "深層通路",
+                "BOSS ANTECHAMBER" => "ボス前",
+                "BOSS ARENA" => "ボスアリーナ",
+                _ => english
+            };
+        }
+
         public static string ConsumableName(string id)
         {
             if (!IsJapanese) return id.Replace("_", " ").ToUpperInvariant();
