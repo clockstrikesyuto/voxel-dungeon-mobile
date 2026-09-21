@@ -42,6 +42,36 @@ namespace VoxelDungeon.UI
             "VOID GARDEN  •  ASTRAL WARDEN"
         };
 
+        private static readonly string[] CryptZonesJa =
+        {
+            "クリスタル洞窟  •  入口広場",
+            "クリスタル洞窟  •  結晶回廊",
+            "クリスタル洞窟  •  外縁の道",
+            "クリスタル洞窟  •  深層洞窟",
+            "クリスタル洞窟  •  地下神殿",
+            "クリスタル洞窟  •  ストーンウォーデン"
+        };
+
+        private static readonly string[] AshenZonesJa =
+        {
+            "灼熱の鍛冶場  •  鉱山入口",
+            "灼熱の鍛冶場  •  精錬通り",
+            "灼熱の鍛冶場  •  鉄橋",
+            "灼熱の鍛冶場  •  巨大炉",
+            "灼熱の鍛冶場  •  炉心部",
+            "灼熱の鍛冶場  •  フォージコロッサス"
+        };
+
+        private static readonly string[] VoidZonesJa =
+        {
+            "虚空の庭園  •  庭園入口",
+            "虚空の庭園  •  月光テラス",
+            "虚空の庭園  •  鏡の森",
+            "虚空の庭園  •  星の神殿",
+            "虚空の庭園  •  アストラルコート",
+            "虚空の庭園  •  アストラルウォーデン"
+        };
+
         private void Start()
         {
             Build();
@@ -60,12 +90,25 @@ namespace VoxelDungeon.UI
                 return;
 
             currentZone = zone;
-            string[] zones = GameFlowState.SelectedStageId switch
+            string[] zones;
+            if (Localization.IsJapanese)
             {
-                "stage.ashen" => AshenZones,
-                "stage.void" => VoidZones,
-                _ => CryptZones
-            };
+                zones = GameFlowState.SelectedStageId switch
+                {
+                    "stage.ashen" => AshenZonesJa,
+                    "stage.void" => VoidZonesJa,
+                    _ => CryptZonesJa
+                };
+            }
+            else
+            {
+                zones = GameFlowState.SelectedStageId switch
+                {
+                    "stage.ashen" => AshenZones,
+                    "stage.void" => VoidZones,
+                    _ => CryptZones
+                };
+            }
             ShowZone(zones[Mathf.Clamp(zone, 0, zones.Length - 1)]);
         }
 
