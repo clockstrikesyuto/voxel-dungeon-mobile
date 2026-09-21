@@ -206,12 +206,12 @@ namespace VoxelDungeon.EditorTools
 
             BoxCollider trigger = root.AddComponent<BoxCollider>();
             StageCheckpoint checkpoint = root.AddComponent<StageCheckpoint>();
-            checkpoint.Configure(label, new Vector3(12f, 3.4f, 2.2f), new Vector3(0f, -1.35f, -1.45f));
+            checkpoint.Configure(label, new Vector3(12f, 3.4f, 2.2f), new Vector3(0f, -0.65f, -1.45f));
 
             GameObject rune = CreateBlock(
                 root.transform,
                 "CheckpointRune",
-                new Vector3(0f, -1.50f, 0f),
+                position + new Vector3(0f, -1.50f, 0f),
                 new Vector3(3.2f, 0.06f, 1.1f),
                 glow,
                 false);
