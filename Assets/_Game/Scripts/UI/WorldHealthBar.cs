@@ -7,14 +7,15 @@ namespace VoxelDungeon.UI
     [RequireComponent(typeof(Health))]
     public sealed class WorldHealthBar : MonoBehaviour
     {
-        [SerializeField] private Vector3 worldOffset = new Vector3(0f, 2.45f, 0f);
-        [SerializeField] private Vector2 pixelSize = new Vector2(140f, 16f);
+        [SerializeField] private Vector3 worldOffset = new Vector3(0f, 2.80f, 0f);
+        [SerializeField] private Vector2 pixelSize = new Vector2(150f, 18f);
         [SerializeField] private float worldScale = 0.01f;
 
         private Health health;
         private RectTransform fill;
         private RectTransform barRoot;
         private Camera mainCamera;
+        private float resolvedHeight;
 
         private void Awake()
         {
@@ -31,8 +32,27 @@ namespace VoxelDungeon.UI
         private void Start()
         {
             mainCamera = Camera.main;
+            ResolveHeight();
+
             if (health != null)
                 OnHealthChanged(health.CurrentHealth, health.MaxHealth);
+        }
+
+        private void ResolveHeight()
+        {
+            float highest = transform.position.y + worldOffset.y;
+            Renderer[] renderers = GetComponentsInChildren<Renderer>(true);
+
+            foreach (Renderer renderer in renderers)
+            {
+                if (renderer == null || !renderer.enabled)
+                    continue;
+
+                if (renderer.bounds.max.y > highest)
+                    highest = renderer.bounds.max.y;
+            }
+
+            resolvedHeight = Mathf.Max(worldOffset.y, highest - transform.position.y + 0.38f);
         }
 
         private void OnDisable()
@@ -46,7 +66,7 @@ namespace VoxelDungeon.UI
             if (barRoot == null)
                 return;
 
-            barRoot.position = transform.position + worldOffset;
+            barRoot.position = transform.position + new Vector3(worldOffset.x, resolvedHeight, worldOffset.z);
 
             if (mainCamera == null)
                 mainCamera = Camera.main;
