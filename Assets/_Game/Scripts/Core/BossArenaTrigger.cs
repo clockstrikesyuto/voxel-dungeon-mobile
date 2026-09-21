@@ -50,10 +50,23 @@ namespace VoxelDungeon.Core
             if (triggered)
                 return;
 
-            if (other.GetComponentInParent<VoxelDungeon.Player.TopDownPlayerMotor>() == null)
+            VoxelDungeon.Player.TopDownPlayerMotor motor =
+                other.GetComponentInParent<VoxelDungeon.Player.TopDownPlayerMotor>();
+
+            if (motor == null)
                 return;
 
             triggered = true;
+
+            VoxelDungeon.Player.StageCheckpointSystem checkpoints =
+                motor.GetComponent<VoxelDungeon.Player.StageCheckpointSystem>();
+
+            if (checkpoints != null)
+            {
+                Vector3 inside = transform.position + transform.forward * 2.8f;
+                inside.y = motor.transform.position.y;
+                checkpoints.ActivateCheckpoint(inside, "BOSS ARENA");
+            }
 
             if (closeBarrier != null)
                 closeBarrier.SetActive(true);
