@@ -71,9 +71,15 @@ namespace VoxelDungeon.Loot
 
             if (Random.value < 0.34f)
             {
+                string consumable = Random.value < 0.65f
+                    ? "healing_potion"
+                    : Random.value < 0.55f
+                        ? "fire_bomb"
+                        : "frost_flask";
+
                 AdventureItemPickup.Spawn(
                     transform.position - transform.forward * 0.85f,
-                    "healing_potion",
+                    consumable,
                     1,
                     true);
             }
