@@ -55,9 +55,15 @@ namespace VoxelDungeon.Loot
         private void Collect()
         {
             if (consumable)
+            {
                 ProfileProgress.AddConsumable(itemId, amount);
+                MissionRunStats.AddConsumable(itemId, amount);
+            }
             else
+            {
                 ProfileProgress.AddMaterial(itemId, amount);
+                MissionRunStats.AddMaterial(itemId, amount);
+            }
 
             Destroy(gameObject);
         }
