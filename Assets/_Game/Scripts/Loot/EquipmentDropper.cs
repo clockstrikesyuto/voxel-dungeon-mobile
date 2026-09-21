@@ -44,7 +44,13 @@ namespace VoxelDungeon.Loot
             if (!guaranteed && Random.value > chance)
                 return;
 
-            string id = itemIds[Random.Range(0, itemIds.Length)];
+            string id;
+
+            if (!guaranteed && Random.value < 0.52f)
+                id = StageLootCatalog.RollEquipment();
+            else
+                id = itemIds[Random.Range(0, itemIds.Length)];
+
             EquipmentPickup.Spawn(transform.position + transform.right * 0.65f, id);
         }
     }
