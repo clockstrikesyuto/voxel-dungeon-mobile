@@ -49,6 +49,15 @@ namespace VoxelDungeon.Player
             baseScale = transform.localScale;
         }
 
+        private void Start()
+        {
+            if (health != null)
+            {
+                int maxHealth = 100 + ProfileProgress.TotalVitality + (ProfileProgress.Level - 1) * 3;
+                health.ConfigureMaxHealth(maxHealth, true);
+            }
+        }
+
         public bool TryMelee()
         {
             if (Time.time < nextMeleeTime)
@@ -80,15 +89,25 @@ namespace VoxelDungeon.Player
                 Vector3 direction = hit.transform.position - transform.position;
                 direction.y = 0f;
 
+                int baseDamage =
+                    meleeDamage
+                    + (progress != null ? progress.MeleePowerBonus : 0)
+                    + ProfileProgress.MeleePower
+                    + meleeItem.Power
+                    + ProfileProgress.EquippedWeaponRollPower(EquipmentSlot.Melee)
+                    + ProfileProgress.MightRank * 2;
+
+                bool critical = Random.value < ProfileProgress.TotalCritChance;
+                int finalDamage = critical
+                    ? Mathf.RoundToInt(baseDamage * 1.65f)
+                    : baseDamage;
+
                 receiver.ReceiveDamage(new DamagePayload(
                     gameObject,
-                    meleeDamage
-                        + (progress != null ? progress.MeleePowerBonus : 0)
-                        + ProfileProgress.MeleePower
-                        + meleeItem.Power,
+                    finalDamage,
                     hit.ClosestPoint(center),
                     direction.normalized,
-                    false));
+                    critical));
             }
 
             return true;
@@ -119,14 +138,27 @@ namespace VoxelDungeon.Player
                 renderer.material.color = new Color(0.35f, 0.8f, 1f, 1f);
 
             SimpleProjectile projectileLogic = projectile.AddComponent<SimpleProjectile>();
+            int baseDamage =
+                rangedDamage
+                + (progress != null ? progress.RangedPowerBonus : 0)
+                + ProfileProgress.RangedPower
+                + rangedItem.Power
+                + ProfileProgress.EquippedWeaponRollPower(EquipmentSlot.Ranged)
+                + ProfileProgress.MightRank * 2;
+
+            bool critical = Random.value < ProfileProgress.TotalCritChance;
+            int finalDamage = critical
+                ? Mathf.RoundToInt(baseDamage * 1.65f)
+                : baseDamage;
+
             projectileLogic.Initialize(
                 gameObject,
                 direction,
                 rangedSpeed,
-                rangedDamage
-                    + (progress != null ? progress.RangedPowerBonus : 0)
-                    + ProfileProgress.RangedPower
-                    + rangedItem.Power);
+                finalDamage,
+                3.0f,
+                0.28f,
+                critical);
 
             transform.forward = direction;
             return true;
@@ -137,7 +169,13 @@ namespace VoxelDungeon.Player
             if (Time.time < nextPotionTime || health == null)
                 return false;
 
+            if (ProfileProgress.GetConsumable("healing_potion") <= 0)
+                return false;
+
             if (!health.Heal(potionHeal))
+                return false;
+
+            if (!ProfileProgress.ConsumeItem("healing_potion"))
                 return false;
 
             nextPotionTime = Time.time + potionCooldown;
