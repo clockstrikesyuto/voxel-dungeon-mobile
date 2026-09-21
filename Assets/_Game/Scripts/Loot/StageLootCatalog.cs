@@ -7,19 +7,19 @@ namespace VoxelDungeon.Loot
     {
         private static readonly string[] CryptEquipment =
         {
-            "crystal_saber", "crystal_bow",
+            "crystal_saber", "crystal_daggers", "crystal_bow",
             "crystal_hood", "crystal_mail", "crystal_steps", "crystal_charm"
         };
 
         private static readonly string[] ForgeEquipment =
         {
-            "ember_axe", "ember_repeater",
+            "ember_axe", "forge_spear", "ember_repeater",
             "forge_helm", "ember_plate", "ember_greaves", "forge_emblem"
         };
 
         private static readonly string[] VoidEquipment =
         {
-            "moonblade", "starbow",
+            "moonblade", "starbow", "astral_crossbow",
             "astral_crown", "void_mantle", "moonstep_boots", "void_talisman"
         };
 
