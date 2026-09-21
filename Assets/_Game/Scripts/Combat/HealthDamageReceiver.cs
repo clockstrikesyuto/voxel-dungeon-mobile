@@ -52,6 +52,9 @@ namespace VoxelDungeon.Combat
             health.ApplyDamage(appliedAmount);
             FloatingDamageText.Spawn(payload.HitPoint, appliedAmount, payload.Critical);
 
+            PlayerActionAnimator playerAnimator = GetComponent<PlayerActionAnimator>();
+            playerAnimator?.PlayHitReaction();
+
             if (health.IsDead)
                 return;
 
