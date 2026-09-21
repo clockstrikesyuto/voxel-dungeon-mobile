@@ -2,6 +2,7 @@ using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
 using VoxelDungeon.Combat;
+using VoxelDungeon.Core;
 
 namespace VoxelDungeon.Player
 {
