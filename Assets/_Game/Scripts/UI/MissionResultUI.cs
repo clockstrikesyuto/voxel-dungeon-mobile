@@ -48,6 +48,10 @@ namespace VoxelDungeon.UI
                 new Vector2(0.86f, 0.90f),
                 new Color(0.035f, 0.050f, 0.065f, 0.985f));
 
+            CanvasGroup cardGroup = card.AddComponent<CanvasGroup>();
+            MissionResultAnimator animator = card.AddComponent<MissionResultAnimator>();
+            animator.Configure(card.GetComponent<RectTransform>(), cardGroup);
+
             AddText(
                 card.transform,
                 Localization.T("mission_clear"),
