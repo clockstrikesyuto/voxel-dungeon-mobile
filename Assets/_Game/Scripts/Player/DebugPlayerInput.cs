@@ -47,6 +47,12 @@ namespace VoxelDungeon.Player
                 if (Keyboard.current.rKey.wasPressedThisFrame)
                     combat.TryPotion();
 
+                if (Keyboard.current.qKey.wasPressedThisFrame)
+                    combat.TryFireBomb();
+
+                if (Keyboard.current.eKey.wasPressedThisFrame)
+                    combat.TryFrostFlask();
+
                 if (Keyboard.current.leftShiftKey.wasPressedThisFrame ||
                     Keyboard.current.rightShiftKey.wasPressedThisFrame)
                     motor.TryDodge();
@@ -66,6 +72,12 @@ namespace VoxelDungeon.Player
 
                 if (Gamepad.current.dpad.up.wasPressedThisFrame)
                     combat.TryPotion();
+
+                if (Gamepad.current.dpad.left.wasPressedThisFrame)
+                    combat.TryFireBomb();
+
+                if (Gamepad.current.dpad.right.wasPressedThisFrame)
+                    combat.TryFrostFlask();
 
                 if (Gamepad.current.buttonEast.wasPressedThisFrame)
                     motor.TryDodge();
