@@ -177,6 +177,8 @@ namespace VoxelDungeon.Player
 
         private void BuildMelee(string id)
         {
+            Transform meleeRig = CreateRig("MeleeRig");
+
             Color metal = new Color(0.78f, 0.88f, 0.92f);
             Color accent = new Color(0.20f, 0.82f, 0.92f);
             Vector3 bladeScale = new Vector3(0.12f, 0.92f, 0.10f);
@@ -243,27 +245,29 @@ namespace VoxelDungeon.Player
                     break;
             }
 
-            GameObject blade = CreateCube("MeleeBlade", bladePos, bladeScale, metal);
+            GameObject blade = CreateCube(meleeRig, "MeleeBlade", bladePos, bladeScale, metal);
             blade.transform.localRotation = Quaternion.Euler(-18f, 0f, -18f);
 
-            CreateCube(
+            CreateCube(meleeRig, 
                 "MeleeGrip",
                 new Vector3(0.52f, 0.54f, 0.20f),
                 new Vector3(0.14f, 0.28f, 0.14f),
                 new Color(0.24f, 0.12f, 0.06f));
 
-            CreateCube(
+            CreateCube(meleeRig, 
                 "MeleeGuard",
                 new Vector3(0.58f, 0.69f, 0.24f),
                 new Vector3(0.34f, 0.10f, 0.12f),
                 accent);
 
             if (headScale != Vector3.zero)
-                CreateCube("MeleeHead", headPos, headScale, metal);
+                CreateCube(meleeRig, "MeleeHead", headPos, headScale, metal);
         }
 
         private void BuildRanged(string id)
         {
+            Transform rangedRig = CreateRig("RangedRig");
+
             Color body = id switch
             {
                 "crystal_bow" => new Color(0.18f, 0.72f, 1f),
@@ -276,13 +280,13 @@ namespace VoxelDungeon.Player
 
             if (id == "void_staff")
             {
-                CreateCube(
+                CreateCube(rangedRig, 
                     "BackStaff",
                     new Vector3(-0.48f, 1.00f, -0.34f),
                     new Vector3(0.10f, 1.20f, 0.10f),
                     new Color(0.30f, 0.22f, 0.40f));
 
-                CreateCube(
+                CreateCube(rangedRig, 
                     "StaffCore",
                     new Vector3(-0.48f, 1.62f, -0.34f),
                     new Vector3(0.28f, 0.28f, 0.28f),
@@ -290,7 +294,7 @@ namespace VoxelDungeon.Player
                 return;
             }
 
-            GameObject bow = CreateCube(
+            GameObject bow = CreateCube(rangedRig, 
                 "BackRanged",
                 new Vector3(-0.44f, 1.05f, -0.36f),
                 new Vector3(0.12f, 0.95f, 0.12f),
@@ -298,18 +302,32 @@ namespace VoxelDungeon.Player
 
             bow.transform.localRotation = Quaternion.Euler(10f, 0f, 24f);
 
-            CreateCube(
+            CreateCube(rangedRig, 
                 "RangedCore",
                 new Vector3(-0.34f, 1.05f, -0.40f),
                 new Vector3(0.24f, 0.20f, 0.12f),
                 body);
         }
 
+        private Transform CreateRig(string name)
+        {
+            GameObject rig = new GameObject(name);
+            rig.transform.SetParent(visualRoot, false);
+            rig.transform.localPosition = Vector3.zero;
+            rig.transform.localRotation = Quaternion.identity;
+            return rig.transform;
+        }
+
         private GameObject CreateCube(string name, Vector3 localPosition, Vector3 scale, Color color)
+        {
+            return CreateCube(visualRoot, name, localPosition, scale, color);
+        }
+
+        private GameObject CreateCube(Transform parent, string name, Vector3 localPosition, Vector3 scale, Color color)
         {
             GameObject go = GameObject.CreatePrimitive(PrimitiveType.Cube);
             go.name = name;
-            go.transform.SetParent(visualRoot, false);
+            go.transform.SetParent(parent, false);
             go.transform.localPosition = localPosition;
             go.transform.localScale = scale;
 
