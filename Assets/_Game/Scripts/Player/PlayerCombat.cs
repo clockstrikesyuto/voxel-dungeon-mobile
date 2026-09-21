@@ -37,6 +37,7 @@ namespace VoxelDungeon.Player
 
         private Health health;
         private PlayerProgress progress;
+        private PlayerBuffState buffs;
         private float nextMeleeTime;
         private float nextRangedTime;
         private float nextPotionTime;
@@ -48,6 +49,10 @@ namespace VoxelDungeon.Player
         {
             health = GetComponent<Health>();
             progress = GetComponent<PlayerProgress>();
+            buffs = GetComponent<PlayerBuffState>();
+            if (buffs == null)
+                buffs = gameObject.AddComponent<PlayerBuffState>();
+
             baseScale = transform.localScale;
         }
 
@@ -100,9 +105,9 @@ namespace VoxelDungeon.Player
                     + ProfileProgress.MightRank * 2;
 
                 bool critical = Random.value < ProfileProgress.TotalCritChance;
-                int finalDamage = critical
-                    ? Mathf.RoundToInt(baseDamage * 1.65f)
-                    : baseDamage;
+                float buffMultiplier = buffs != null ? buffs.DamageMultiplier : 1f;
+                int finalDamage = Mathf.RoundToInt(
+                    (critical ? baseDamage * 1.65f : baseDamage) * buffMultiplier);
 
                 receiver.ReceiveDamage(new DamagePayload(
                     gameObject,
@@ -149,9 +154,9 @@ namespace VoxelDungeon.Player
                 + ProfileProgress.MightRank * 2;
 
             bool critical = Random.value < ProfileProgress.TotalCritChance;
-            int finalDamage = critical
-                ? Mathf.RoundToInt(baseDamage * 1.65f)
-                : baseDamage;
+            float buffMultiplier = buffs != null ? buffs.DamageMultiplier : 1f;
+            int finalDamage = Mathf.RoundToInt(
+                (critical ? baseDamage * 1.65f : baseDamage) * buffMultiplier);
 
             projectileLogic.Initialize(
                 gameObject,
@@ -183,6 +188,49 @@ namespace VoxelDungeon.Player
             nextPotionTime = Time.time + potionCooldown;
             StartCoroutine(PotionPulse());
             return true;
+        }
+
+        public bool TryPowerTonic()
+        {
+            if (ProfileProgress.GetConsumable("power_tonic") <= 0)
+                return false;
+
+            if (!ProfileProgress.ConsumeItem("power_tonic"))
+                return false;
+
+            buffs?.ActivatePower();
+            return true;
+        }
+
+        public bool TryGuardTonic()
+        {
+            if (ProfileProgress.GetConsumable("guard_tonic") <= 0)
+                return false;
+
+            if (!ProfileProgress.ConsumeItem("guard_tonic"))
+                return false;
+
+            buffs?.ActivateGuard();
+            return true;
+        }
+
+        public bool TryHasteTonic()
+        {
+            if (ProfileProgress.GetConsumable("haste_tonic") <= 0)
+                return false;
+
+            if (!ProfileProgress.ConsumeItem("haste_tonic"))
+                return false;
+
+            buffs?.ActivateHaste();
+            return true;
+        }
+
+        public bool TryUtilityTonic()
+        {
+            if (TryPowerTonic()) return true;
+            if (TryGuardTonic()) return true;
+            return TryHasteTonic();
         }
 
         public bool TryFireBomb()
