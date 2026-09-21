@@ -94,6 +94,12 @@ namespace VoxelDungeon.Player
             if (hairTop != null)
                 hairTop.gameObject.SetActive(string.IsNullOrEmpty(headId));
 
+            Transform bakedBootL = transform.Find("PlayerVisual/Boot_L");
+            Transform bakedBootR = transform.Find("PlayerVisual/Boot_R");
+            bool showBakedBoots = string.IsNullOrEmpty(bootsId);
+            if (bakedBootL != null) bakedBootL.gameObject.SetActive(showBakedBoots);
+            if (bakedBootR != null) bakedBootR.gameObject.SetActive(showBakedBoots);
+
             for (int i = visualRoot.childCount - 1; i >= 0; i--)
                 Destroy(visualRoot.GetChild(i).gameObject);
 
