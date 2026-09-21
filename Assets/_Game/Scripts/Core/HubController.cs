@@ -198,8 +198,10 @@ namespace VoxelDungeon.Core
 
                 case HubPointKind.Training:
                     ShowInfoPanel(
-                        "TRAINING YARD",
-                        "Movement and combat practice area.\nTarget dummies and weapon trials are being expanded.");
+                        Localization.IsJapanese ? "訓練場" : "TRAINING YARD",
+                        Localization.IsJapanese
+                            ? "移動と戦闘を練習できます。\nターゲットや武器試験は今後拡張予定です。"
+                            : "Movement and combat practice area.\nTarget dummies and weapon trials are being expanded.");
                     break;
 
                 case HubPointKind.Armory:
@@ -367,11 +369,15 @@ namespace VoxelDungeon.Core
         private void ShowForge()
         {
             ClearOverlay();
-            CreateOverlayTitle("EMBER FORGE", $"Gold {ProfileProgress.Gold}");
+            CreateOverlayTitle(
+                Localization.IsJapanese ? "エンバー鍛冶場" : "EMBER FORGE",
+                Localization.IsJapanese ? $"ゴールド {ProfileProgress.Gold}" : $"Gold {ProfileProgress.Gold}");
 
             CreateForgeRow(
-                "MELEE CORE",
-                $"+2 permanent melee power  •  Current +{ProfileProgress.MeleePower}",
+                Localization.IsJapanese ? "近接コア" : "MELEE CORE",
+                Localization.IsJapanese
+                    ? $"+2 恒久近接攻撃  •  現在 +{ProfileProgress.MeleePower}"
+                    : $"+2 permanent melee power  •  Current +{ProfileProgress.MeleePower}",
                 20,
                 warm,
                 () =>
@@ -382,8 +388,10 @@ namespace VoxelDungeon.Core
                 });
 
             CreateForgeRow(
-                "RANGED CORE",
-                $"+2 permanent ranged power  •  Current +{ProfileProgress.RangedPower}",
+                Localization.IsJapanese ? "遠距離コア" : "RANGED CORE",
+                Localization.IsJapanese
+                    ? $"+2 恒久遠距離攻撃  •  現在 +{ProfileProgress.RangedPower}"
+                    : $"+2 permanent ranged power  •  Current +{ProfileProgress.RangedPower}",
                 20,
                 violet,
                 () =>
@@ -394,8 +402,10 @@ namespace VoxelDungeon.Core
                 });
 
             CreateForgeRow(
-                "ARMOR FRAME",
-                $"+2 permanent defense  •  Current +{ProfileProgress.ArmorPower}",
+                Localization.IsJapanese ? "防具フレーム" : "ARMOR FRAME",
+                Localization.IsJapanese
+                    ? $"+2 恒久防御  •  現在 +{ProfileProgress.ArmorPower}"
+                    : $"+2 permanent defense  •  Current +{ProfileProgress.ArmorPower}",
                 30,
                 cyan,
                 () =>
@@ -542,7 +552,7 @@ namespace VoxelDungeon.Core
             CreateButton(
                 root,
                 "Close",
-                "CLOSE",
+                Localization.IsJapanese ? "閉じる" : "CLOSE",
                 new Vector2(0.38f, 0.035f),
                 new Vector2(0.62f, 0.125f),
                 new Color(0.35f, 0.42f, 0.5f, 1f),
@@ -564,9 +574,9 @@ namespace VoxelDungeon.Core
             if (profileText == null)
                 return;
 
-            profileText.text =
-                $"LV {ProfileProgress.Level}   GOLD {ProfileProgress.Gold}\n" +
-                $"MELEE +{ProfileProgress.MeleePower}   RANGE +{ProfileProgress.RangedPower}   ARMOR +{ProfileProgress.ArmorPower}";
+            profileText.text = Localization.IsJapanese
+                ? $"LV {ProfileProgress.Level}   G {ProfileProgress.Gold}\n近接 +{ProfileProgress.MeleePower}   遠距離 +{ProfileProgress.RangedPower}   防御 +{ProfileProgress.ArmorPower}"
+                : $"LV {ProfileProgress.Level}   GOLD {ProfileProgress.Gold}\nMELEE +{ProfileProgress.MeleePower}   RANGE +{ProfileProgress.RangedPower}   ARMOR +{ProfileProgress.ArmorPower}";
         }
 
         private GameObject CreatePanel(
