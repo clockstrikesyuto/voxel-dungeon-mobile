@@ -163,6 +163,7 @@ namespace VoxelDungeon.EditorTools
 
             CreateDirectionalLight();
             CrystalCryptWorldBuilder.Build();
+            AdventureExpansionBuilder.Decorate("stage.crypt");
             CreateMobileHud(motor, combat, input, playerHealth);
             player.AddComponent<MissionHeaderUI>();
             player.AddComponent<StageJourneyUI>();
@@ -211,6 +212,7 @@ namespace VoxelDungeon.EditorTools
 
             CreateDirectionalLight();
             AshenForgeWorldBuilder.Build();
+            AdventureExpansionBuilder.Decorate("stage.ashen");
             CreateMobileHud(motor, combat, input, playerHealth);
             player.AddComponent<MissionHeaderUI>();
             player.AddComponent<StageJourneyUI>();
@@ -258,6 +260,7 @@ namespace VoxelDungeon.EditorTools
 
             CreateDirectionalLight();
             VoidGardenWorldBuilder.Build();
+            AdventureExpansionBuilder.Decorate("stage.void");
             CreateMobileHud(motor, combat, input, playerHealth);
             player.AddComponent<MissionHeaderUI>();
             player.AddComponent<StageJourneyUI>();
