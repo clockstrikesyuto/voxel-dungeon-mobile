@@ -144,7 +144,7 @@ namespace VoxelDungeon.UI
             group.blocksRaycasts = false;
 
             zoneText = root.AddComponent<Text>();
-            zoneText.font = Resources.GetBuiltinResource<Font>("LegacyRuntime.ttf");
+            zoneText.font = UiFontProvider.Get();
             zoneText.fontSize = 24;
             zoneText.fontStyle = FontStyle.Bold;
             zoneText.alignment = TextAnchor.MiddleCenter;
