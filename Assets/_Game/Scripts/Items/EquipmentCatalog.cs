@@ -10,14 +10,6 @@ namespace VoxelDungeon.Items
         Ranged
     }
 
-    public enum ItemRarity
-    {
-        Common,
-        Rare,
-        Epic,
-        Legendary
-    }
-
     [Serializable]
     public readonly struct EquipmentRecord
     {
