@@ -344,6 +344,18 @@ namespace VoxelDungeon.Core
                     ShowForge();
                 });
 
+            CreateForgeRow(
+                "ARMOR FRAME",
+                $"+2 permanent defense  •  Current +{ProfileProgress.ArmorPower}",
+                30,
+                cyan,
+                () =>
+                {
+                    ProfileProgress.UpgradeArmor(30, 2);
+                    RefreshProfile();
+                    ShowForge();
+                });
+
             CreateOverlayCloseButton();
             overlayRoot.SetActive(true);
         }
