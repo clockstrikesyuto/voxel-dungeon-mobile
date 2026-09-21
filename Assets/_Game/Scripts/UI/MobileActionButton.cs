@@ -11,7 +11,9 @@ namespace VoxelDungeon.UI
             Attack,
             Dodge,
             Ranged,
-            Potion
+            Potion,
+            FireBomb,
+            FrostFlask
         }
 
         [SerializeField] private ActionKind action;
@@ -40,6 +42,12 @@ namespace VoxelDungeon.UI
                     break;
                 case ActionKind.Potion:
                     combat?.TryPotion();
+                    break;
+                case ActionKind.FireBomb:
+                    combat?.TryFireBomb();
+                    break;
+                case ActionKind.FrostFlask:
+                    combat?.TryFrostFlask();
                     break;
             }
         }
