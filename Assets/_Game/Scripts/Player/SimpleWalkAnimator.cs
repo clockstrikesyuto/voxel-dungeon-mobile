@@ -23,15 +23,17 @@ namespace VoxelDungeon.Player
         private Vector3 rightBootBase;
         private float phase;
         private bool basesCaptured;
+        private PlayerActionAnimator actions;
 
         private void Start()
         {
+            actions = GetComponent<PlayerActionAnimator>();
             ResolveParts();
         }
 
         private void Update()
         {
-            if (leftLeg == null || rightLeg == null)
+            if (leftLeg == null || rightLeg == null || leftBoot == null || rightBoot == null)
                 ResolveParts();
 
             CharacterController controller = GetComponent<CharacterController>();
@@ -52,8 +54,13 @@ namespace VoxelDungeon.Player
 
                 ApplyRotation(leftLeg, legAngle);
                 ApplyRotation(rightLeg, -legAngle);
-                ApplyRotation(leftArm, -armAngle);
-                ApplyRotation(rightArm, armAngle);
+
+                if (actions == null || !actions.UpperBodyBusy)
+                {
+                    ApplyRotation(leftArm, -armAngle);
+                    ApplyRotation(rightArm, armAngle);
+                }
+
                 ApplyRotation(leftBoot, legAngle * 0.65f);
                 ApplyRotation(rightBoot, -legAngle * 0.65f);
 
@@ -69,8 +76,13 @@ namespace VoxelDungeon.Player
             {
                 SettleRotation(leftLeg);
                 SettleRotation(rightLeg);
-                SettleRotation(leftArm);
-                SettleRotation(rightArm);
+
+                if (actions == null || !actions.UpperBodyBusy)
+                {
+                    SettleRotation(leftArm);
+                    SettleRotation(rightArm);
+                }
+
                 SettleRotation(leftBoot);
                 SettleRotation(rightBoot);
 
