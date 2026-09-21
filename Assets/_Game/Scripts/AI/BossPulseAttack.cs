@@ -17,9 +17,11 @@ namespace VoxelDungeon.AI
         private HealthDamageReceiver receiver;
         private float nextTime;
         private LineRenderer ring;
+        private bool encounterStarted;
 
         public void BeginEncounter()
         {
+            encounterStarted = true;
             nextTime = Time.time + 0.65f;
             if (ring != null)
                 SetRingVisible(false);
@@ -40,7 +42,9 @@ namespace VoxelDungeon.AI
 
         private void Start()
         {
-            nextTime = Time.time + 1.5f;
+            if (!encounterStarted)
+                nextTime = Time.time + 1.5f;
+
             BuildRing();
             SetRingVisible(false);
         }
