@@ -159,6 +159,13 @@ namespace VoxelDungeon.Player
                     bladeScale = new Vector3(0.10f, 1.06f, 0.08f);
                     break;
 
+                case "crystal_daggers":
+                    accent = new Color(0.20f, 0.96f, 1f);
+                    metal = new Color(0.72f, 0.96f, 1f);
+                    bladeScale = new Vector3(0.09f, 0.66f, 0.07f);
+                    bladePos = new Vector3(0.70f, 0.93f, 0.30f);
+                    break;
+
                 case "warden_cleaver":
                     accent = new Color(0.62f, 0.30f, 1f);
                     metal = new Color(0.44f, 0.48f, 0.58f);
@@ -171,6 +178,15 @@ namespace VoxelDungeon.Player
                     bladeScale = new Vector3(0.10f, 0.88f, 0.10f);
                     headScale = new Vector3(0.46f, 0.32f, 0.12f);
                     headPos = new Vector3(0.88f, 1.42f, 0.30f);
+                    break;
+
+                case "forge_spear":
+                    accent = new Color(1f, 0.52f, 0.08f);
+                    metal = new Color(0.54f, 0.56f, 0.58f);
+                    bladeScale = new Vector3(0.08f, 1.55f, 0.08f);
+                    bladePos = new Vector3(0.73f, 1.12f, 0.30f);
+                    headScale = new Vector3(0.22f, 0.40f, 0.10f);
+                    headPos = new Vector3(0.92f, 1.84f, 0.30f);
                     break;
 
                 case "colossus_maul":
@@ -221,6 +237,7 @@ namespace VoxelDungeon.Player
                 "ember_repeater" => new Color(1f, 0.40f, 0.08f),
                 "void_staff" => new Color(0.62f, 0.30f, 1f),
                 "starbow" => new Color(0.24f, 0.90f, 0.62f),
+                "astral_crossbow" => new Color(0.72f, 0.62f, 1f),
                 _ => new Color(0.48f, 0.30f, 0.16f)
             };
 
