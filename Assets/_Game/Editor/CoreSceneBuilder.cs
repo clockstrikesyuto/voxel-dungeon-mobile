@@ -7,6 +7,7 @@ using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem.UI;
+using UnityEngine.Rendering;
 using UnityEngine.Rendering.Universal;
 using VoxelDungeon.Combat;
 using VoxelDungeon.AI;
@@ -111,13 +112,20 @@ namespace VoxelDungeon.EditorTools
             HubPlayerInput input = player.AddComponent<HubPlayerInput>();
             VisualStyleBuilder.ApplyPlayerVisual(player);
             player.AddComponent<LoadoutVisualController>();
+            player.AddComponent<SimpleWalkAnimator>();
 
-            Camera camera = CreateCamera("Main Camera", new Vector3(0f, 12f, -10f), Vector3.zero);
+            Camera camera = CreateCamera("Main Camera", new Vector3(0f, 12.5f, -10.5f), Vector3.zero);
             camera.backgroundColor = new Color(0.58f, 0.78f, 0.90f);
             TopDownCameraFollow follow = camera.gameObject.AddComponent<TopDownCameraFollow>();
             follow.SetTarget(player.transform);
-            follow.ConfigureView(new Vector3(0f, 12f, -10f), new Vector3(0f, 1f, 0f));
-            camera.transform.LookAt(player.transform.position + Vector3.up);
+            follow.ConfigureView(
+                new Vector3(0f, 12.5f, -10.5f),
+                new Vector3(0f, 0.85f, 0f));
+
+            CameraOcclusionFader occlusion = camera.gameObject.AddComponent<CameraOcclusionFader>();
+            occlusion.SetTarget(player.transform);
+
+            camera.transform.LookAt(player.transform.position + Vector3.up * 0.85f);
 
             CreateDirectionalLight();
             HubWorldBuilder.PopulateHub(player);
@@ -154,12 +162,20 @@ namespace VoxelDungeon.EditorTools
             DebugPlayerInput input = player.AddComponent<DebugPlayerInput>();
             VisualStyleBuilder.ApplyPlayerVisual(player);
             player.AddComponent<LoadoutVisualController>();
+            player.AddComponent<SimpleWalkAnimator>();
 
-            Camera camera = CreateCamera("Main Camera", new Vector3(0f, 10f, -8f), Vector3.zero);
+            Camera camera = CreateCamera("Main Camera", new Vector3(0f, 12.5f, -10.5f), Vector3.zero);
             camera.backgroundColor = new Color(0.18f, 0.28f, 0.34f);
             TopDownCameraFollow follow = camera.gameObject.AddComponent<TopDownCameraFollow>();
             follow.SetTarget(player.transform);
-            camera.transform.LookAt(player.transform.position + Vector3.up);
+            follow.ConfigureView(
+                new Vector3(0f, 12.5f, -10.5f),
+                new Vector3(0f, 0.85f, 0f));
+
+            CameraOcclusionFader occlusion = camera.gameObject.AddComponent<CameraOcclusionFader>();
+            occlusion.SetTarget(player.transform);
+
+            camera.transform.LookAt(player.transform.position + Vector3.up * 0.85f);
 
             CreateDirectionalLight();
             CrystalCryptWorldBuilder.Build();
@@ -203,12 +219,20 @@ namespace VoxelDungeon.EditorTools
             DebugPlayerInput input = player.AddComponent<DebugPlayerInput>();
             VisualStyleBuilder.ApplyPlayerVisual(player);
             player.AddComponent<LoadoutVisualController>();
+            player.AddComponent<SimpleWalkAnimator>();
 
-            Camera camera = CreateCamera("Main Camera", new Vector3(0f, 10f, -8f), Vector3.zero);
+            Camera camera = CreateCamera("Main Camera", new Vector3(0f, 12.5f, -10.5f), Vector3.zero);
             camera.backgroundColor = new Color(0.30f, 0.20f, 0.15f);
             TopDownCameraFollow follow = camera.gameObject.AddComponent<TopDownCameraFollow>();
             follow.SetTarget(player.transform);
-            camera.transform.LookAt(player.transform.position + Vector3.up);
+            follow.ConfigureView(
+                new Vector3(0f, 12.5f, -10.5f),
+                new Vector3(0f, 0.85f, 0f));
+
+            CameraOcclusionFader occlusion = camera.gameObject.AddComponent<CameraOcclusionFader>();
+            occlusion.SetTarget(player.transform);
+
+            camera.transform.LookAt(player.transform.position + Vector3.up * 0.85f);
 
             CreateDirectionalLight();
             AshenForgeWorldBuilder.Build();
@@ -251,12 +275,20 @@ namespace VoxelDungeon.EditorTools
             DebugPlayerInput input = player.AddComponent<DebugPlayerInput>();
             VisualStyleBuilder.ApplyPlayerVisual(player);
             player.AddComponent<LoadoutVisualController>();
+            player.AddComponent<SimpleWalkAnimator>();
 
-            Camera camera = CreateCamera("Main Camera", new Vector3(0f, 10f, -8f), Vector3.zero);
+            Camera camera = CreateCamera("Main Camera", new Vector3(0f, 12.5f, -10.5f), Vector3.zero);
             camera.backgroundColor = new Color(0.58f, 0.66f, 0.74f);
             TopDownCameraFollow follow = camera.gameObject.AddComponent<TopDownCameraFollow>();
             follow.SetTarget(player.transform);
-            camera.transform.LookAt(player.transform.position + Vector3.up);
+            follow.ConfigureView(
+                new Vector3(0f, 12.5f, -10.5f),
+                new Vector3(0f, 0.85f, 0f));
+
+            CameraOcclusionFader occlusion = camera.gameObject.AddComponent<CameraOcclusionFader>();
+            occlusion.SetTarget(player.transform);
+
+            camera.transform.LookAt(player.transform.position + Vector3.up * 0.85f);
 
             CreateDirectionalLight();
             VoidGardenWorldBuilder.Build();
@@ -578,13 +610,13 @@ namespace VoxelDungeon.EditorTools
             go.transform.eulerAngles = euler;
 
             Camera camera = go.AddComponent<Camera>();
-            camera.fieldOfView = 46f;
+            camera.fieldOfView = 50f;
             camera.allowHDR = true;
             camera.allowMSAA = true;
             camera.backgroundColor = new Color(0.018f, 0.03f, 0.045f);
             camera.clearFlags = CameraClearFlags.SolidColor;
             camera.nearClipPlane = 0.1f;
-            camera.farClipPlane = 250f;
+            camera.farClipPlane = 320f;
             camera.GetUniversalAdditionalCameraData().renderPostProcessing = true;
             go.AddComponent<AudioListener>();
             return camera;
@@ -595,8 +627,15 @@ namespace VoxelDungeon.EditorTools
             GameObject go = new GameObject("Directional Light");
             Light light = go.AddComponent<Light>();
             light.type = LightType.Directional;
-            light.intensity = 1.2f;
+            light.intensity = 1.65f;
+            light.color = new Color(1f, 0.97f, 0.91f);
+            light.shadows = LightShadows.Soft;
+            light.shadowStrength = 0.58f;
             go.transform.rotation = Quaternion.Euler(48f, -32f, 0f);
+
+            RenderSettings.ambientMode = AmbientMode.Flat;
+            RenderSettings.ambientLight = new Color(0.46f, 0.50f, 0.56f);
+            RenderSettings.reflectionIntensity = 0.82f;
         }
 
         private static GameObject CreateGround(string name, Vector3 position, Vector3 scale)
