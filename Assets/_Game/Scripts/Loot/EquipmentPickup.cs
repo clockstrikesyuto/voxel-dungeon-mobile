@@ -51,6 +51,7 @@ namespace VoxelDungeon.Loot
         private void Collect()
         {
             EquipmentRecord item = EquipmentCatalog.Get(itemId);
+            MissionRunStats.AddEquipment(item.Name);
 
             if (ProfileProgress.AddEquipment(itemId))
             {
