@@ -196,7 +196,9 @@ namespace VoxelDungeon.Core
                 $"Moon Bloom      {ProfileProgress.GetMaterial("moon_bloom")}\n" +
                 $"Void Fragment   {ProfileProgress.GetMaterial("void_fragment")}\n" +
                 $"Ancient Relic   {ProfileProgress.GetMaterial("ancient_relic")}\n\n" +
-                $"Healing Potion  {ProfileProgress.GetConsumable("healing_potion")}";
+                $"Healing Potion  {ProfileProgress.GetConsumable("healing_potion")}\n" +
+                $"Fire Bomb       {ProfileProgress.GetConsumable("fire_bomb")}\n" +
+                $"Frost Flask     {ProfileProgress.GetConsumable("frost_flask")}";
 
             AddText(
                 info.GetComponent<RectTransform>(),
