@@ -95,10 +95,8 @@ namespace VoxelDungeon.EditorTools
                 CreateBlock(root.transform, "Wall_L", new Vector3(-9.5f, 2.7f, z), new Vector3(3.0f, 5.4f, 4.0f), wall);
                 CreateBlock(root.transform, "Wall_R", new Vector3(9.5f, 2.7f, z), new Vector3(3.0f, 5.4f, 4.0f), wall);
 
-                // Partial ceiling shelves keep the top-down camera readable while
-                // still making the route feel enclosed.
-                CreateBlock(root.transform, "Ceiling_L", new Vector3(-7.2f, 6.2f, z), new Vector3(4.2f, 1.1f, 3.5f), accent, false);
-                CreateBlock(root.transform, "Ceiling_R", new Vector3(7.2f, 6.2f, z), new Vector3(4.2f, 1.1f, 3.5f), accent, false);
+                // Keep the cave open above the gameplay lane. Tall side walls,
+                // arches and crystals sell the cave without blocking the camera.
             }
 
             CreateArch(root.transform, new Vector3(0f, 0f, centerZ - half), wall, glow);
@@ -123,9 +121,8 @@ namespace VoxelDungeon.EditorTools
         {
             CreateBlock(root, "Arch_L", position + new Vector3(-5.8f, 2.7f, 0f), new Vector3(2.2f, 5.4f, 1.2f), stone);
             CreateBlock(root, "Arch_R", position + new Vector3(5.8f, 2.7f, 0f), new Vector3(2.2f, 5.4f, 1.2f), stone);
-            CreateBlock(root, "ArchTop_L", position + new Vector3(-3.8f, 5.45f, 0f), new Vector3(3.2f, 0.8f, 1.2f), stone, false);
-            CreateBlock(root, "ArchTop_R", position + new Vector3(3.8f, 5.45f, 0f), new Vector3(3.2f, 0.8f, 1.2f), stone, false);
-            CreateBlock(root, "ArchRune", position + new Vector3(0f, 5.45f, 0f), new Vector3(1.1f, 0.34f, 1.3f), glow, false);
+            CreateBlock(root, "ArchRune_L", position + new Vector3(-4.5f, 4.6f, 0f), new Vector3(0.25f, 1.4f, 1.3f), glow, false);
+            CreateBlock(root, "ArchRune_R", position + new Vector3(4.5f, 4.6f, 0f), new Vector3(0.25f, 1.4f, 1.3f), glow, false);
         }
 
         private static void CreateOutdoorSection(string stageId, Material ground, Material stone, Material glow)
