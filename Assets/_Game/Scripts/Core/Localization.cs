@@ -129,6 +129,64 @@ namespace VoxelDungeon.Core
             };
         }
 
+        public static string EquipmentName(string id, string fallback = null)
+        {
+            if (!IsJapanese)
+                return string.IsNullOrEmpty(fallback) ? id.Replace("_", " ").ToUpperInvariant() : fallback;
+
+            return id switch
+            {
+                "rustblade" => "フロンティアブレード",
+                "crystal_saber" => "クリスタルセイバー",
+                "crystal_daggers" => "クリスタルダガー",
+                "warden_cleaver" => "ウォーデンクリーバー",
+                "ember_axe" => "エンバーアックス",
+                "forge_spear" => "フォージスピア",
+                "colossus_maul" => "コロッサスモール",
+                "moonblade" => "ムーンブレード",
+                "void_edge" => "ヴォイドエッジ",
+                "field_bow" => "フィールドボウ",
+                "crystal_bow" => "クリスタルボウ",
+                "ember_repeater" => "エンバーリピーター",
+                "void_staff" => "ヴォイドスタッフ",
+                "starbow" => "スターボウ",
+                "astral_crossbow" => "アストラルクロスボウ",
+                "frontier_cap" => "フロンティアキャップ",
+                "crystal_hood" => "クリスタルフード",
+                "forge_helm" => "フォージヘルム",
+                "astral_crown" => "アストラルクラウン",
+                "frontier_vest" => "フロンティアベスト",
+                "crystal_mail" => "クリスタルメイル",
+                "ember_plate" => "エンバープレート",
+                "void_mantle" => "ヴォイドマント",
+                "trail_boots" => "トレイルブーツ",
+                "crystal_steps" => "クリスタルステップ",
+                "ember_greaves" => "エンバーグリーヴ",
+                "moonstep_boots" => "ムーンステップ",
+                "scout_charm" => "スカウトチャーム",
+                "crystal_charm" => "クリスタルチャーム",
+                "forge_emblem" => "フォージエンブレム",
+                "void_talisman" => "ヴォイドタリスマン",
+                _ => string.IsNullOrEmpty(fallback) ? id : fallback
+            };
+        }
+
+        public static string ConsumableName(string id)
+        {
+            if (!IsJapanese) return id.Replace("_", " ").ToUpperInvariant();
+
+            return id switch
+            {
+                "healing_potion" => "回復ポーション",
+                "power_tonic" => "攻撃トニック",
+                "guard_tonic" => "防御トニック",
+                "haste_tonic" => "速度トニック",
+                "fire_bomb" => "火炎爆弾",
+                "frost_flask" => "氷結瓶",
+                _ => id
+            };
+        }
+
         public static string MaterialName(string id)
         {
             if (!IsJapanese) return id.Replace("_", " ").ToUpperInvariant();
