@@ -222,13 +222,13 @@ namespace VoxelDungeon.AI
                     Physics.AllLayers,
                     QueryTriggerInteraction.Ignore))
             {
+                bool hitsTarget =
+                    target != null &&
+                    (hit.transform == target || hit.transform.IsChildOf(target));
+
                 if (hit.transform != transform &&
                     !hit.transform.IsChildOf(transform) &&
-                    (target == null &&
-                     !hit.transform.IsChildOf(target) ||
-                     target != null &&
-                     hit.transform != target &&
-                     !hit.transform.IsChildOf(target)))
+                    !hitsTarget)
                     return false;
             }
 
