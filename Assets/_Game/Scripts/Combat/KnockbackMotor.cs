@@ -15,6 +15,11 @@ namespace VoxelDungeon.Combat
             controller = GetComponent<CharacterController>();
         }
 
+        public void ResetMotion()
+        {
+            velocity = Vector3.zero;
+        }
+
         public void AddImpulse(Vector3 direction, float strength)
         {
             direction.y = 0f;
