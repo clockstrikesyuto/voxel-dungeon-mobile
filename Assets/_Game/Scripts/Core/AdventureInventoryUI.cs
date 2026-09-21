@@ -67,7 +67,7 @@ namespace VoxelDungeon.Core
 
             AddText(
                 panel,
-                "LOADOUT & INVENTORY",
+                Localization.IsJapanese ? "装備 & インベントリ" : "LOADOUT & INVENTORY",
                 new Vector2(0.04f, 0.905f),
                 new Vector2(0.60f, 0.98f),
                 34,
@@ -127,7 +127,7 @@ namespace VoxelDungeon.Core
 
             AddText(
                 row.GetComponent<RectTransform>(),
-                item.Name,
+                Localization.EquipmentName(item.Id, item.Name),
                 new Vector2(0.18f, 0.50f),
                 new Vector2(0.68f, 0.96f),
                 22,
@@ -150,7 +150,7 @@ namespace VoxelDungeon.Core
 
             CreateButton(
                 row.transform,
-                "NEXT",
+                Localization.IsJapanese ? "次へ" : "NEXT",
                 new Vector2(0.82f, 0.17f),
                 new Vector2(0.97f, 0.83f),
                 rarity,
@@ -181,7 +181,7 @@ namespace VoxelDungeon.Core
 
             AddText(
                 info.GetComponent<RectTransform>(),
-                "EXPEDITION BAG",
+                Localization.IsJapanese ? "探索バッグ" : "EXPEDITION BAG",
                 new Vector2(0.06f, 0.84f),
                 new Vector2(0.94f, 0.97f),
                 22,
@@ -190,18 +190,18 @@ namespace VoxelDungeon.Core
                 cyan);
 
             string inventory =
-                $"Crystal Shard   {ProfileProgress.GetMaterial("crystal_shard")}\n" +
-                $"Iron Ore        {ProfileProgress.GetMaterial("iron_ore")}\n" +
-                $"Ember Core      {ProfileProgress.GetMaterial("ember_core")}\n" +
-                $"Moon Bloom      {ProfileProgress.GetMaterial("moon_bloom")}\n" +
-                $"Void Fragment   {ProfileProgress.GetMaterial("void_fragment")}\n" +
-                $"Ancient Relic   {ProfileProgress.GetMaterial("ancient_relic")}\n\n" +
-                $"Healing Potion  {ProfileProgress.GetConsumable("healing_potion")}\n" +
-                $"Fire Bomb       {ProfileProgress.GetConsumable("fire_bomb")}\n" +
-                $"Frost Flask     {ProfileProgress.GetConsumable("frost_flask")}\n" +
-                $"Power Tonic     {ProfileProgress.GetConsumable("power_tonic")}\n" +
-                $"Guard Tonic     {ProfileProgress.GetConsumable("guard_tonic")}\n" +
-                $"Haste Tonic     {ProfileProgress.GetConsumable("haste_tonic")}";
+                $"{Localization.MaterialName("crystal_shard")}   {ProfileProgress.GetMaterial("crystal_shard")}\n" +
+                $"{Localization.MaterialName("iron_ore")}        {ProfileProgress.GetMaterial("iron_ore")}\n" +
+                $"{Localization.MaterialName("ember_core")}      {ProfileProgress.GetMaterial("ember_core")}\n" +
+                $"{Localization.MaterialName("moon_bloom")}      {ProfileProgress.GetMaterial("moon_bloom")}\n" +
+                $"{Localization.MaterialName("void_fragment")}   {ProfileProgress.GetMaterial("void_fragment")}\n" +
+                $"{Localization.MaterialName("ancient_relic")}   {ProfileProgress.GetMaterial("ancient_relic")}\n\n" +
+                $"{Localization.ConsumableName("healing_potion")}  {ProfileProgress.GetConsumable("healing_potion")}\n" +
+                $"{Localization.ConsumableName("fire_bomb")}       {ProfileProgress.GetConsumable("fire_bomb")}\n" +
+                $"{Localization.ConsumableName("frost_flask")}     {ProfileProgress.GetConsumable("frost_flask")}\n" +
+                $"{Localization.ConsumableName("power_tonic")}     {ProfileProgress.GetConsumable("power_tonic")}\n" +
+                $"{Localization.ConsumableName("guard_tonic")}     {ProfileProgress.GetConsumable("guard_tonic")}\n" +
+                $"{Localization.ConsumableName("haste_tonic")}     {ProfileProgress.GetConsumable("haste_tonic")}";
 
             AddText(
                 info.GetComponent<RectTransform>(),
@@ -221,7 +221,9 @@ namespace VoxelDungeon.Core
 
             AddText(
                 skills.GetComponent<RectTransform>(),
-                $"SKILLS   POINTS {ProfileProgress.SkillPoints}",
+                Localization.IsJapanese
+                    ? $"スキル   ポイント {ProfileProgress.SkillPoints}"
+                    : $"SKILLS   POINTS {ProfileProgress.SkillPoints}",
                 new Vector2(0.06f, 0.72f),
                 new Vector2(0.94f, 0.96f),
                 20,
@@ -231,7 +233,7 @@ namespace VoxelDungeon.Core
 
             CreateButton(
                 skills.transform,
-                $"MIGHT {ProfileProgress.MightRank}",
+                Localization.IsJapanese ? $"攻撃 {ProfileProgress.MightRank}" : $"MIGHT {ProfileProgress.MightRank}",
                 new Vector2(0.05f, 0.12f),
                 new Vector2(0.31f, 0.62f),
                 warm,
@@ -239,7 +241,7 @@ namespace VoxelDungeon.Core
 
             CreateButton(
                 skills.transform,
-                $"GUARD {ProfileProgress.GuardRank}",
+                Localization.IsJapanese ? $"防御 {ProfileProgress.GuardRank}" : $"GUARD {ProfileProgress.GuardRank}",
                 new Vector2(0.37f, 0.12f),
                 new Vector2(0.63f, 0.62f),
                 cyan,
@@ -247,7 +249,7 @@ namespace VoxelDungeon.Core
 
             CreateButton(
                 skills.transform,
-                $"AGILITY {ProfileProgress.AgilityRank}",
+                Localization.IsJapanese ? $"俊敏 {ProfileProgress.AgilityRank}" : $"AGILITY {ProfileProgress.AgilityRank}",
                 new Vector2(0.69f, 0.12f),
                 new Vector2(0.95f, 0.62f),
                 violet,
@@ -265,12 +267,14 @@ namespace VoxelDungeon.Core
                     ? "ember_plate"
                     : "crystal_mail";
 
-            string craftLabel = craftId switch
-            {
-                "void_talisman" => "CRAFT VOID TALISMAN",
-                "ember_plate" => "CRAFT EMBER PLATE",
-                _ => "CRAFT CRYSTAL MAIL"
-            };
+            string craftLabel = Localization.IsJapanese
+                ? $"作成：{Localization.EquipmentName(craftId, EquipmentCatalog.Get(craftId).Name)}"
+                : craftId switch
+                {
+                    "void_talisman" => "CRAFT VOID TALISMAN",
+                    "ember_plate" => "CRAFT EMBER PLATE",
+                    _ => "CRAFT CRYSTAL MAIL"
+                };
 
             CreateButton(
                 craft.transform,
@@ -348,7 +352,7 @@ namespace VoxelDungeon.Core
         {
             CreateButton(
                 panel,
-                "CLOSE",
+                Localization.IsJapanese ? "閉じる" : "CLOSE",
                 new Vector2(0.82f, 0.89f),
                 new Vector2(0.96f, 0.965f),
                 new Color(0.55f, 0.60f, 0.66f),
@@ -372,6 +376,20 @@ namespace VoxelDungeon.Core
 
         private static string SlotLabel(EquipmentSlot slot)
         {
+            if (Localization.IsJapanese)
+            {
+                return slot switch
+                {
+                    EquipmentSlot.Melee => "近接",
+                    EquipmentSlot.Ranged => "遠距離",
+                    EquipmentSlot.Head => "頭",
+                    EquipmentSlot.Body => "胴",
+                    EquipmentSlot.Boots => "足",
+                    EquipmentSlot.Accessory => "アクセ",
+                    _ => slot.ToString()
+                };
+            }
+
             return slot switch
             {
                 EquipmentSlot.Melee => "MELEE",
