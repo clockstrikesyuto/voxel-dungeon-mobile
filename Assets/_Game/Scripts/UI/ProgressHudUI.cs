@@ -57,7 +57,7 @@ namespace VoxelDungeon.UI
             var ranged = ProfileProgress.EquippedRanged;
 
             label.text =
-                $"LV {ProfileProgress.Level}  EXP {ProfileProgress.Experience}/{ProfileProgress.ExperienceToNextLevel}  POTION {ProfileProgress.GetConsumable("healing_potion")}\n" +
+                $"LV {ProfileProgress.Level}  EXP {ProfileProgress.Experience}/{ProfileProgress.ExperienceToNextLevel}  POT {ProfileProgress.GetConsumable("healing_potion")}  FIRE {ProfileProgress.GetConsumable("fire_bomb")}  ICE {ProfileProgress.GetConsumable("frost_flask")}\n" +
                 $"GOLD {progress.Gold}   MELEE +{progress.MeleePowerBonus}   RANGE +{progress.RangedPowerBonus}\n" +
                 $"{melee.Name}  •  {ranged.Name}";
         }
