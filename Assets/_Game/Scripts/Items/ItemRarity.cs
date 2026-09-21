@@ -3,8 +3,15 @@ namespace VoxelDungeon.Items
     public enum ItemRarity
     {
         Common = 0,
-        Refined = 1,
-        Heroic = 2,
-        Mythic = 3
+
+        // Current equipment naming.
+        Rare = 1,
+        Epic = 2,
+        Legendary = 3,
+
+        // Legacy aliases kept so older ItemDefinition assets remain compatible.
+        Refined = Rare,
+        Heroic = Epic,
+        Mythic = Legendary
     }
 }
