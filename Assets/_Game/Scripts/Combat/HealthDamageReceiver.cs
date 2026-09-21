@@ -1,6 +1,8 @@
 using System.Collections;
 using UnityEngine;
 using VoxelDungeon.Presentation;
+using VoxelDungeon.Core;
+using VoxelDungeon.Player;
 
 namespace VoxelDungeon.Combat
 {
@@ -36,8 +38,17 @@ namespace VoxelDungeon.Combat
         {
             if (!CanReceiveDamage) return;
 
-            health.ApplyDamage(payload.Amount);
-            FloatingDamageText.Spawn(payload.HitPoint, payload.Amount, payload.Critical);
+            int appliedAmount = payload.Amount;
+
+            if (GetComponent<PlayerProgress>() != null)
+            {
+                int defense = Mathf.Max(0, ProfileProgress.TotalDefense);
+                float multiplier = 100f / (100f + defense * 4f);
+                appliedAmount = Mathf.Max(1, Mathf.RoundToInt(payload.Amount * multiplier));
+            }
+
+            health.ApplyDamage(appliedAmount);
+            FloatingDamageText.Spawn(payload.HitPoint, appliedAmount, payload.Critical);
 
             if (health.IsDead)
                 return;
