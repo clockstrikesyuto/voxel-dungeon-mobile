@@ -18,6 +18,13 @@ namespace VoxelDungeon.AI
         private float nextTime;
         private LineRenderer ring;
 
+        public void BeginEncounter()
+        {
+            nextTime = Time.time + 0.65f;
+            if (ring != null)
+                SetRingVisible(false);
+        }
+
         public void Configure(float attackRadius, float attackInterval, float attackWindup, int attackDamage)
         {
             radius = Mathf.Max(1f, attackRadius);
