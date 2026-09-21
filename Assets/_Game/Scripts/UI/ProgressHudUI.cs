@@ -10,12 +10,22 @@ namespace VoxelDungeon.UI
     {
         private PlayerProgress progress;
         private Text label;
+        private float nextRefreshTime;
 
         private void Start()
         {
             progress = GetComponent<PlayerProgress>();
             Build();
             progress.Changed += Refresh;
+            Refresh();
+        }
+
+        private void Update()
+        {
+            if (Time.time < nextRefreshTime)
+                return;
+
+            nextRefreshTime = Time.time + 0.25f;
             Refresh();
         }
 
