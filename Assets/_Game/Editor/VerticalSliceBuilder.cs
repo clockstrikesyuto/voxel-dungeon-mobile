@@ -260,7 +260,6 @@ namespace VoxelDungeon.EditorTools
 
             boss.AddComponent<KnockbackMotor>();
             boss.AddComponent<HealthDamageReceiver>();
-            boss.AddComponent<WorldHealthBar>();
 
             SimpleEnemyBrain brain = boss.AddComponent<SimpleEnemyBrain>();
             brain.Configure(2.05f, 20f, 2.0f, 1.10f, 0.58f, 26);
