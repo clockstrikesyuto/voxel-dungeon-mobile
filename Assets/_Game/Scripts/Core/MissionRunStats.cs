@@ -1,3 +1,4 @@
+using VoxelDungeon.Items;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -43,10 +44,10 @@ namespace VoxelDungeon.Core
             Consumables[id] = Consumables.TryGetValue(id, out int current) ? current + amount : amount;
         }
 
-        public static void AddEquipment(string displayName)
+        public static void AddEquipment(string itemId)
         {
-            if (!string.IsNullOrEmpty(displayName))
-                Equipment.Add(displayName);
+            if (!string.IsNullOrEmpty(itemId))
+                Equipment.Add(itemId);
         }
 
         public static IReadOnlyDictionary<string, int> MaterialSnapshot => Materials;
@@ -67,7 +68,8 @@ namespace VoxelDungeon.Core
             if (Equipment.Count == 0)
                 return Localization.IsJapanese ? "なし" : "None";
 
-            return string.Join("\n", Equipment.Take(maxLines));
+            return string.Join("\n", Equipment.Take(maxLines).Select(id =>
+                Localization.EquipmentName(id, EquipmentCatalog.Get(id).Name)));
         }
     }
 }
