@@ -15,6 +15,8 @@ namespace VoxelDungeon.Core
 
         private void Awake()
         {
+            MissionRunStats.Reset();
+
             if (!string.IsNullOrEmpty(stageId))
                 GameFlowState.SelectedStageId = stageId;
 
