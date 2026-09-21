@@ -589,8 +589,9 @@ namespace VoxelDungeon.EditorTools
             rect.offsetMax = Vector2.zero;
 
             Text label = labelGo.AddComponent<Text>();
-            label.font = Resources.GetBuiltinResource<Font>("LegacyRuntime.ttf");
+            label.font = UiFontProvider.Get();
             label.text = labelText;
+            labelGo.AddComponent<LocalizedActionLabel>().Configure(labelText);
             label.fontSize = fontSize;
             label.fontStyle = FontStyle.Bold;
             label.alignment = TextAnchor.MiddleCenter;
