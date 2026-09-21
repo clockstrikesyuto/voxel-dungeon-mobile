@@ -77,7 +77,9 @@ namespace VoxelDungeon.Core
 
             AddText(
                 panel,
-                $"LV {ProfileProgress.Level}   EXP {ProfileProgress.Experience}/{ProfileProgress.ExperienceToNextLevel}   GOLD {ProfileProgress.Gold}   SKILL {ProfileProgress.SkillPoints}",
+                Localization.IsJapanese
+                    ? $"LV {ProfileProgress.Level}   EXP {ProfileProgress.Experience}/{ProfileProgress.ExperienceToNextLevel}   G {ProfileProgress.Gold}   SP {ProfileProgress.SkillPoints}"
+                    : $"LV {ProfileProgress.Level}   EXP {ProfileProgress.Experience}/{ProfileProgress.ExperienceToNextLevel}   GOLD {ProfileProgress.Gold}   SKILL {ProfileProgress.SkillPoints}",
                 new Vector2(0.04f, 0.855f),
                 new Vector2(0.72f, 0.91f),
                 20,
@@ -135,12 +137,13 @@ namespace VoxelDungeon.Core
                 TextAnchor.MiddleLeft,
                 rarity);
 
-            string stats =
-                $"PWR {item.Power + roll.PowerBonus}   DEF {item.Defense + roll.DefenseBonus}   HP +{item.Vitality + roll.VitalityBonus}   CRIT +{Mathf.RoundToInt((item.CritChance + roll.CritBonus) * 100f)}%";
+            string stats = Localization.IsJapanese
+                ? $"攻 {item.Power + roll.PowerBonus}   防 {item.Defense + roll.DefenseBonus}   HP +{item.Vitality + roll.VitalityBonus}   会心 +{Mathf.RoundToInt((item.CritChance + roll.CritBonus) * 100f)}%"
+                : $"PWR {item.Power + roll.PowerBonus}   DEF {item.Defense + roll.DefenseBonus}   HP +{item.Vitality + roll.VitalityBonus}   CRIT +{Mathf.RoundToInt((item.CritChance + roll.CritBonus) * 100f)}%";
 
             AddText(
                 row.GetComponent<RectTransform>(),
-                stats + "   •   " + item.Trait,
+                stats + "   •   " + Localization.EquipmentTrait(item.Id, item.Trait),
                 new Vector2(0.18f, 0.06f),
                 new Vector2(0.80f, 0.50f),
                 14,
