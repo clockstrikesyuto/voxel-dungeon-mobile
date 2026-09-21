@@ -1,3 +1,16 @@
+# Changelog
+
+## 0.0.7 - Adventure Expansion Polish
+
+- Fixed actor visual roots so feet align with the ground plane.
+- Fixed equipped boots and armor alignment.
+- Boss-fight falls now respawn the player safely inside the active boss arena.
+- Checkpoints snap to verified ground to prevent recovery loops.
+- Replaced the flashing purple boss barrier with subtle transparent glass and edge feedback.
+- Expanded boss barrier collision so the doorway cannot be bypassed from the sides or above.
+- Removed boss world-space health bars; bosses now use only the safe-area top HUD.
+- Improved visibility of mobile FIRE / ICE / TONIC and other action buttons.
+
 ## 0.0.6 - Equipment & Void Garden Expansion
 
 - Added persistent melee/ranged equipment inventory and loadouts.
