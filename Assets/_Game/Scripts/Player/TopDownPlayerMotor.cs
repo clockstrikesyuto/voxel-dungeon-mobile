@@ -24,11 +24,26 @@ namespace VoxelDungeon.Player
         public Vector2 MoveInput => moveInput;
         public bool IsDodging => Time.time < dodgeEndTime;
 
-        private void Awake() => controller = GetComponent<CharacterController>();
+        private void Awake()
+        {
+            controller = GetComponent<CharacterController>();
+
+            if (GetComponent<FallRecovery>() == null)
+                gameObject.AddComponent<FallRecovery>();
+        }
 
         public void SetMoveInput(Vector2 input)
         {
             moveInput = Vector2.ClampMagnitude(input, 1f);
+        }
+
+        public void ResetMotion()
+        {
+            moveInput = Vector2.zero;
+            planarVelocity = Vector3.zero;
+            verticalVelocity = -2f;
+            dodgeDirection = Vector3.zero;
+            dodgeEndTime = 0f;
         }
 
         public bool TryDodge()
