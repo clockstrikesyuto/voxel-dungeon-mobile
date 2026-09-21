@@ -72,7 +72,7 @@ namespace VoxelDungeon.UI
             nameRect.offsetMax = Vector2.zero;
 
             Text nameText = nameGo.AddComponent<Text>();
-            nameText.font = Resources.GetBuiltinResource<Font>("LegacyRuntime.ttf");
+            nameText.font = UiFontProvider.Get();
             nameText.text = bossName.Replace("Boss_", string.Empty).Replace("_", " ").ToUpperInvariant();
             nameText.fontSize = 28;
             nameText.fontStyle = FontStyle.Bold;
@@ -108,7 +108,7 @@ namespace VoxelDungeon.UI
             hpRect.offsetMin = Vector2.zero;
             hpRect.offsetMax = Vector2.zero;
             hpText = hpGo.AddComponent<Text>();
-            hpText.font = Resources.GetBuiltinResource<Font>("LegacyRuntime.ttf");
+            hpText.font = UiFontProvider.Get();
             hpText.fontSize = 16;
             hpText.fontStyle = FontStyle.Bold;
             hpText.alignment = TextAnchor.MiddleCenter;
