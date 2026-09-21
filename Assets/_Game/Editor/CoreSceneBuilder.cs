@@ -455,6 +455,20 @@ namespace VoxelDungeon.EditorTools
                 combat);
             AddButtonLabel(frost, "ICE", 20);
 
+            GameObject tonic = CreateUiBlock(
+                "TonicButton",
+                safeRect,
+                new Vector2(1f, 0f),
+                new Vector2(1f, 0f),
+                new Vector2(-690f, 390f),
+                new Vector2(98f, 98f),
+                new Color(0.78f, 0.42f, 1f, 0.84f));
+            tonic.AddComponent<MobileActionButton>().Configure(
+                MobileActionButton.ActionKind.Tonic,
+                motor,
+                combat);
+            AddButtonLabel(tonic, "TONIC", 15);
+
             GameObject hpBg = CreateUiBlock(
                 "HealthBar",
                 safeRect,
