@@ -445,12 +445,12 @@ namespace VoxelDungeon.Core
         private void CreateForgeRow(string title, string description, int cost, Color accent, Action action)
         {
             RectTransform root = overlayRoot.GetComponent<RectTransform>();
-            float top = 0.56f - forgeRowIndex * 0.22f;
+            float top = 0.60f - forgeRowIndex * 0.18f;
 
             GameObject row = CreatePanel(
                 root,
                 "ForgeRow",
-                new Vector2(0.14f, top - 0.15f),
+                new Vector2(0.14f, top - 0.12f),
                 new Vector2(0.86f, top),
                 Vector2.zero,
                 Vector2.zero,
@@ -516,8 +516,8 @@ namespace VoxelDungeon.Core
                 return;
 
             profileText.text =
-                $"GOLD {ProfileProgress.Gold}\n" +
-                $"MELEE +{ProfileProgress.MeleePower}   RANGE +{ProfileProgress.RangedPower}";
+                $"LV {ProfileProgress.Level}   GOLD {ProfileProgress.Gold}\n" +
+                $"MELEE +{ProfileProgress.MeleePower}   RANGE +{ProfileProgress.RangedPower}   ARMOR +{ProfileProgress.ArmorPower}";
         }
 
         private GameObject CreatePanel(
