@@ -68,6 +68,10 @@ namespace VoxelDungeon.Items
                 "crystal_saber", "CRYSTAL SABER", EquipmentSlot.Melee,
                 ItemRarity.Rare, 8, 0.92f, "Fast crystal-forged blade", critChance: 0.03f),
 
+            ["crystal_daggers"] = new EquipmentRecord(
+                "crystal_daggers", "CRYSTAL DAGGERS", EquipmentSlot.Melee,
+                ItemRarity.Rare, 6, 0.70f, "Twin blades built for rapid critical strikes", critChance: 0.06f, moveSpeedBonus: 0.02f),
+
             ["warden_cleaver"] = new EquipmentRecord(
                 "warden_cleaver", "WARDEN CLEAVER", EquipmentSlot.Melee,
                 ItemRarity.Epic, 17, 1.12f, "Heavy strike with high power", defense: 2),
@@ -75,6 +79,10 @@ namespace VoxelDungeon.Items
             ["ember_axe"] = new EquipmentRecord(
                 "ember_axe", "EMBER AXE", EquipmentSlot.Melee,
                 ItemRarity.Rare, 13, 1.05f, "Forged in the Ashen foundry"),
+
+            ["forge_spear"] = new EquipmentRecord(
+                "forge_spear", "FORGE SPEAR", EquipmentSlot.Melee,
+                ItemRarity.Epic, 18, 0.98f, "Long-reaching foundry spear", critChance: 0.03f),
 
             ["colossus_maul"] = new EquipmentRecord(
                 "colossus_maul", "COLOSSUS MAUL", EquipmentSlot.Melee,
@@ -107,6 +115,10 @@ namespace VoxelDungeon.Items
             ["starbow"] = new EquipmentRecord(
                 "starbow", "STAR BOW", EquipmentSlot.Ranged,
                 ItemRarity.Epic, 18, 0.82f, "Rapid shots infused with garden light", critChance: 0.05f),
+
+            ["astral_crossbow"] = new EquipmentRecord(
+                "astral_crossbow", "ASTRAL CROSSBOW", EquipmentSlot.Ranged,
+                ItemRarity.Epic, 22, 1.04f, "Heavy astral bolt with high impact", critChance: 0.04f),
 
             ["frontier_cap"] = new EquipmentRecord(
                 "frontier_cap", "FRONTIER CAP", EquipmentSlot.Head,
