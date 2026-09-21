@@ -29,11 +29,19 @@ namespace VoxelDungeon.AI
         private float verticalVelocity;
         private bool attacking;
         private bool dying;
+        private float slowUntil;
+        private float slowMultiplier = 1f;
 
         public void SetTarget(Transform value)
         {
             target = value;
             ResolveTargetReceiver();
+        }
+
+        public void ApplySlow(float duration, float multiplier)
+        {
+            slowUntil = Mathf.Max(slowUntil, Time.time + Mathf.Max(0.1f, duration));
+            slowMultiplier = Mathf.Clamp(multiplier, 0.2f, 1f);
         }
 
         public void BeginEncounter()
@@ -154,12 +162,77 @@ namespace VoxelDungeon.AI
             if (distance > attackRange)
             {
                 verticalVelocity = controller.isGrounded ? -2f : verticalVelocity - 25f * Time.deltaTime;
-                controller.Move((direction * moveSpeed + Vector3.up * verticalVelocity) * Time.deltaTime);
+
+                Vector3 safeDirection = ResolveSafeDirection(direction);
+                float speedMultiplier = Time.time < slowUntil ? slowMultiplier : 1f;
+
+                controller.Move(
+                    (safeDirection * moveSpeed * speedMultiplier +
+                     Vector3.up * verticalVelocity) * Time.deltaTime);
                 return;
             }
 
             if (Time.time >= nextAttackTime)
                 StartCoroutine(AttackSequence());
+        }
+
+        private Vector3 ResolveSafeDirection(Vector3 desired)
+        {
+            if (desired.sqrMagnitude < 0.001f)
+                return Vector3.zero;
+
+            if (DirectionIsSafe(desired))
+                return desired;
+
+            float[] angles = { 38f, -38f, 72f, -72f, 110f, -110f };
+            foreach (float angle in angles)
+            {
+                Vector3 candidate = Quaternion.Euler(0f, angle, 0f) * desired;
+                if (DirectionIsSafe(candidate))
+                    return candidate.normalized;
+            }
+
+            return Vector3.zero;
+        }
+
+        private bool DirectionIsSafe(Vector3 direction)
+        {
+            direction.y = 0f;
+            direction.Normalize();
+
+            Vector3 groundProbe =
+                transform.position + Vector3.up * 1.1f + direction * 0.95f;
+
+            bool hasGround = Physics.Raycast(
+                groundProbe,
+                Vector3.down,
+                3.0f,
+                Physics.AllLayers,
+                QueryTriggerInteraction.Ignore);
+
+            if (!hasGround)
+                return false;
+
+            Vector3 obstacleOrigin = transform.position + Vector3.up * 0.85f;
+            if (Physics.Raycast(
+                    obstacleOrigin,
+                    direction,
+                    out RaycastHit hit,
+                    0.95f,
+                    Physics.AllLayers,
+                    QueryTriggerInteraction.Ignore))
+            {
+                if (hit.transform != transform &&
+                    !hit.transform.IsChildOf(transform) &&
+                    (target == null &&
+                     !hit.transform.IsChildOf(target) ||
+                     target != null &&
+                     hit.transform != target &&
+                     !hit.transform.IsChildOf(target)))
+                    return false;
+            }
+
+            return true;
         }
 
         private IEnumerator AttackSequence()
