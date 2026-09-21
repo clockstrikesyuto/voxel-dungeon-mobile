@@ -188,7 +188,11 @@ namespace VoxelDungeon.Core
                 {
                     GameFlowState.SelectedStageId = "stage.ashen";
                     GameFlowState.SelectedStageName = Localization.StageName("stage.ashen");
-                    ShowLobby();
+
+                    if (GameFlowState.Mode == PlayModeKind.Solo)
+                        SceneManager.LoadScene("Mission_Ashen");
+                    else
+                        ShowLobby();
                 });
 
             bool voidOpen = ProfileProgress.VoidGardenUnlocked;
@@ -206,7 +210,11 @@ namespace VoxelDungeon.Core
                 {
                     GameFlowState.SelectedStageId = "stage.void";
                     GameFlowState.SelectedStageName = Localization.StageName("stage.void");
-                    ShowLobby();
+
+                    if (GameFlowState.Mode == PlayModeKind.Solo)
+                        SceneManager.LoadScene("Mission_Void");
+                    else
+                        ShowLobby();
                 });
 
             CreateBackButton(GameFlowState.Mode == PlayModeKind.Solo ? ShowTitle : ShowMultiplayer);
