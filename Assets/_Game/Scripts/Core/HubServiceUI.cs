@@ -10,6 +10,11 @@ namespace VoxelDungeon.Core
     {
         public static bool IsOpen { get; private set; }
 
+        public static void SetExternalOpen(bool value)
+        {
+            IsOpen = value;
+        }
+
         private Canvas canvas;
         private RectTransform panel;
         private Font font;
@@ -20,7 +25,7 @@ namespace VoxelDungeon.Core
 
         public static void ShowEquipment()
         {
-            Create().BuildEquipment();
+            AdventureInventoryUI.Show();
         }
 
         public static void ShowMerchant()
