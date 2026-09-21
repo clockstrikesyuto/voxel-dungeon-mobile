@@ -97,31 +97,37 @@ namespace VoxelDungeon.Core
             promptTitle.text = nearest.DisplayName;
             promptSubtitle.text = unlocked ? nearest.Subtitle : GetLockedText(nearest.StageId);
             interactButton.interactable = unlocked;
-            interactButton.GetComponentInChildren<Text>().text = unlocked ? GetActionLabel(nearest.Kind) : "LOCKED";
+            interactButton.GetComponentInChildren<Text>().text = unlocked
+                ? GetActionLabel(nearest.Kind)
+                : Localization.T("locked");
         }
 
         private string GetActionLabel(HubPointKind kind)
         {
             return kind switch
             {
-                HubPointKind.StageGate => "ENTER",
-                HubPointKind.WorldMap => "OPEN MAP",
-                HubPointKind.Forge => "USE FORGE",
-                HubPointKind.Merchant => "TALK",
-                HubPointKind.Training => "TRAIN",
-                HubPointKind.Armory => "OPEN ARSENAL",
-                HubPointKind.Quest => "TALK",
-                _ => "OPEN"
+                HubPointKind.StageGate => Localization.T("enter"),
+                HubPointKind.WorldMap => Localization.T("open_map"),
+                HubPointKind.Forge => Localization.T("use_forge"),
+                HubPointKind.Merchant => Localization.T("talk"),
+                HubPointKind.Training => Localization.T("train"),
+                HubPointKind.Armory => Localization.T("open_arsenal"),
+                HubPointKind.Quest => Localization.T("talk"),
+                _ => Localization.IsJapanese ? "開く" : "OPEN"
             };
         }
 
         private string GetLockedText(string stageId)
         {
             if (stageId == "stage.ashen")
-                return "Clear CRYSTAL CRYPT to unlock";
+                return Localization.IsJapanese
+                    ? "クリスタル洞窟をクリアすると解放"
+                    : "Clear CRYSTAL CRYPT to unlock";
             if (stageId == "stage.void")
-                return "Clear ASHEN FORGE to unlock";
-            return "Locked";
+                return Localization.IsJapanese
+                    ? "灼熱の鍛冶場をクリアすると解放"
+                    : "Clear ASHEN FORGE to unlock";
+            return Localization.T("locked");
         }
 
         private void Interact(HubPoint point)
@@ -136,7 +142,7 @@ namespace VoxelDungeon.Core
                     break;
 
                 case HubPointKind.WorldMap:
-                    ShowWorldMap();
+                    WorldMapUI.Show();
                     break;
 
                 case HubPointKind.Forge:
@@ -218,7 +224,7 @@ namespace VoxelDungeon.Core
                 FontStyle.Bold,
                 TextAnchor.UpperCenter,
                 Color.white);
-            title.text = "FRONTIER HAVEN";
+            title.text = Localization.IsJapanese ? "フロンティア・ヘイヴン" : "FRONTIER HAVEN";
 
             promptRoot = CreatePanel(
                 safeRoot,
