@@ -166,10 +166,10 @@ namespace VoxelDungeon.EditorTools
             CreateCube(visual.transform, "Glove_L", new Vector3(-0.52f, 0.58f, 0.02f), new Vector3(0.24f, 0.20f, 0.26f), leather);
             CreateCube(visual.transform, "Glove_R", new Vector3(0.52f, 0.58f, 0.02f), new Vector3(0.24f, 0.20f, 0.26f), leather);
 
-            CreateCube(visual.transform, "Leg_L", new Vector3(-0.22f, 0.30f, 0f), new Vector3(0.28f, 0.62f, 0.32f), dark);
-            CreateCube(visual.transform, "Leg_R", new Vector3(0.22f, 0.30f, 0f), new Vector3(0.28f, 0.62f, 0.32f), dark);
-            CreateCube(visual.transform, "Boot_L", new Vector3(-0.22f, 0.02f, 0.08f), new Vector3(0.31f, 0.20f, 0.46f), leather);
-            CreateCube(visual.transform, "Boot_R", new Vector3(0.22f, 0.02f, 0.08f), new Vector3(0.31f, 0.20f, 0.46f), leather);
+            CreateCube(visual.transform, "Leg_L", new Vector3(-0.22f, 0.38f, 0f), new Vector3(0.28f, 0.62f, 0.32f), dark);
+            CreateCube(visual.transform, "Leg_R", new Vector3(0.22f, 0.38f, 0f), new Vector3(0.28f, 0.62f, 0.32f), dark);
+            CreateCube(visual.transform, "Boot_L", new Vector3(-0.22f, 0.13f, 0.08f), new Vector3(0.31f, 0.20f, 0.46f), leather);
+            CreateCube(visual.transform, "Boot_R", new Vector3(0.22f, 0.13f, 0.08f), new Vector3(0.31f, 0.20f, 0.46f), leather);
 
             CreateCube(visual.transform, "Cape", new Vector3(0f, 0.98f, -0.33f), new Vector3(0.66f, 0.90f, 0.08f), cloth);
 
