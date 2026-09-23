@@ -55,7 +55,7 @@ namespace VoxelDungeon.UI
             panelRect.anchorMin = new Vector2(0.20f, 1f);
             panelRect.anchorMax = new Vector2(0.80f, 1f);
             panelRect.pivot = new Vector2(0.5f, 1f);
-            panelRect.anchoredPosition = new Vector2(0f, -82f);
+            panelRect.anchoredPosition = new Vector2(0f, -62f);
             panelRect.sizeDelta = new Vector2(0f, 100f);
 
             Image panelImage = panel.AddComponent<Image>();
