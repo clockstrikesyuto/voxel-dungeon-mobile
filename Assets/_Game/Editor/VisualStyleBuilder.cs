@@ -132,53 +132,67 @@ namespace VoxelDungeon.EditorTools
         {
             HidePrimitiveRenderer(root);
 
-            Material skin = GetMaterial("Player_Skin", new Color(0.93f, 0.72f, 0.54f), 0f, 0.25f);
-            Material coat = GetMaterial("Player_Coat", new Color(0.10f, 0.34f, 0.42f), 0.04f, 0.42f);
-            Material cloth = GetMaterial("Player_Cloth", new Color(0.16f, 0.46f, 0.52f), 0f, 0.32f);
-            Material trim = GetMaterial("Player_Trim", new Color(0.16f, 0.84f, 0.88f), 0.05f, 0.52f, true);
-            Material dark = GetMaterial("Player_Dark", new Color(0.05f, 0.07f, 0.09f), 0.15f, 0.38f);
-            Material leather = GetMaterial("Player_Leather", new Color(0.28f, 0.14f, 0.07f), 0.02f, 0.30f);
-            Material steel = GetMaterial("Player_Sword", new Color(0.76f, 0.88f, 0.92f), 0.78f, 0.72f);
-            Material gold = GetMaterial("Player_Gold", new Color(0.92f, 0.68f, 0.20f), 0.62f, 0.58f);
-            Material hair = GetMaterial("Player_Hair", new Color(0.10f, 0.075f, 0.06f), 0f, 0.28f);
-            Material eye = GetMaterial("Player_Eye", new Color(0.06f, 0.12f, 0.15f), 0f, 0.32f);
+            Material skin = GetMaterial("Player_Skin", new Color(0.94f, 0.72f, 0.53f), 0f, 0.28f);
+            Material skinShade = GetMaterial("Player_SkinShade", new Color(0.78f, 0.52f, 0.36f), 0f, 0.22f);
+            Material coat = GetMaterial("Player_Coat", new Color(0.075f, 0.29f, 0.36f), 0.05f, 0.40f);
+            Material cloth = GetMaterial("Player_Cloth", new Color(0.12f, 0.43f, 0.50f), 0f, 0.34f);
+            Material trim = GetMaterial("Player_Trim", new Color(0.18f, 0.86f, 0.92f), 0.04f, 0.55f, true);
+            Material dark = GetMaterial("Player_Dark", new Color(0.055f, 0.065f, 0.075f), 0.16f, 0.40f);
+            Material leather = GetMaterial("Player_Leather", new Color(0.24f, 0.12f, 0.065f), 0.02f, 0.30f);
+            Material steel = GetMaterial("Player_Steel", new Color(0.60f, 0.69f, 0.74f), 0.72f, 0.62f);
+            Material gold = GetMaterial("Player_Gold", new Color(0.92f, 0.66f, 0.18f), 0.62f, 0.58f);
+            Material hair = GetMaterial("Player_Hair", new Color(0.075f, 0.055f, 0.045f), 0f, 0.26f);
+            Material eyeWhite = GetMaterial("Player_EyeWhite", new Color(0.91f, 0.93f, 0.91f), 0f, 0.30f);
+            Material eye = GetMaterial("Player_Eye", new Color(0.045f, 0.10f, 0.12f), 0f, 0.32f);
+            Material eyeSpark = GetMaterial("Player_EyeSpark", new Color(0.40f, 0.92f, 1f), 0f, 0.50f, true);
 
             GameObject visual = NewVisualRoot(root, "PlayerVisual");
 
-            CreateCube(visual.transform, "Body", new Vector3(0f, 0.95f, 0f), new Vector3(0.80f, 0.88f, 0.54f), coat);
-            CreateCube(visual.transform, "ChestPanel", new Vector3(0f, 1.06f, 0.292f), new Vector3(0.56f, 0.40f, 0.05f), cloth);
-            CreateCube(visual.transform, "ChestTrim", new Vector3(0f, 1.15f, 0.323f), new Vector3(0.60f, 0.09f, 0.04f), trim);
-            CreateCube(visual.transform, "Belt", new Vector3(0f, 0.63f, 0.01f), new Vector3(0.86f, 0.13f, 0.58f), leather);
-            CreateCube(visual.transform, "Buckle", new Vector3(0f, 0.63f, 0.315f), new Vector3(0.15f, 0.15f, 0.05f), gold);
+            CreateCube(visual.transform, "Body", new Vector3(0f, 0.99f, 0f), new Vector3(0.72f, 0.86f, 0.50f), coat);
+            CreateCube(visual.transform, "ChestPanel", new Vector3(0f, 1.07f, 0.272f), new Vector3(0.48f, 0.34f, 0.055f), cloth);
+            CreateCube(visual.transform, "ChestTrim", new Vector3(0f, 1.19f, 0.306f), new Vector3(0.50f, 0.075f, 0.045f), trim);
+            CreateCube(visual.transform, "Collar_L", new Vector3(-0.19f, 1.34f, 0.19f), new Vector3(0.22f, 0.13f, 0.11f), dark);
+            CreateCube(visual.transform, "Collar_R", new Vector3(0.19f, 1.34f, 0.19f), new Vector3(0.22f, 0.13f, 0.11f), dark);
+            CreateCube(visual.transform, "Belt", new Vector3(0f, 0.67f, 0.01f), new Vector3(0.78f, 0.12f, 0.54f), leather);
+            CreateCube(visual.transform, "Buckle", new Vector3(0f, 0.67f, 0.295f), new Vector3(0.13f, 0.13f, 0.055f), gold);
 
-            CreateCube(visual.transform, "Head", new Vector3(0f, 1.64f, 0f), new Vector3(0.60f, 0.60f, 0.60f), skin);
-            CreateCube(visual.transform, "HairTop", new Vector3(0f, 1.96f, -0.02f), new Vector3(0.64f, 0.17f, 0.64f), hair);
-            CreateCube(visual.transform, "HairFront_L", new Vector3(-0.17f, 1.83f, 0.315f), new Vector3(0.18f, 0.20f, 0.05f), hair);
-            CreateCube(visual.transform, "HairFront_R", new Vector3(0.10f, 1.86f, 0.315f), new Vector3(0.16f, 0.16f, 0.05f), hair);
-            CreateCube(visual.transform, "Eye_L", new Vector3(-0.15f, 1.66f, 0.315f), new Vector3(0.07f, 0.07f, 0.04f), eye);
-            CreateCube(visual.transform, "Eye_R", new Vector3(0.15f, 1.66f, 0.315f), new Vector3(0.07f, 0.07f, 0.04f), eye);
-            CreateCube(visual.transform, "Mouth", new Vector3(0f, 1.51f, 0.315f), new Vector3(0.12f, 0.035f, 0.035f), leather);
+            CreateCube(visual.transform, "Head", new Vector3(0f, 1.67f, 0f), new Vector3(0.56f, 0.54f, 0.54f), skin);
+            CreateCube(visual.transform, "Ear_L", new Vector3(-0.295f, 1.67f, 0f), new Vector3(0.055f, 0.15f, 0.14f), skinShade);
+            CreateCube(visual.transform, "Ear_R", new Vector3(0.295f, 1.67f, 0f), new Vector3(0.055f, 0.15f, 0.14f), skinShade);
+            CreateCube(visual.transform, "HairTop", new Vector3(0f, 1.965f, -0.025f), new Vector3(0.59f, 0.13f, 0.58f), hair);
+            CreateCube(visual.transform, "HairSide_L", new Vector3(-0.255f, 1.80f, -0.06f), new Vector3(0.08f, 0.28f, 0.44f), hair);
+            CreateCube(visual.transform, "HairSide_R", new Vector3(0.255f, 1.80f, -0.06f), new Vector3(0.08f, 0.28f, 0.44f), hair);
+            CreateCube(visual.transform, "HairFront_L", new Vector3(-0.15f, 1.86f, 0.286f), new Vector3(0.16f, 0.13f, 0.045f), hair);
+            CreateCube(visual.transform, "HairFront_R", new Vector3(0.12f, 1.88f, 0.286f), new Vector3(0.14f, 0.10f, 0.045f), hair);
 
-            CreateCube(visual.transform, "Shoulder_L", new Vector3(-0.52f, 1.23f, 0f), new Vector3(0.30f, 0.24f, 0.38f), steel);
-            CreateCube(visual.transform, "Shoulder_R", new Vector3(0.52f, 1.23f, 0f), new Vector3(0.30f, 0.24f, 0.38f), steel);
-            CreateCube(visual.transform, "Arm_L", new Vector3(-0.52f, 0.93f, 0f), new Vector3(0.22f, 0.64f, 0.24f), coat);
-            CreateCube(visual.transform, "Arm_R", new Vector3(0.52f, 0.93f, 0f), new Vector3(0.22f, 0.64f, 0.24f), coat);
-            CreateCube(visual.transform, "Glove_L", new Vector3(-0.52f, 0.58f, 0.02f), new Vector3(0.24f, 0.20f, 0.26f), leather);
-            CreateCube(visual.transform, "Glove_R", new Vector3(0.52f, 0.58f, 0.02f), new Vector3(0.24f, 0.20f, 0.26f), leather);
+            CreateCube(visual.transform, "EyeWhite_L", new Vector3(-0.13f, 1.69f, 0.286f), new Vector3(0.105f, 0.075f, 0.042f), eyeWhite);
+            CreateCube(visual.transform, "EyeWhite_R", new Vector3(0.13f, 1.69f, 0.286f), new Vector3(0.105f, 0.075f, 0.042f), eyeWhite);
+            CreateCube(visual.transform, "Eye_L", new Vector3(-0.125f, 1.685f, 0.312f), new Vector3(0.048f, 0.058f, 0.028f), eye);
+            CreateCube(visual.transform, "Eye_R", new Vector3(0.125f, 1.685f, 0.312f), new Vector3(0.048f, 0.058f, 0.028f), eye);
+            CreateCube(visual.transform, "EyeSpark_L", new Vector3(-0.112f, 1.705f, 0.331f), new Vector3(0.017f, 0.017f, 0.015f), eyeSpark);
+            CreateCube(visual.transform, "EyeSpark_R", new Vector3(0.138f, 1.705f, 0.331f), new Vector3(0.017f, 0.017f, 0.015f), eyeSpark);
+            CreateCube(visual.transform, "Nose", new Vector3(0f, 1.60f, 0.298f), new Vector3(0.055f, 0.055f, 0.045f), skinShade);
+            CreateCube(visual.transform, "Mouth", new Vector3(0f, 1.535f, 0.296f), new Vector3(0.085f, 0.022f, 0.028f), leather);
 
-            CreateCube(visual.transform, "Leg_L", new Vector3(-0.22f, 0.38f, 0f), new Vector3(0.28f, 0.62f, 0.32f), dark);
-            CreateCube(visual.transform, "Leg_R", new Vector3(0.22f, 0.38f, 0f), new Vector3(0.28f, 0.62f, 0.32f), dark);
-            CreateCube(visual.transform, "Boot_L", new Vector3(-0.22f, 0.13f, 0.08f), new Vector3(0.31f, 0.20f, 0.46f), leather);
-            CreateCube(visual.transform, "Boot_R", new Vector3(0.22f, 0.13f, 0.08f), new Vector3(0.31f, 0.20f, 0.46f), leather);
+            CreateCube(visual.transform, "Shoulder_L", new Vector3(-0.46f, 1.24f, 0f), new Vector3(0.25f, 0.20f, 0.34f), steel);
+            CreateCube(visual.transform, "Shoulder_R", new Vector3(0.46f, 1.24f, 0f), new Vector3(0.25f, 0.20f, 0.34f), steel);
+            CreateCube(visual.transform, "Arm_L", new Vector3(-0.47f, 0.94f, 0f), new Vector3(0.20f, 0.62f, 0.22f), coat);
+            CreateCube(visual.transform, "Arm_R", new Vector3(0.47f, 0.94f, 0f), new Vector3(0.20f, 0.62f, 0.22f), coat);
+            CreateCube(visual.transform, "Glove_L", new Vector3(-0.47f, 0.59f, 0.02f), new Vector3(0.22f, 0.18f, 0.24f), leather);
+            CreateCube(visual.transform, "Glove_R", new Vector3(0.47f, 0.59f, 0.02f), new Vector3(0.22f, 0.18f, 0.24f), leather);
 
-            CreateCube(visual.transform, "Cape", new Vector3(0f, 0.98f, -0.33f), new Vector3(0.66f, 0.90f, 0.08f), cloth);
+            CreateCube(visual.transform, "Leg_L", new Vector3(-0.19f, 0.39f, 0f), new Vector3(0.25f, 0.66f, 0.29f), dark);
+            CreateCube(visual.transform, "Leg_R", new Vector3(0.19f, 0.39f, 0f), new Vector3(0.25f, 0.66f, 0.29f), dark);
+            CreateCube(visual.transform, "Boot_L", new Vector3(-0.19f, 0.13f, 0.09f), new Vector3(0.29f, 0.20f, 0.43f), leather);
+            CreateCube(visual.transform, "Boot_R", new Vector3(0.19f, 0.13f, 0.09f), new Vector3(0.29f, 0.20f, 0.43f), leather);
+            CreateCube(visual.transform, "Cape", new Vector3(0f, 1.00f, -0.29f), new Vector3(0.58f, 0.84f, 0.065f), cloth);
 
-            GameObject sword = CreateCube(visual.transform, "SwordBlade", new Vector3(0.72f, 1.06f, 0.30f), new Vector3(0.13f, 0.88f, 0.10f), steel);
-            sword.transform.localRotation = Quaternion.Euler(-18f, 0f, -18f);
-            CreateCube(visual.transform, "SwordGuard", new Vector3(0.58f, 0.69f, 0.24f), new Vector3(0.38f, 0.10f, 0.12f), gold);
-            CreateCube(visual.transform, "SwordGrip", new Vector3(0.52f, 0.55f, 0.20f), new Vector3(0.15f, 0.24f, 0.16f), leather);
+            GameObject sword = CreateCube(visual.transform, "SwordBlade", new Vector3(0.62f, 1.02f, 0.18f), new Vector3(0.14f, 0.88f, 0.16f), steel);
+            sword.transform.localRotation = Quaternion.Euler(0f, 0f, -10f);
+            CreateCube(visual.transform, "SwordGuard", new Vector3(0.53f, 0.65f, 0.15f), new Vector3(0.32f, 0.10f, 0.14f), gold);
+            CreateCube(visual.transform, "SwordGrip", new Vector3(0.48f, 0.53f, 0.12f), new Vector3(0.13f, 0.24f, 0.15f), leather);
 
-            root.AddComponent<SimpleVisualBob>().Configure(visual.transform, 0.040f, 6f);
+            root.AddComponent<SimpleVisualBob>().Configure(visual.transform, 0.028f, 5.2f);
         }
 
         public static void ApplyEnemyVisual(GameObject root, string archetype)
