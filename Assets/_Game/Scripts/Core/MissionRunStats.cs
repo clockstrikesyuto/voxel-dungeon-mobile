@@ -1,4 +1,5 @@
 using VoxelDungeon.Items;
+using UnityEngine;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -61,6 +62,23 @@ namespace VoxelDungeon.Core
 
             return string.Join("\n", Materials.Take(maxLines).Select(pair =>
                 $"{Localization.MaterialName(pair.Key)} ×{pair.Value}"));
+        }
+
+        public static string BuildAdventureLootSummary(int maxLines = 5)
+        {
+            List<string> lines = new List<string>();
+
+            foreach (var pair in Materials.Take(maxLines))
+                lines.Add($"{Localization.MaterialName(pair.Key)} ×{pair.Value}");
+
+            int remaining = Mathf.Max(0, maxLines - lines.Count);
+            foreach (var pair in Consumables.Take(remaining))
+                lines.Add($"{Localization.ConsumableName(pair.Key)} ×{pair.Value}");
+
+            if (lines.Count == 0)
+                return Localization.IsJapanese ? "なし" : "None";
+
+            return string.Join("\n", lines);
         }
 
         public static string BuildEquipmentSummary(int maxLines = 3)
