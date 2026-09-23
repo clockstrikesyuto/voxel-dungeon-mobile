@@ -112,8 +112,8 @@ namespace VoxelDungeon.UI
 
             CreateRewardBox(
                 card.transform,
-                Localization.T("materials"),
-                MissionRunStats.BuildMaterialSummary(),
+                Localization.IsJapanese ? "素材・アイテム" : "MATERIALS & ITEMS",
+                MissionRunStats.BuildAdventureLootSummary(),
                 new Vector2(0.54f, 0.35f),
                 new Vector2(0.92f, 0.57f),
                 new Color(0.18f, 0.76f, 0.70f),
