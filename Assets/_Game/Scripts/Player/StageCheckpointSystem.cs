@@ -34,20 +34,48 @@ namespace VoxelDungeon.Player
 
         private Vector3 ResolveSafeGround(Vector3 requested)
         {
-            Vector3 origin = requested + Vector3.up * 4f;
-
-            if (Physics.Raycast(
-                    origin,
-                    Vector3.down,
-                    out RaycastHit hit,
-                    10f,
-                    Physics.AllLayers,
-                    QueryTriggerInteraction.Ignore))
+            Vector3[] offsets =
             {
-                return hit.point + Vector3.up * 0.10f;
+                Vector3.zero,
+                new Vector3(1.15f, 0f, 0f),
+                new Vector3(-1.15f, 0f, 0f),
+                new Vector3(0f, 0f, 1.15f),
+                new Vector3(0f, 0f, -1.15f),
+                new Vector3(0.85f, 0f, 0.85f),
+                new Vector3(-0.85f, 0f, 0.85f),
+                new Vector3(0.85f, 0f, -0.85f),
+                new Vector3(-0.85f, 0f, -0.85f)
+            };
+
+            Vector3 best = requested + Vector3.up * 0.18f;
+            float bestDistance = float.MaxValue;
+
+            foreach (Vector3 offset in offsets)
+            {
+                Vector3 sample = requested + offset;
+                Vector3 origin = sample + Vector3.up * 4f;
+
+                if (!Physics.Raycast(
+                        origin,
+                        Vector3.down,
+                        out RaycastHit hit,
+                        10f,
+                        Physics.AllLayers,
+                        QueryTriggerInteraction.Ignore))
+                    continue;
+
+                if (hit.normal.y < 0.68f)
+                    continue;
+
+                float distance = offset.sqrMagnitude;
+                if (distance < bestDistance)
+                {
+                    bestDistance = distance;
+                    best = hit.point + Vector3.up * 0.12f;
+                }
             }
 
-            return requested + Vector3.up * 0.18f;
+            return best;
         }
 
         public bool BeginRecovery()
