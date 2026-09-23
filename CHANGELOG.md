@@ -1,5 +1,24 @@
 # Changelog
 
+## 0.0.9 - Adventure Overhaul
+
+- Redesigned the player character with friendlier facial proportions, layered clothing and cleaner armor silhouettes.
+- Reduced oversized headgear and removed chest/headgear overlap flicker.
+- Rebuilt melee weapons around a hand pivot so blades stand upright instead of looking flat.
+- Refined melee, dagger and ranged animation poses.
+- Synchronized melee damage and ranged projectile release with the visible attack animation.
+- Added enemy crowd separation for clearer close-range combat.
+- Made boss encounters engage faster and improved opening telegraphs.
+- Added visible boss phase color changes and cleared telegraphs immediately on defeat.
+- Lifted the boss HP HUD and retained dynamic enemy health-bar placement.
+- Replaced large colored boss-floor squares with subtle glowing inlay lines.
+- Made visible outdoor and stage floor surfaces consistently walkable.
+- Changed fall recovery to allow a readable fall into the abyss without endless falling.
+- Improved checkpoint recovery by sampling nearby verified floor positions.
+- Added consumables to mission-clear reward summaries.
+- Preserved the bright-stage, open-cave, world-map and Japanese/English systems from the visual overhaul.
+
+
 ## 0.0.8 - Character Motion & Combat Polish
 
 - Added alternating leg and arm movement while walking.
