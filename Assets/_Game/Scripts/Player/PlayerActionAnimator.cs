@@ -168,21 +168,25 @@ namespace VoxelDungeon.Player
             float recover = rangedDuration * 0.36f;
 
             Vector3 readyPosition = rangedBasePosition + new Vector3(0.52f, 0.02f, 0.74f);
-            Quaternion readyRotation = weaponId == "void_staff"
-                ? Quaternion.Euler(-18f, 0f, -22f)
-                : Quaternion.Euler(0f, -12f, -82f);
+            Quaternion readyRotation = rangedBaseRotation * (
+                weaponId == "void_staff"
+                    ? Quaternion.Euler(-18f, 0f, -22f)
+                    : Quaternion.Euler(0f, -12f, -82f));
+
+            Quaternion rightReady = rightArmBaseRotation * Quaternion.Euler(-58f, 0f, -12f);
+            Quaternion leftReady = leftArmBaseRotation * Quaternion.Euler(-42f, 0f, 14f);
 
             yield return AnimateRanged(
                 raise,
-                Quaternion.Euler(-58f, 0f, -12f),
-                Quaternion.Euler(-42f, 0f, 14f),
+                rightReady,
+                leftReady,
                 readyRotation,
                 readyPosition);
 
             yield return AnimateRanged(
                 release,
-                Quaternion.Euler(-72f, 0f, -6f),
-                Quaternion.Euler(-34f, 0f, 8f),
+                rightArmBaseRotation * Quaternion.Euler(-72f, 0f, -6f),
+                leftArmBaseRotation * Quaternion.Euler(-34f, 0f, 8f),
                 readyRotation,
                 readyPosition + new Vector3(0f, 0f, 0.08f));
 
