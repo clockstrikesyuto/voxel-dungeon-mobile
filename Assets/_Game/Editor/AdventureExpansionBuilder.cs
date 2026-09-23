@@ -172,7 +172,7 @@ namespace VoxelDungeon.EditorTools
         {
             GameObject root = new GameObject("OutdoorPassage");
 
-            CreateBlock(root.transform, "OutdoorFloorAccent", new Vector3(0f, 0.035f, 7f), new Vector3(18f, 0.07f, 20f), ground, false);
+            CreateBlock(root.transform, "OutdoorFloorAccent", new Vector3(0f, 0.035f, 7f), new Vector3(18f, 0.07f, 20f), ground, true);
 
             for (int i = 0; i < 8; i++)
             {
