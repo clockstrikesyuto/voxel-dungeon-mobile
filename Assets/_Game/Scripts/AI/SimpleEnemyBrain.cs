@@ -50,8 +50,8 @@ namespace VoxelDungeon.AI
             attacking = false;
             dying = false;
             verticalVelocity = 0f;
-            nextAttackTime = Time.time + 0.20f;
-            aggroRange = Mathf.Max(aggroRange, 40f);
+            nextAttackTime = Time.time + 0.05f;
+            aggroRange = Mathf.Max(aggroRange, 60f);
 
             EnsureTarget();
             enabled = true;
