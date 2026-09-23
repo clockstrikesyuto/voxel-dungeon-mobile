@@ -77,8 +77,18 @@ namespace VoxelDungeon.Player
 
             EquipmentRecord meleeItem = ProfileProgress.EquippedMelee;
             nextMeleeTime = Time.time + meleeCooldown * Mathf.Max(0.35f, meleeItem.CooldownMultiplier);
-            PlayAttackPulse();
+
             actionAnimator?.PlayMelee(meleeItem.Id);
+            StartCoroutine(ResolveMeleeAfterWindup(meleeItem));
+            return true;
+        }
+
+        private IEnumerator ResolveMeleeAfterWindup(EquipmentRecord meleeItem)
+        {
+            // Match the damage frame to the visible weapon strike.
+            yield return new WaitForSeconds(0.09f);
+
+            PlayAttackPulse();
             MeleeArcVisual.Spawn(transform);
 
             float attackRadius = meleeRadius;
@@ -93,18 +103,22 @@ namespace VoxelDungeon.Player
                     forwardOffset = 0.90f;
                     weaponCritBonus = 0.12f;
                     break;
+
                 case "forge_spear":
                     attackRadius = 1.0f;
                     forwardOffset = 1.65f;
                     break;
+
                 case "colossus_maul":
                     attackRadius = 1.55f;
                     forwardOffset = 1.18f;
                     weaponDamageMultiplier = 1.12f;
                     break;
+
                 case "ember_axe":
                     weaponDamageMultiplier = 1.08f;
                     break;
+
                 case "void_edge":
                     weaponCritBonus = 0.05f;
                     weaponDamageMultiplier = 1.10f;
@@ -153,14 +167,12 @@ namespace VoxelDungeon.Player
                     gameObject,
                     finalDamage,
                     hit.ClosestPoint(center),
-                    direction.normalized,
+                    direction.sqrMagnitude > 0.001f ? direction.normalized : transform.forward,
                     critical));
 
                 if (meleeItem.Id == "warden_cleaver" && health != null)
                     health.Heal(2);
             }
-
-            return true;
         }
 
         public bool TryRanged()
