@@ -165,7 +165,10 @@ namespace VoxelDungeon.EditorTools
                 CreatePillar(root.transform, new Vector3(i * 4.5f, 2.4f, depth * 0.38f), wall, gold);
             }
 
-            CreateBlockChild(root.transform, "BossSigil", new Vector3(0f, 0.08f, 2f), new Vector3(7f, 0.10f, 7f), glow, false);
+            CreateBlockChild(root.transform, "BossSigil_N", new Vector3(0f, 0.10f, 5.1f), new Vector3(6.2f, 0.045f, 0.18f), glow, false);
+            CreateBlockChild(root.transform, "BossSigil_S", new Vector3(0f, 0.10f, -1.1f), new Vector3(6.2f, 0.045f, 0.18f), glow, false);
+            CreateBlockChild(root.transform, "BossSigil_W", new Vector3(-3.1f, 0.10f, 2f), new Vector3(0.18f, 0.045f, 6.2f), glow, false);
+            CreateBlockChild(root.transform, "BossSigil_E", new Vector3(3.1f, 0.10f, 2f), new Vector3(0.18f, 0.045f, 6.2f), glow, false);
             CreateCrystalCluster(root.transform, new Vector3(-9f, 0.8f, 4f), glow, 1.6f);
             CreateCrystalCluster(root.transform, new Vector3(9f, 0.8f, 4f), glow, 1.6f);
             CreateRoomLight(root.transform, new Vector3(0f, 4f, 1f), glow.color, 3.6f, 14f);
