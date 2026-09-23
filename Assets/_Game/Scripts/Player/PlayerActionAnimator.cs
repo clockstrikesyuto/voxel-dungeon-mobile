@@ -13,13 +13,16 @@ namespace VoxelDungeon.Player
         private Transform rightArm;
         private Transform leftArm;
         private Transform meleeRig;
+        private Transform offhandMeleeRig;
         private Transform rangedRig;
 
         private Quaternion rightArmBaseRotation;
         private Quaternion leftArmBaseRotation;
         private Quaternion meleeBaseRotation;
+        private Quaternion offhandBaseRotation;
         private Quaternion rangedBaseRotation;
         private Vector3 meleeBasePosition;
+        private Vector3 offhandBasePosition;
         private Vector3 rangedBasePosition;
         private Quaternion visualBaseRotation;
 
@@ -83,12 +86,19 @@ namespace VoxelDungeon.Player
             if (loadout != null)
             {
                 meleeRig = loadout.Find("MeleeRig");
+                offhandMeleeRig = loadout.Find("OffhandMeleeRig");
                 rangedRig = loadout.Find("RangedRig");
 
                 if (meleeRig != null && !UpperBodyBusy)
                 {
                     meleeBasePosition = meleeRig.localPosition;
                     meleeBaseRotation = meleeRig.localRotation;
+                }
+
+                if (offhandMeleeRig != null && !UpperBodyBusy)
+                {
+                    offhandBasePosition = offhandMeleeRig.localPosition;
+                    offhandBaseRotation = offhandMeleeRig.localRotation;
                 }
 
                 if (rangedRig != null && !UpperBodyBusy)
@@ -104,30 +114,39 @@ namespace VoxelDungeon.Player
             UpperBodyBusy = true;
             ResolveParts();
 
-            float windupAngle = weaponId == "colossus_maul" ? -72f :
-                                weaponId == "forge_spear" ? -32f : -48f;
+            float windupAngle = weaponId == "colossus_maul" ? -76f :
+                                weaponId == "forge_spear" ? -30f :
+                                weaponId == "crystal_daggers" ? -42f : -52f;
 
-            float strikeAngle = weaponId == "crystal_daggers" ? 76f :
-                                weaponId == "forge_spear" ? 26f :
-                                weaponId == "colossus_maul" ? 98f : 88f;
+            float strikeAngle = weaponId == "crystal_daggers" ? 72f :
+                                weaponId == "forge_spear" ? 24f :
+                                weaponId == "colossus_maul" ? 102f : 88f;
 
             float windup = meleeDuration * 0.30f;
             float strike = meleeDuration * 0.34f;
             float recover = meleeDuration * 0.36f;
 
+            Quaternion rightWindup = rightArmBaseRotation * Quaternion.Euler(windupAngle, 0f, -14f);
+            Quaternion leftWindup = leftArmBaseRotation * Quaternion.Euler(12f, 0f, 8f);
+            Quaternion rigWindup = meleeBaseRotation * Quaternion.Euler(windupAngle * 0.72f, -8f, -24f);
+
             yield return AnimateUpperBody(
                 windup,
-                Quaternion.Euler(windupAngle, 0f, -18f),
-                Quaternion.Euler(16f, 0f, 10f),
-                Quaternion.Euler(-18f, -8f, -30f),
-                meleeBasePosition + new Vector3(0f, 0.03f, -0.04f));
+                rightWindup,
+                leftWindup,
+                rigWindup,
+                meleeBasePosition + new Vector3(0f, 0.04f, -0.04f));
+
+            Quaternion rightStrike = rightArmBaseRotation * Quaternion.Euler(strikeAngle, 0f, 18f);
+            Quaternion leftStrike = leftArmBaseRotation * Quaternion.Euler(-14f, 0f, -6f);
+            Quaternion rigStrike = meleeBaseRotation * Quaternion.Euler(strikeAngle * 0.88f, 12f, 32f);
 
             yield return AnimateUpperBody(
                 strike,
-                Quaternion.Euler(strikeAngle, 0f, 24f),
-                Quaternion.Euler(-18f, 0f, -8f),
-                Quaternion.Euler(strikeAngle * 0.78f, 12f, 35f),
-                meleeBasePosition + new Vector3(0.02f, -0.04f, 0.18f));
+                rightStrike,
+                leftStrike,
+                rigStrike,
+                meleeBasePosition + new Vector3(0.04f, -0.03f, 0.22f));
 
             yield return AnimateUpperBody(
                 recover,
@@ -223,6 +242,8 @@ namespace VoxelDungeon.Player
             Quaternion leftStart = leftArm != null ? leftArm.localRotation : Quaternion.identity;
             Quaternion rigStart = meleeRig != null ? meleeRig.localRotation : Quaternion.identity;
             Vector3 rigPositionStart = meleeRig != null ? meleeRig.localPosition : Vector3.zero;
+            Quaternion offhandStart = offhandMeleeRig != null ? offhandMeleeRig.localRotation : Quaternion.identity;
+            Vector3 offhandPositionStart = offhandMeleeRig != null ? offhandMeleeRig.localPosition : Vector3.zero;
 
             float age = 0f;
             while (age < duration)
@@ -237,6 +258,21 @@ namespace VoxelDungeon.Player
                 {
                     meleeRig.localRotation = Quaternion.Slerp(rigStart, meleeTarget, t);
                     meleeRig.localPosition = Vector3.Lerp(rigPositionStart, meleePositionTarget, t);
+                }
+
+                if (offhandMeleeRig != null)
+                {
+                    Quaternion offhandTarget = offhandBaseRotation * Quaternion.Inverse(meleeBaseRotation) * meleeTarget;
+                    offhandTarget = Quaternion.Euler(
+                        offhandTarget.eulerAngles.x,
+                        -offhandTarget.eulerAngles.y,
+                        -offhandTarget.eulerAngles.z);
+
+                    Vector3 delta = meleePositionTarget - meleeBasePosition;
+                    Vector3 offhandTargetPosition = offhandBasePosition + new Vector3(-delta.x, delta.y, delta.z);
+
+                    offhandMeleeRig.localRotation = Quaternion.Slerp(offhandStart, offhandTarget, t);
+                    offhandMeleeRig.localPosition = Vector3.Lerp(offhandPositionStart, offhandTargetPosition, t);
                 }
 
                 yield return null;
@@ -283,6 +319,12 @@ namespace VoxelDungeon.Player
             {
                 meleeRig.localRotation = meleeBaseRotation;
                 meleeRig.localPosition = meleeBasePosition;
+            }
+
+            if (offhandMeleeRig != null)
+            {
+                offhandMeleeRig.localRotation = offhandBaseRotation;
+                offhandMeleeRig.localPosition = offhandBasePosition;
             }
 
             if (rangedRig != null)
