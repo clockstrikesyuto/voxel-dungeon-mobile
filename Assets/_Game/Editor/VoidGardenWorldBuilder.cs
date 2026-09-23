@@ -123,8 +123,15 @@ namespace VoxelDungeon.EditorTools
             CreateBlock(root.transform, "Wall_R", new Vector3(width * 0.5f, 2.2f, 0f), new Vector3(1f, 4.4f, depth), wall);
             CreateBlock(root.transform, "Wall_N", new Vector3(0f, 2.2f, depth * 0.5f), new Vector3(width, 4.4f, 1f), wall);
 
-            CreateBlock(root.transform, "GardenSigil", new Vector3(0f, 0.11f, 2f), new Vector3(8f, 0.09f, 8f), violet, false);
-            CreateBlock(root.transform, "MossRing", new Vector3(0f, 0.16f, 2f), new Vector3(5.8f, 0.05f, 5.8f), moss, false);
+            // Thin inlaid lines read like a magical arena rather than
+            // a debug-colored square while the real floor stays fully walkable.
+            CreateBlock(root.transform, "Sigil_N", new Vector3(0f, 0.105f, 5.5f), new Vector3(7f, 0.045f, 0.18f), violet, false);
+            CreateBlock(root.transform, "Sigil_S", new Vector3(0f, 0.105f, -1.5f), new Vector3(7f, 0.045f, 0.18f), violet, false);
+            CreateBlock(root.transform, "Sigil_W", new Vector3(-3.5f, 0.105f, 2f), new Vector3(0.18f, 0.045f, 7f), violet, false);
+            CreateBlock(root.transform, "Sigil_E", new Vector3(3.5f, 0.105f, 2f), new Vector3(0.18f, 0.045f, 7f), violet, false);
+
+            CreateBlock(root.transform, "GardenCross_A", new Vector3(0f, 0.115f, 2f), new Vector3(5.0f, 0.035f, 0.16f), moss, false);
+            CreateBlock(root.transform, "GardenCross_B", new Vector3(0f, 0.115f, 2f), new Vector3(0.16f, 0.035f, 5.0f), moss, false);
 
             CreateCrystalFlower(root.transform, new Vector3(-9f, 0.9f, 3f), green, 1.6f);
             CreateCrystalFlower(root.transform, new Vector3(9f, 0.9f, 3f), violet, 1.6f);
