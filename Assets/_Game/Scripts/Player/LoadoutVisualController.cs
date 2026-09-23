@@ -90,9 +90,26 @@ namespace VoxelDungeon.Player
 
             ResolveVisualRoot();
 
+            bool fullHeadCover = headId == "crystal_hood" || headId == "forge_helm";
+
             Transform hairTop = transform.Find("PlayerVisual/HairTop");
             if (hairTop != null)
-                hairTop.gameObject.SetActive(string.IsNullOrEmpty(headId));
+                hairTop.gameObject.SetActive(string.IsNullOrEmpty(headId) || headId == "astral_crown");
+
+            string[] hairDetails =
+            {
+                "PlayerVisual/HairSide_L",
+                "PlayerVisual/HairSide_R",
+                "PlayerVisual/HairFront_L",
+                "PlayerVisual/HairFront_R"
+            };
+
+            foreach (string hairPath in hairDetails)
+            {
+                Transform hairPart = transform.Find(hairPath);
+                if (hairPart != null)
+                    hairPart.gameObject.SetActive(!fullHeadCover);
+            }
 
             Transform bakedBootL = transform.Find("PlayerVisual/Boot_L");
             Transform bakedBootR = transform.Find("PlayerVisual/Boot_R");
@@ -114,42 +131,111 @@ namespace VoxelDungeon.Player
             Color bodyColor = GetEquipmentVisualColor(bodyId);
             Color bootsColor = GetEquipmentVisualColor(bootsId);
             Color accessoryColor = EquipmentCatalog.GetRarityColor(EquipmentCatalog.Get(accessoryId).Rarity);
+            Color accent = Color.Lerp(bodyColor, Color.white, 0.34f);
 
-            CreateCube(
-                "ArmorHead",
-                new Vector3(0f, 1.98f, -0.02f),
-                headId == "frontier_cap"
-                    ? new Vector3(0.68f, 0.16f, 0.68f)
-                    : new Vector3(0.72f, 0.24f, 0.72f),
-                headColor);
+            if (!string.IsNullOrEmpty(headId))
+            {
+                if (headId == "frontier_cap")
+                {
+                    CreateCube(
+                        "ArmorHead",
+                        new Vector3(0f, 1.965f, -0.025f),
+                        new Vector3(0.61f, 0.12f, 0.60f),
+                        headColor);
 
-            CreateCube(
-                "ArmorChest",
-                new Vector3(0f, 1.02f, 0.325f),
-                bodyId == "frontier_vest"
-                    ? new Vector3(0.58f, 0.42f, 0.055f)
-                    : new Vector3(0.72f, 0.55f, 0.075f),
-                bodyColor);
+                    CreateCube(
+                        "ArmorBrim",
+                        new Vector3(0f, 1.90f, 0.27f),
+                        new Vector3(0.44f, 0.055f, 0.17f),
+                        Color.Lerp(headColor, Color.black, 0.16f));
+                }
+                else if (headId == "astral_crown")
+                {
+                    CreateCube(
+                        "ArmorHead",
+                        new Vector3(0f, 1.985f, -0.01f),
+                        new Vector3(0.60f, 0.09f, 0.58f),
+                        headColor);
 
-            CreateCube(
-                "ArmorBoot_L",
-                new Vector3(-0.22f, 0.13f, 0.10f),
-                new Vector3(0.33f, 0.22f, 0.48f),
-                bootsColor);
+                    CreateCube(
+                        "CrownGem",
+                        new Vector3(0f, 2.075f, 0.17f),
+                        new Vector3(0.16f, 0.20f, 0.12f),
+                        new Color(0.36f, 0.88f, 1f));
+                }
+                else
+                {
+                    CreateCube(
+                        "ArmorHead",
+                        new Vector3(0f, 1.91f, -0.015f),
+                        new Vector3(0.62f, 0.19f, 0.60f),
+                        headColor);
 
-            CreateCube(
-                "ArmorBoot_R",
-                new Vector3(0.22f, 0.13f, 0.10f),
-                new Vector3(0.33f, 0.22f, 0.48f),
-                bootsColor);
+                    CreateCube(
+                        "HelmetBand",
+                        new Vector3(0f, 1.86f, 0.29f),
+                        new Vector3(0.48f, 0.075f, 0.055f),
+                        accent);
+                }
+            }
 
-            GameObject charm = CreateCube(
-                "AccessoryCharm",
-                new Vector3(-0.25f, 0.86f, 0.39f),
-                new Vector3(0.14f, 0.22f, 0.08f),
-                accessoryColor);
+            if (!string.IsNullOrEmpty(bodyId))
+            {
+                CreateCube(
+                    "ArmorChest",
+                    new Vector3(0f, 1.045f, 0.292f),
+                    bodyId == "frontier_vest"
+                        ? new Vector3(0.48f, 0.34f, 0.055f)
+                        : new Vector3(0.56f, 0.42f, 0.075f),
+                    bodyColor);
 
-            charm.transform.localRotation = Quaternion.Euler(0f, 0f, 18f);
+                CreateCube(
+                    "ArmorChestTrim",
+                    new Vector3(0f, 1.16f, 0.337f),
+                    new Vector3(0.42f, 0.065f, 0.035f),
+                    accent);
+
+                if (bodyId == "ember_plate" || bodyId == "void_mantle")
+                {
+                    CreateCube(
+                        "ArmorSide_L",
+                        new Vector3(-0.33f, 1.02f, 0.24f),
+                        new Vector3(0.11f, 0.34f, 0.10f),
+                        Color.Lerp(bodyColor, Color.black, 0.12f));
+
+                    CreateCube(
+                        "ArmorSide_R",
+                        new Vector3(0.33f, 1.02f, 0.24f),
+                        new Vector3(0.11f, 0.34f, 0.10f),
+                        Color.Lerp(bodyColor, Color.black, 0.12f));
+                }
+            }
+
+            if (!string.IsNullOrEmpty(bootsId))
+            {
+                CreateCube(
+                    "ArmorBoot_L",
+                    new Vector3(-0.19f, 0.13f, 0.09f),
+                    new Vector3(0.30f, 0.21f, 0.44f),
+                    bootsColor);
+
+                CreateCube(
+                    "ArmorBoot_R",
+                    new Vector3(0.19f, 0.13f, 0.09f),
+                    new Vector3(0.30f, 0.21f, 0.44f),
+                    bootsColor);
+            }
+
+            if (!string.IsNullOrEmpty(accessoryId))
+            {
+                GameObject charm = CreateCube(
+                    "AccessoryCharm",
+                    new Vector3(-0.24f, 0.86f, 0.34f),
+                    new Vector3(0.12f, 0.18f, 0.075f),
+                    accessoryColor);
+
+                charm.transform.localRotation = Quaternion.Euler(0f, 0f, 18f);
+            }
         }
 
         private static Color GetEquipmentVisualColor(string id)
@@ -178,90 +264,144 @@ namespace VoxelDungeon.Player
         private void BuildMelee(string id)
         {
             Transform meleeRig = CreateRig("MeleeRig");
+            meleeRig.localPosition = new Vector3(0.49f, 0.54f, 0.10f);
+            meleeRig.localRotation = Quaternion.Euler(0f, 0f, -8f);
 
-            Color metal = new Color(0.78f, 0.88f, 0.92f);
+            Color metal = new Color(0.76f, 0.86f, 0.90f);
             Color accent = new Color(0.20f, 0.82f, 0.92f);
-            Vector3 bladeScale = new Vector3(0.12f, 0.92f, 0.10f);
-            Vector3 bladePos = new Vector3(0.72f, 1.06f, 0.30f);
+            Color gripColor = new Color(0.22f, 0.11f, 0.055f);
+
+            float bladeLength = 0.86f;
+            float bladeWidth = 0.14f;
+            float bladeDepth = 0.16f;
+            float gripLength = 0.26f;
+            float guardWidth = 0.34f;
+            bool hasHead = false;
             Vector3 headScale = Vector3.zero;
-            Vector3 headPos = Vector3.zero;
+            float headY = 1.04f;
 
             switch (id)
             {
                 case "crystal_saber":
                     accent = new Color(0.14f, 0.92f, 1f);
                     metal = new Color(0.62f, 0.94f, 1f);
-                    bladeScale = new Vector3(0.10f, 1.06f, 0.08f);
+                    bladeLength = 1.02f;
+                    bladeWidth = 0.11f;
+                    bladeDepth = 0.14f;
                     break;
 
                 case "crystal_daggers":
                     accent = new Color(0.20f, 0.96f, 1f);
                     metal = new Color(0.72f, 0.96f, 1f);
-                    bladeScale = new Vector3(0.09f, 0.66f, 0.07f);
-                    bladePos = new Vector3(0.70f, 0.93f, 0.30f);
+                    bladeLength = 0.58f;
+                    bladeWidth = 0.10f;
+                    guardWidth = 0.24f;
+                    gripLength = 0.20f;
                     break;
 
                 case "warden_cleaver":
                     accent = new Color(0.62f, 0.30f, 1f);
                     metal = new Color(0.44f, 0.48f, 0.58f);
-                    bladeScale = new Vector3(0.28f, 1.12f, 0.12f);
+                    bladeLength = 1.00f;
+                    bladeWidth = 0.28f;
+                    bladeDepth = 0.18f;
                     break;
 
                 case "ember_axe":
                     accent = new Color(1f, 0.42f, 0.08f);
                     metal = new Color(0.42f, 0.44f, 0.46f);
-                    bladeScale = new Vector3(0.10f, 0.88f, 0.10f);
-                    headScale = new Vector3(0.46f, 0.32f, 0.12f);
-                    headPos = new Vector3(0.88f, 1.42f, 0.30f);
+                    bladeLength = 0.82f;
+                    bladeWidth = 0.095f;
+                    hasHead = true;
+                    headScale = new Vector3(0.48f, 0.30f, 0.18f);
+                    headY = 1.02f;
                     break;
 
                 case "forge_spear":
                     accent = new Color(1f, 0.52f, 0.08f);
                     metal = new Color(0.54f, 0.56f, 0.58f);
-                    bladeScale = new Vector3(0.08f, 1.55f, 0.08f);
-                    bladePos = new Vector3(0.73f, 1.12f, 0.30f);
-                    headScale = new Vector3(0.22f, 0.40f, 0.10f);
-                    headPos = new Vector3(0.92f, 1.84f, 0.30f);
+                    bladeLength = 1.42f;
+                    bladeWidth = 0.08f;
+                    bladeDepth = 0.10f;
+                    hasHead = true;
+                    headScale = new Vector3(0.20f, 0.34f, 0.13f);
+                    headY = 1.54f;
                     break;
 
                 case "colossus_maul":
                     accent = new Color(1f, 0.24f, 0.04f);
                     metal = new Color(0.30f, 0.31f, 0.34f);
-                    bladeScale = new Vector3(0.12f, 1.08f, 0.12f);
-                    headScale = new Vector3(0.62f, 0.42f, 0.42f);
-                    headPos = new Vector3(0.86f, 1.48f, 0.30f);
+                    bladeLength = 0.94f;
+                    bladeWidth = 0.11f;
+                    bladeDepth = 0.13f;
+                    hasHead = true;
+                    headScale = new Vector3(0.62f, 0.40f, 0.44f);
+                    headY = 1.10f;
                     break;
 
                 case "moonblade":
                     accent = new Color(0.72f, 0.54f, 1f);
                     metal = new Color(0.88f, 0.92f, 1f);
-                    bladeScale = new Vector3(0.09f, 1.18f, 0.08f);
+                    bladeLength = 1.10f;
+                    bladeWidth = 0.10f;
+                    bladeDepth = 0.14f;
                     break;
 
                 case "void_edge":
                     accent = new Color(0.22f, 0.92f, 0.58f);
                     metal = new Color(0.18f, 0.20f, 0.25f);
-                    bladeScale = new Vector3(0.18f, 1.18f, 0.10f);
+                    bladeLength = 1.10f;
+                    bladeWidth = 0.19f;
+                    bladeDepth = 0.17f;
                     break;
             }
 
-            GameObject blade = CreateCube(meleeRig, "MeleeBlade", bladePos, bladeScale, metal);
-            blade.transform.localRotation = Quaternion.Euler(-18f, 0f, -18f);
-
-            CreateCube(meleeRig, 
+            // The weapon is built around the hand pivot instead of around the
+            // player's origin. This keeps the blade upright and gives attack
+            // animation a natural rotation point.
+            CreateCube(
+                meleeRig,
                 "MeleeGrip",
-                new Vector3(0.52f, 0.54f, 0.20f),
-                new Vector3(0.14f, 0.28f, 0.14f),
-                new Color(0.24f, 0.12f, 0.06f));
+                new Vector3(0f, gripLength * 0.5f, 0f),
+                new Vector3(0.13f, gripLength, 0.14f),
+                gripColor);
 
-            CreateCube(meleeRig, 
+            CreateCube(
+                meleeRig,
                 "MeleeGuard",
-                new Vector3(0.58f, 0.69f, 0.24f),
-                new Vector3(0.34f, 0.10f, 0.12f),
+                new Vector3(0f, gripLength + 0.05f, 0.02f),
+                new Vector3(guardWidth, 0.10f, 0.15f),
                 accent);
 
-            if (headScale != Vector3.zero)
-                CreateCube(meleeRig, "MeleeHead", headPos, headScale, metal);
+            float bladeCenterY = gripLength + 0.10f + bladeLength * 0.5f;
+            GameObject blade = CreateCube(
+                meleeRig,
+                "MeleeBlade",
+                new Vector3(0f, bladeCenterY, 0.035f),
+                new Vector3(bladeWidth, bladeLength, bladeDepth),
+                metal);
+
+            blade.transform.localRotation = Quaternion.identity;
+
+            if (hasHead)
+            {
+                CreateCube(
+                    meleeRig,
+                    "MeleeHead",
+                    new Vector3(0f, headY, 0.035f),
+                    headScale,
+                    metal);
+            }
+
+            if (id == "crystal_daggers")
+            {
+                Transform offhand = CreateRig("OffhandMeleeRig");
+                offhand.localPosition = new Vector3(-0.49f, 0.54f, 0.10f);
+                offhand.localRotation = Quaternion.Euler(0f, 0f, 8f);
+
+                CreateCube(offhand, "OffhandGrip", new Vector3(0f, 0.10f, 0f), new Vector3(0.11f, 0.20f, 0.12f), gripColor);
+                CreateCube(offhand, "OffhandBlade", new Vector3(0f, 0.46f, 0.035f), new Vector3(0.10f, 0.56f, 0.14f), metal);
+            }
         }
 
         private void BuildRanged(string id)
