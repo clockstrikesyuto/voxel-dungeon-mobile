@@ -7,7 +7,7 @@ namespace VoxelDungeon.Player
     [RequireComponent(typeof(CharacterController))]
     public sealed class FallRecovery : MonoBehaviour
     {
-        [SerializeField] private float recoveryY = -28f;
+        [SerializeField] private float recoveryY = -9.5f;
 
         private CharacterController controller;
         private TopDownPlayerMotor playerMotor;
@@ -59,7 +59,7 @@ namespace VoxelDungeon.Player
             enemyRecovering = true;
 
             // Let the fall read visually before snapping an AI actor home.
-            yield return new WaitForSeconds(0.22f);
+            yield return new WaitForSeconds(0.16f);
 
             bool wasEnabled = controller != null && controller.enabled;
             if (wasEnabled)
