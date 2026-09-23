@@ -19,6 +19,9 @@ namespace VoxelDungeon.AI
         private Health health;
         private SimpleEnemyBrain brain;
         private BossPulseAttack pulse;
+        private Renderer coreRenderer;
+        private MaterialPropertyBlock coreBlock;
+        private string coreColorProperty;
         private int phase = 1;
         private float nextBurst;
 
@@ -37,6 +40,22 @@ namespace VoxelDungeon.AI
             health = GetComponent<Health>();
             brain = GetComponent<SimpleEnemyBrain>();
             pulse = GetComponent<BossPulseAttack>();
+
+            Transform core = transform.Find("BossVisual/Core");
+            if (core != null)
+            {
+                coreRenderer = core.GetComponent<Renderer>();
+                if (coreRenderer != null && coreRenderer.sharedMaterial != null)
+                {
+                    coreColorProperty = coreRenderer.sharedMaterial.HasProperty("_BaseColor")
+                        ? "_BaseColor"
+                        : coreRenderer.sharedMaterial.HasProperty("_Color")
+                            ? "_Color"
+                            : null;
+
+                    coreBlock = new MaterialPropertyBlock();
+                }
+            }
         }
 
         private void OnEnable()
@@ -71,6 +90,8 @@ namespace VoxelDungeon.AI
 
         private void ApplyPhase(int value)
         {
+            UpdateCoreVisual(value);
+
             if (brain != null)
             {
                 switch (variant)
@@ -125,6 +146,42 @@ namespace VoxelDungeon.AI
                 BossVariant.Void => value >= 3 ? 2.2f : 3.0f,
                 _ => value >= 3 ? 3.0f : 3.7f
             };
+        }
+
+        private void UpdateCoreVisual(int value)
+        {
+            if (coreRenderer == null || coreBlock == null || string.IsNullOrEmpty(coreColorProperty))
+                return;
+
+            Color color = variant switch
+            {
+                BossVariant.Forge => value switch
+                {
+                    1 => new Color(1f, 0.22f, 0.05f),
+                    2 => new Color(1f, 0.52f, 0.06f),
+                    _ => new Color(1f, 0.88f, 0.28f)
+                },
+                BossVariant.Void => value switch
+                {
+                    1 => new Color(0.28f, 0.90f, 0.62f),
+                    2 => new Color(0.38f, 0.68f, 1f),
+                    _ => new Color(0.76f, 0.42f, 1f)
+                },
+                _ => value switch
+                {
+                    1 => new Color(1f, 0.12f, 0.07f),
+                    2 => new Color(0.82f, 0.28f, 1f),
+                    _ => new Color(0.34f, 0.84f, 1f)
+                }
+            };
+
+            coreRenderer.GetPropertyBlock(coreBlock);
+            coreBlock.SetColor(coreColorProperty, color);
+
+            if (coreRenderer.sharedMaterial.HasProperty("_EmissionColor"))
+                coreBlock.SetColor("_EmissionColor", color * (value == 3 ? 3.4f : 2.4f));
+
+            coreRenderer.SetPropertyBlock(coreBlock);
         }
 
         private void SpawnRadialBurst()
