@@ -25,6 +25,8 @@ namespace VoxelDungeon.AI
         private string colorProperty;
         private Color baseColor = Color.white;
 
+        private readonly Collider[] crowdBuffer = new Collider[16];
+
         private float nextAttackTime;
         private float verticalVelocity;
         private bool attacking;
@@ -163,7 +165,12 @@ namespace VoxelDungeon.AI
             {
                 verticalVelocity = controller.isGrounded ? -2f : verticalVelocity - 25f * Time.deltaTime;
 
-                Vector3 safeDirection = ResolveSafeDirection(direction);
+                Vector3 separation = ResolveCrowdSeparation();
+                Vector3 desired = direction + separation * 0.62f;
+                if (desired.sqrMagnitude > 0.001f)
+                    desired.Normalize();
+
+                Vector3 safeDirection = ResolveSafeDirection(desired);
                 float speedMultiplier = Time.time < slowUntil ? slowMultiplier : 1f;
 
                 controller.Move(
@@ -174,6 +181,40 @@ namespace VoxelDungeon.AI
 
             if (Time.time >= nextAttackTime)
                 StartCoroutine(AttackSequence());
+        }
+
+        private Vector3 ResolveCrowdSeparation()
+        {
+            int count = Physics.OverlapSphereNonAlloc(
+                transform.position,
+                1.35f,
+                crowdBuffer,
+                Physics.AllLayers,
+                QueryTriggerInteraction.Ignore);
+
+            Vector3 push = Vector3.zero;
+
+            for (int i = 0; i < count; i++)
+            {
+                Collider candidate = crowdBuffer[i];
+                if (candidate == null || candidate.transform == transform || candidate.transform.IsChildOf(transform))
+                    continue;
+
+                SimpleEnemyBrain other = candidate.GetComponentInParent<SimpleEnemyBrain>();
+                if (other == null || other == this)
+                    continue;
+
+                Vector3 away = transform.position - other.transform.position;
+                away.y = 0f;
+
+                float distance = away.magnitude;
+                if (distance < 0.001f || distance >= 1.35f)
+                    continue;
+
+                push += away.normalized * (1f - distance / 1.35f);
+            }
+
+            return push.sqrMagnitude > 1f ? push.normalized : push;
         }
 
         private Vector3 ResolveSafeDirection(Vector3 desired)
