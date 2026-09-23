@@ -111,6 +111,12 @@ namespace VoxelDungeon.Player
                     hairPart.gameObject.SetActive(!fullHeadCover);
             }
 
+            Transform bakedChest = transform.Find("PlayerVisual/ChestPanel");
+            Transform bakedChestTrim = transform.Find("PlayerVisual/ChestTrim");
+            bool showBakedChest = string.IsNullOrEmpty(bodyId);
+            if (bakedChest != null) bakedChest.gameObject.SetActive(showBakedChest);
+            if (bakedChestTrim != null) bakedChestTrim.gameObject.SetActive(showBakedChest);
+
             Transform bakedBootL = transform.Find("PlayerVisual/Boot_L");
             Transform bakedBootR = transform.Find("PlayerVisual/Boot_R");
             bool showBakedBoots = string.IsNullOrEmpty(bootsId);
@@ -153,13 +159,13 @@ namespace VoxelDungeon.Player
                 {
                     CreateCube(
                         "ArmorHead",
-                        new Vector3(0f, 1.985f, -0.01f),
-                        new Vector3(0.60f, 0.09f, 0.58f),
+                        new Vector3(0f, 2.075f, -0.01f),
+                        new Vector3(0.60f, 0.065f, 0.58f),
                         headColor);
 
                     CreateCube(
                         "CrownGem",
-                        new Vector3(0f, 2.075f, 0.17f),
+                        new Vector3(0f, 2.17f, 0.17f),
                         new Vector3(0.16f, 0.20f, 0.12f),
                         new Color(0.36f, 0.88f, 1f));
                 }
