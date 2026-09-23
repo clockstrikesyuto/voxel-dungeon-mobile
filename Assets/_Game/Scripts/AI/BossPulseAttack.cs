@@ -22,7 +22,7 @@ namespace VoxelDungeon.AI
         public void BeginEncounter()
         {
             encounterStarted = true;
-            nextTime = Time.time + 0.65f;
+            nextTime = Time.time + 0.35f;
             if (ring != null)
                 SetRingVisible(false);
         }
@@ -112,8 +112,8 @@ namespace VoxelDungeon.AI
             ring.useWorldSpace = false;
             ring.loop = true;
             ring.positionCount = 48;
-            ring.startWidth = 0.08f;
-            ring.endWidth = 0.08f;
+            ring.startWidth = 0.12f;
+            ring.endWidth = 0.12f;
             ring.material = new Material(Shader.Find("Sprites/Default"));
             ring.startColor = new Color(1f, 0.1f, 0.08f, 0.9f);
             ring.endColor = ring.startColor;
