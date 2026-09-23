@@ -40,6 +40,25 @@ namespace VoxelDungeon.AI
             health = GetComponent<Health>();
         }
 
+        private void OnEnable()
+        {
+            if (health != null)
+                health.Died += OnBossDied;
+        }
+
+        private void OnDisable()
+        {
+            if (health != null)
+                health.Died -= OnBossDied;
+        }
+
+        private void OnBossDied()
+        {
+            StopAllCoroutines();
+            encounterStarted = false;
+            SetRingVisible(false);
+        }
+
         private void Start()
         {
             if (!encounterStarted)
