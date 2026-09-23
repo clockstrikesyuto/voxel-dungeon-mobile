@@ -182,9 +182,17 @@ namespace VoxelDungeon.Player
 
             EquipmentRecord rangedItem = ProfileProgress.EquippedRanged;
             nextRangedTime = Time.time + rangedCooldown * Mathf.Max(0.35f, rangedItem.CooldownMultiplier);
-            PlayAttackPulse();
-            actionAnimator?.PlayRanged(rangedItem.Id);
 
+            actionAnimator?.PlayRanged(rangedItem.Id);
+            StartCoroutine(ResolveRangedAfterReady(rangedItem));
+            return true;
+        }
+
+        private IEnumerator ResolveRangedAfterReady(EquipmentRecord rangedItem)
+        {
+            yield return new WaitForSeconds(0.11f);
+
+            PlayAttackPulse();
             Vector3 direction = FindAimDirection();
 
             GameObject projectile = GameObject.CreatePrimitive(PrimitiveType.Sphere);
@@ -198,7 +206,16 @@ namespace VoxelDungeon.Player
 
             Renderer renderer = projectile.GetComponent<Renderer>();
             if (renderer != null)
-                renderer.material.color = new Color(0.35f, 0.8f, 1f, 1f);
+            {
+                renderer.material.color = rangedItem.Id switch
+                {
+                    "ember_repeater" => new Color(1f, 0.42f, 0.10f, 1f),
+                    "void_staff" => new Color(0.62f, 0.34f, 1f, 1f),
+                    "starbow" => new Color(0.28f, 1f, 0.66f, 1f),
+                    "astral_crossbow" => new Color(0.78f, 0.68f, 1f, 1f),
+                    _ => new Color(0.35f, 0.8f, 1f, 1f)
+                };
+            }
 
             SimpleProjectile projectileLogic = projectile.AddComponent<SimpleProjectile>();
             int baseDamage =
@@ -220,14 +237,17 @@ namespace VoxelDungeon.Player
                     projectileSpeed += 4f;
                     projectileRadius = 0.24f;
                     break;
+
                 case "void_staff":
                     projectileRadius = 0.42f;
                     rangedDamageMultiplier = 1.08f;
                     break;
+
                 case "starbow":
                     projectileSpeed += 2f;
                     rangedCritBonus = 0.08f;
                     break;
+
                 case "astral_crossbow":
                     projectileSpeed += 3f;
                     projectileRadius = 0.34f;
@@ -254,7 +274,6 @@ namespace VoxelDungeon.Player
                 critical);
 
             transform.forward = direction;
-            return true;
         }
 
         public bool TryPotion()
