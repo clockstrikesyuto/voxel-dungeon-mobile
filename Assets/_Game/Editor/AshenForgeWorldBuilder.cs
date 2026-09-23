@@ -140,7 +140,10 @@ namespace VoxelDungeon.EditorTools
             CreateLavaCanalWorld(root.transform, new Vector3(-9f, 0f, 0f), 3f, depth * 0.75f, lava, metal);
             CreateLavaCanalWorld(root.transform, new Vector3(9f, 0f, 0f), 3f, depth * 0.75f, lava, metal);
 
-            CreateBlock(root.transform, "CoreSigil", new Vector3(0f, 0.12f, 2f), new Vector3(7f, 0.12f, 7f), core, false);
+            CreateBlock(root.transform, "CoreSigil_N", new Vector3(0f, 0.11f, 5.1f), new Vector3(6.2f, 0.05f, 0.20f), core, false);
+            CreateBlock(root.transform, "CoreSigil_S", new Vector3(0f, 0.11f, -1.1f), new Vector3(6.2f, 0.05f, 0.20f), core, false);
+            CreateBlock(root.transform, "CoreSigil_W", new Vector3(-3.1f, 0.11f, 2f), new Vector3(0.20f, 0.05f, 6.2f), core, false);
+            CreateBlock(root.transform, "CoreSigil_E", new Vector3(3.1f, 0.11f, 2f), new Vector3(0.20f, 0.05f, 6.2f), core, false);
 
             for (int i = -2; i <= 2; i++)
             {
